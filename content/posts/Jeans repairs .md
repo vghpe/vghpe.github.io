@@ -1,8 +1,8 @@
 ---
 title: Jeans repairs 
-date: 2024-08-04T03:20:05-07:00
+date: 2024-08-04T03:43:11-07:00
 draft: false
 ---
-![Alt Text](/images/IMG_2582-3.heic)
+![Alt Text](/images/IMG_2582-2.jpeg)
 
-Found a place that can fix this rip for 10 dollars. Gonna go pick them up tomorrow. 
+Found a place that will patch these up for 10 dollars. Seems like a great. Going to pick them up tomorrow. 
