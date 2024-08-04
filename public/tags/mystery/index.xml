@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Mystery on </title>
-    <link>https://example.org/tags/mystery/</link>
+    <link>http://localhost:1313/tags/mystery/</link>
     <description>Recent content in Mystery on </description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 31 Jul 2024 14:00:00 +0000</lastBuildDate>
-    <atom:link href="https://example.org/tags/mystery/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/mystery/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Purple Post</title>
-      <link>https://example.org/posts/purple-post/</link>
+      <link>http://localhost:1313/posts/purple-post/</link>
       <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
-      <guid>https://example.org/posts/purple-post/</guid>
-      <description>&lt;p&gt;&lt;p class=&#34;markdown-image&#34;&gt;&#xA;  &lt;img src=&#34;https://example.org/images/purple.png&#34; alt=&#34;Purple Image&#34;  /&gt;&#xA;&lt;/p&gt;&lt;/p&gt;&#xA;&lt;p&gt;Explore the majestic and mysterious shades of purple.&lt;/p&gt;</description>
+      <guid>http://localhost:1313/posts/purple-post/</guid>
+      <description>&lt;p&gt;&lt;p class=&#34;markdown-image&#34;&gt;&#xA;  &lt;img src=&#34;http://localhost:1313/images/purple.png&#34; alt=&#34;Purple Image&#34;  /&gt;&#xA;&lt;/p&gt;&lt;/p&gt;&#xA;&lt;p&gt;Explore the majestic and mysterious shades of purple.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>

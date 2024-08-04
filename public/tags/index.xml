@@ -2,59 +2,59 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Tags on </title>
-    <link>https://example.org/tags/</link>
+    <link>http://localhost:1313/tags/</link>
     <description>Recent content in Tags on </description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 31 Jul 2024 14:00:00 +0000</lastBuildDate>
-    <atom:link href="https://example.org/tags/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/tags/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Blue</title>
-      <link>https://example.org/tags/blue/</link>
+      <link>http://localhost:1313/tags/blue/</link>
       <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
-      <guid>https://example.org/tags/blue/</guid>
+      <guid>http://localhost:1313/tags/blue/</guid>
       <description></description>
     </item>
     <item>
       <title>Calm</title>
-      <link>https://example.org/tags/calm/</link>
+      <link>http://localhost:1313/tags/calm/</link>
       <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
-      <guid>https://example.org/tags/calm/</guid>
+      <guid>http://localhost:1313/tags/calm/</guid>
       <description></description>
     </item>
     <item>
       <title>Color</title>
-      <link>https://example.org/tags/color/</link>
+      <link>http://localhost:1313/tags/color/</link>
       <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
-      <guid>https://example.org/tags/color/</guid>
+      <guid>http://localhost:1313/tags/color/</guid>
       <description></description>
     </item>
     <item>
       <title>Mystery</title>
-      <link>https://example.org/tags/mystery/</link>
+      <link>http://localhost:1313/tags/mystery/</link>
       <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
-      <guid>https://example.org/tags/mystery/</guid>
+      <guid>http://localhost:1313/tags/mystery/</guid>
       <description></description>
     </item>
     <item>
       <title>Pink</title>
-      <link>https://example.org/tags/pink/</link>
+      <link>http://localhost:1313/tags/pink/</link>
       <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
-      <guid>https://example.org/tags/pink/</guid>
+      <guid>http://localhost:1313/tags/pink/</guid>
       <description></description>
     </item>
     <item>
       <title>Purple</title>
-      <link>https://example.org/tags/purple/</link>
+      <link>http://localhost:1313/tags/purple/</link>
       <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
-      <guid>https://example.org/tags/purple/</guid>
+      <guid>http://localhost:1313/tags/purple/</guid>
       <description></description>
     </item>
     <item>
       <title>Vibrant</title>
-      <link>https://example.org/tags/vibrant/</link>
+      <link>http://localhost:1313/tags/vibrant/</link>
       <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
-      <guid>https://example.org/tags/vibrant/</guid>
+      <guid>http://localhost:1313/tags/vibrant/</guid>
       <description></description>
     </item>
   </channel>
