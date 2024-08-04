@@ -6,8 +6,15 @@
     <description>Recent content in Posts on </description>
     <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 31 Jul 2024 14:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 04 Aug 2024 00:42:14 -0700</lastBuildDate>
     <atom:link href="http://localhost:1313/blog/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>This was work</title>
+      <link>http://localhost:1313/blog/posts/this-was-work/</link>
+      <pubDate>Sun, 04 Aug 2024 00:42:14 -0700</pubDate>
+      <guid>http://localhost:1313/blog/posts/this-was-work/</guid>
+      <description>But I guess I’m pretty happy with it</description>
+    </item>
     <item>
       <title>Blue Post</title>
       <link>http://localhost:1313/blog/posts/blue-post/</link>
@@ -28,6 +35,13 @@
       <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
       <guid>http://localhost:1313/blog/posts/purple-post/</guid>
       <description>&lt;p&gt;&lt;p class=&#34;markdown-image&#34;&gt;&#xA;  &lt;img src=&#34;../images/purple.png&#34; alt=&#34;Purple Image&#34;  /&gt;&#xA;&lt;/p&gt;&lt;/p&gt;&#xA;&lt;p&gt;Explore the majestic and mysterious shades of purple.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Another day</title>
+      <link>http://localhost:1313/blog/posts/another-day/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/blog/posts/another-day/</guid>
+      <description>Another post</description>
     </item>
   </channel>
 </rss>
