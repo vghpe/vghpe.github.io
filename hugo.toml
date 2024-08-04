@@ -1,0 +1,5 @@
+baseURL = 'https://example.org/'
+languageCode = 'en-us'
+theme = 'mini'
+[params]
+hiddenPostSummaryInHomePage = false 

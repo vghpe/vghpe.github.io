@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Color on </title>
+    <link>http://localhost:1313/tags/color/</link>
+    <description>Recent content in Color on </description>
+    <generator>Hugo</generator>
+    <language>en-us</language>
+    <lastBuildDate>Wed, 31 Jul 2024 14:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/color/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Blue Post</title>
+      <link>http://localhost:1313/posts/blue-post/</link>
+      <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/blue-post/</guid>
+      <description>Experience the tranquility of the color blue in this post.&#xA;Blue is a color that is often associated with calmness and serenity. It’s the color of the sky and the sea, and it has a natural, soothing effect on people. In this post, we explore the various shades of blue and their impact on mood and perception.&#xA;Blue is a color that is often associated with calmness and serenity. It’s the color of the sky and the sea, and it has a natural, soothing effect on people.</description>
+    </item>
+    <item>
+      <title>Pink Post</title>
+      <link>http://localhost:1313/posts/pink-post/</link>
+      <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/pink-post/</guid>
+      <description>&lt;p&gt;&lt;p class=&#34;markdown-image&#34;&gt;&#xA;  &lt;img src=&#34;http://localhost:1313/images/pink.png&#34; alt=&#34;Pink Image&#34;  /&gt;&#xA;&lt;/p&gt;&lt;/p&gt;&#xA;&lt;p&gt;Discover the vibrant and lively hues of pink.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Purple Post</title>
+      <link>http://localhost:1313/posts/purple-post/</link>
+      <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/purple-post/</guid>
+      <description>&lt;p&gt;&lt;p class=&#34;markdown-image&#34;&gt;&#xA;  &lt;img src=&#34;http://localhost:1313/images/purple.png&#34; alt=&#34;Purple Image&#34;  /&gt;&#xA;&lt;/p&gt;&lt;/p&gt;&#xA;&lt;p&gt;Explore the majestic and mysterious shades of purple.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
