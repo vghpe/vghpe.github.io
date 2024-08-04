@@ -287,17 +287,25 @@ nav.navigation a.button {
     color: #0366d6;
 }
 
-.date {
-    text-align: right;
-    color: #bbb;
-    margin-top: 10px; /* Adjust this to create space between tags and date */
+.tags-date-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px; /* Adjust as needed */
+    min-height: 24px; /* Ensure minimum height to account for no tags */
 }
 
 .tags {
-    display: inline-block;
-    margin-top: 12px;
-    margin-bottom: 8px; /* To add spacing between tags and date */
+    margin-bottom: 0;
 }
+
+.date {
+    margin-left: auto;
+    color: #bbb;
+    text-align: right;
+}
+
+
 .profile h1 {
   font-weight: 400;
   letter-spacing: 0px;

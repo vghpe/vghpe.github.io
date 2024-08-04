@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Calm on </title>
-    <link>http://localhost:1313/tags/calm/</link>
+    <link>https://example.org/tags/calm/</link>
     <description>Recent content in Calm on </description>
     <generator>Hugo</generator>
     <language>en-us</language>
     <lastBuildDate>Wed, 31 Jul 2024 14:00:00 +0000</lastBuildDate>
-    <atom:link href="http://localhost:1313/tags/calm/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="https://example.org/tags/calm/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Blue Post</title>
-      <link>http://localhost:1313/posts/blue-post/</link>
+      <link>https://example.org/posts/blue-post/</link>
       <pubDate>Wed, 31 Jul 2024 14:00:00 +0000</pubDate>
-      <guid>http://localhost:1313/posts/blue-post/</guid>
+      <guid>https://example.org/posts/blue-post/</guid>
       <description>Experience the tranquility of the color blue in this post.&#xA;Blue is a color that is often associated with calmness and serenity. It’s the color of the sky and the sea, and it has a natural, soothing effect on people. In this post, we explore the various shades of blue and their impact on mood and perception.&#xA;Blue is a color that is often associated with calmness and serenity. It’s the color of the sky and the sea, and it has a natural, soothing effect on people.</description>
     </item>
   </channel>
