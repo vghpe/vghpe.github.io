@@ -2,7 +2,7 @@
 title: "Blue Post"
 date: 2024-07-31T14:00:00Z
 draft: false
-tags: ["blue", "color", "calm"]
+#tags: ["blue", "color", "calm"]
 ---
 
 ![Blue Image](/images/blue.png)
