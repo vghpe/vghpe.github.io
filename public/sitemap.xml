@@ -2,48 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>http://localhost:1313/</loc>
+    <loc>http://localhost:1313/blog/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/blue/</loc>
+    <loc>http://localhost:1313/blog/tags/blue/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/blue-post/</loc>
+    <loc>http://localhost:1313/blog/posts/blue-post/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/calm/</loc>
+    <loc>http://localhost:1313/blog/tags/calm/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/color/</loc>
+    <loc>http://localhost:1313/blog/tags/color/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/mystery/</loc>
+    <loc>http://localhost:1313/blog/tags/mystery/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/pink/</loc>
+    <loc>http://localhost:1313/blog/tags/pink/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/pink-post/</loc>
+    <loc>http://localhost:1313/blog/posts/pink-post/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/</loc>
+    <loc>http://localhost:1313/blog/posts/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/purple/</loc>
+    <loc>http://localhost:1313/blog/tags/purple/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/posts/purple-post/</loc>
+    <loc>http://localhost:1313/blog/posts/purple-post/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/</loc>
+    <loc>http://localhost:1313/blog/tags/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/tags/vibrant/</loc>
+    <loc>http://localhost:1313/blog/tags/vibrant/</loc>
     <lastmod>2024-07-31T14:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/about/</loc>
+    <loc>http://localhost:1313/blog/about/</loc>
     <lastmod>2019-02-28T00:00:00+00:00</lastmod>
   </url><url>
-    <loc>http://localhost:1313/categories/</loc>
+    <loc>http://localhost:1313/blog/categories/</loc>
   </url>
 </urlset>
