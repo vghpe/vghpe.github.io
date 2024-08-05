@@ -1,6 +1,6 @@
 ---
 title: "Making this blog"
-date: {{ time.Now }}
+date: 2024-08-04T00:00:00Z  # Replace with the current date and time in this format
 draft: false
 tags: ["blog", "dev", "github"]
 ---
