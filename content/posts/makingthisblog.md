@@ -1,6 +1,6 @@
 ---
 title: "Making this blog"
-date: 2024-08-04T00:00:00Z  # Replace with the current date and time in this format
+date: 2024-08-04T18:26:20Z
 draft: false
 tags: ["blog", "dev", "github"]
 ---
