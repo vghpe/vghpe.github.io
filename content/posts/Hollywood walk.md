@@ -2,7 +2,7 @@
 title: Hollywood walk
 date: 2024-08-04T11:55:24-07:00
 draft: false
+image: "/images/IMG_2585.jpeg"
 ---
-![Alt Text](/images/IMG_2585.jpeg)
 
 Took a walk with Richard 

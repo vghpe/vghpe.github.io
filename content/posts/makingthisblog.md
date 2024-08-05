@@ -2,10 +2,10 @@
 title: "Making this blog"
 date: 2024-08-04T18:26:20Z
 draft: false
+image: "/images/IMG_2590.jpg"
 tags: ["blog", "dev", "github"]
 ---
 
-![Blue Image](/images/IMG_2590.jpg)
 
 Inspired by Hundred Rabbits art collective wiki and log site, the intention of this page is to have a lightweight way to track and log creative output, ideas, doodles. 
 
@@ -14,6 +14,8 @@ I had a couple of wants in mind:
 - Full costumization control of the page. 
 - Write, posts and attach images from my phone
 - Controlled easily with bash commands. 
+
+<!--more-->
 
 After some some conversation with the chatbot I went with static site generator Hugo. I relied heavily on the chatbot to help with a initial setup and then to deploy to github pages with automated actions. That mostly worked but I didn't quite understand what what happening. But it showed me what was possible. 
 

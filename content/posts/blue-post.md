@@ -2,10 +2,10 @@
 title: "Blue Post"
 date: 2024-07-31T14:00:00Z
 draft: false
+image: "/images/blue.png"
 tags: ["blue", "color", "calm"]
 ---
 
-![Blue Image](/images/blue.png)
 
 Experience the tranquility of the color blue in this post.
 
