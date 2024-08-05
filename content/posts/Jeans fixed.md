@@ -5,4 +5,4 @@ draft: false
 image: "/images/IMG_2587.jpeg"
 ---
 
-I got my jeans fixed for 10 dollars
+I got my jeans fixed for 10 dollars 
