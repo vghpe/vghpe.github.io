@@ -5,11 +5,14 @@ draft: false
 tags: ["game industry", "ai", "transcripts"]
 ---
 
-<video width="640" height="360" controls class="custom-subtitles">
-  <source src="/videos/segment_20240811_171525_480p.mp4" type="video/mp4">
-  <track src="/videos/segment_20240811_171525.vtt" kind="subtitles" srclang="en" label="English" default>
-  Your browser does not support the video tag.
-</video>
+<div class="video-container">
+  <video width="640" height="360" controls class="custom-subtitles">
+    <source src="/videos/segment_20240811_171525_480p.mp4" type="video/mp4">
+    <track src="/videos/segment_20240811_171525.vtt" kind="subtitles" srclang="en" label="English" default>
+    Your browser does not support the video tag.
+  </video>
+</div>
+
 
 I had planned to write about MSG2 and level design today, but I got sidetracked in my mission to find a tangential rant by ([Super Bunnyhop](https://www.youtube.com/channel/UCWqr2tH3dPshNhPjV5h1xRw)). I saw this on his live stream a few months ago and thought it was such an interesting statement that I've been thinking about it a lot. However, that too is a topic for another day.  
 
