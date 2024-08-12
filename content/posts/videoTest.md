@@ -4,7 +4,7 @@ date: 2024-08-11T12:00:00Z
 draft: false
 ---
 
-In this post, we’re going to look at a video that starts at 29:22 and stops at 30:10.
+In this post, we’re going to look at a video that starts at 29:22 and stops at 30:10....
 
 ## Embedded YouTube Video
 
