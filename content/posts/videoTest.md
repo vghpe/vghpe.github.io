@@ -1,17 +1,9 @@
 ---
-title: "Video Test"
+title: "Your Post Title"
 date: 2024-08-11T12:00:00Z
 draft: false
 ---
 
-In this post, we’re going to look at a video that starts at 29:22 and stops at 30:10....
+Here is a video embedded using the iframe shortcode:
 
-## Embedded YouTube Video
-
-Below is the embedded video with the specified start and end times:
-
-
-
----
-
-If you want to watch more of the video, you can find the full content [here](https://www.youtube.com/watch?v=QQD-wjeFr10).
+{{< iframe src="https://www.youtube.com/embed/QQD-wjeFr10?start=1762&end=1810" width="560" height="315" >}}
