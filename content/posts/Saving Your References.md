@@ -15,7 +15,7 @@ I had planned to write about MSG2 and level design today, but I got sidetracked 
 
 Instead, I want to talk about the clip itself, the mp4 file you see render on this page. I've been using `yt-dlp` a fair bit recently to save videos from youtube, mostly from no-commentary gameplay videos, capturing some interesting design elements. I mostly use it to share privately with my collaborators. While I could have ([linked a YouTube video with a timestamp](https://www.youtube.com/watch?v=QQD-wjeFr10&t=1786s)), so much YouTube content has been lost over the years. My "Liked" video playlist on YouTube is 30% broken links, which is frustrating.
 
-I've expanded a bit on the typical `yt-dlp` download command and [wrote a segment downloader as a PowerShell script.](/scripts/yt-downloader-segments.ps1)
+I've expanded a bit on the typical `yt-dlp` download command and [wrote a segment downloader as a PowerShell script.](/scripts/yt-downloader-segments.txt)
 
 <!--more-->
 
@@ -29,8 +29,8 @@ You'll need to adjust these parameters:
 
 To generate subtitles, I saw today as an opportunity to learn how some of these new AI transcription tools work. OpenAI has released Whisper ([GitHub link](https://github.com/openai/whisper)), an open-source "general-purpose speech recognition model" that can be run locally.
 
-I ended up using WhisperX ([GitHub link](https://github.com/m-bain/whisperX)), a fork that is supposedly a slimmer version. I just ran the command as listed in the GitHub setup. It had to install a lot of packages, but in the end, it worked great. I gave it the segmented YouTube video, and it generated an SRT file with a perfect transcript.
+I ended up using WhisperX ([GitHub link](https://github.com/m-bain/whisperX)), a fork that is supposedly a slimmer versi)on. I just ran the command as listed in the GitHub setup. It had to install a lot of packages, but in the end, it worked great. I gave it the segmented YouTube video, and it generated an SRT file with a perfect transcript.
 
-I then used `ffmpeg` to convert that into a VTT file, and that's what you see above. 
+I then used `ffmpeg` to convert that into a VTT file ([full transcript](/videos/segment_20240811_171525.vtt)), and that's what you see above. 
 
 There are some ethical considerations here, I'm grabbing this clip without permission and rebublishing it on my blog even if I credit the creator it's a bit iffy and I'll probalbly need to reconsider this post of this page ever become more than a personal log. 
