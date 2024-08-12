@@ -10,7 +10,7 @@ In this post, we’re going to look at a video that starts at 29:22 and stops at
 
 Below is the embedded video with the specified start and end times:
 
-{{< iframe src="https://www.youtube.com/embed/QQD-wjeFr10?start=1762&end=1810" >}}
+
 
 ---
 
