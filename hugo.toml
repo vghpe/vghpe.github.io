@@ -5,3 +5,9 @@ languageCode = 'en-us'
 theme = 'mini'
 [params]
 hiddenPostSummaryInHomePage = false 
+
+
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
