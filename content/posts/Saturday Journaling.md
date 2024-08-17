@@ -11,6 +11,8 @@ Deciding between 3 smaller project.
 
 This one would be practical and have pretty functional outcome. Using Godot would make it a bit novel too, even though I’m unsure I would use it for production. I can test out prototypes. 
 
+<!--more-->
+
 - Research into the creative process of MGS2.
 
 Seems like some daily diaries of Kojima from the time has recently been translated. Would be interesting to dive into that similar to my FLCL article. That took a while though, if I want to publish it. 
