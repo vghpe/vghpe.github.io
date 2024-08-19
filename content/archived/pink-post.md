@@ -1,7 +1,7 @@
 ---
 title: "Pink Post"
 date: 2024-07-31T14:00:00Z
-draft: false
+draft: true
 image: "/images/pink.png"
 tags: ["pink", "color", "vibrant"]
 ---

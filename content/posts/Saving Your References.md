@@ -2,7 +2,7 @@
 title: "Saving Your References"
 date: 2024-08-11T12:00:00Z
 draft: false
-tags: ["game industry", "ai", "transcripts"]
+tags: ["gamesindustry", "ai", "transcripts"]
 ---
 
 <div class="video-container">

@@ -1,7 +1,7 @@
 ---
 title: Jeans fixed
 date: 2024-08-04T14:42:16-07:00
-draft: false
+draft: true
 image: "/images/IMG_2587.jpeg"
 ---
 

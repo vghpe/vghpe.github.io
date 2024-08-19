@@ -1,7 +1,7 @@
 ---
 title: Jeans repairs 
 date: 2024-08-04T03:43:11-07:00
-draft: false
+draft: true
 image: "/images/IMG_2582-2.jpeg"
 ---
 
