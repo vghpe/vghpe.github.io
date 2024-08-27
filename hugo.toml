@@ -5,6 +5,8 @@ languageCode = 'en-us'
 theme = 'mini'
 [params]
 hiddenPostSummaryInHomePage = false 
+copyright = "© 2024 Henrik Pettersson. All rights reserved."
+showPowerBy = false
 
 
 [markup]
