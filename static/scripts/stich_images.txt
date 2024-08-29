@@ -1,0 +1,18 @@
+# Prompt the user to drag and drop the images into the terminal
+$firstImage = Read-Host "Drag the first image here and press Enter"
+$secondImage = Read-Host "Drag the second image here and press Enter"
+
+# Trim any surrounding quotes if present
+$firstImage = $firstImage.Trim('"')
+$secondImage = $secondImage.Trim('"')
+
+# Extract the directory path from the first image
+$directoryPath = [System.IO.Path]::GetDirectoryName($firstImage)
+
+# Create the output image name and path
+$outputImage = Join-Path $directoryPath ([System.IO.Path]::GetFileNameWithoutExtension($firstImage) + "_stitched" + [System.IO.Path]::GetExtension($firstImage))
+
+# Run the ImageMagick command to stitch the images
+magick convert -append $firstImage, $secondImage $outputImage
+
+Write-Output "Stitched image saved as: $outputImage"
