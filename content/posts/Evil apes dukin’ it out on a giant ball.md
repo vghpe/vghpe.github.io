@@ -37,11 +37,11 @@ And finally, let’s just do VO.
   </video>
 </div>
 
+If I were to give a very subjective take, I think the strength of the VO is more in establishing a tone. It’s bizarre, weird, and the delivery is decent, but it doesn't transform the text.
 
-I think the strength of the VO is more in establishing a tone. It’s weird and bizarre, but the delivery of these specific lines isn’t anything outstanding.
+The music and SFX really help with the mood and also keep me focused and engaged. Try muting the video and see the difference. Suddenly, the experience is worse than reading a book.
 
-The music and SFX really help with the mood and also let me stay focused and engaged. Try muting the video and see the difference. Suddenly, the experience is worse than reading a book.
+But ultimately, I think it’s the written idea here — that our conscious experience is nothing more than being an evil ape competing against other evil apes on a giant ball — that is humorous and thought-provoking.
 
-But ultimately, it’s the written idea here—that our conscious experience is nothing more than being an evil ape competing against other evil apes on a giant ball —that is humorous and thought-provoking.
+I’m going to give Robert Kurvitz's book Sacred and Terrible Air a read next. It has recently been fan-translated from Estonian.
 
-I’m going to give Robert Kurvitz book Sacred And Terrible Air a read next. It has recently been fan translated from Estonian. 
