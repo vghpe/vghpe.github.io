@@ -6,13 +6,12 @@ tags: ["research", "journal"]
 image: "images/IMG_2718.jpeg"
 ---
 
-What makes the writing stand out in Disco Elysium? That’s a big question for many posts, but let’s start here:
+The writing in Disco Elysium really felt like it stood out? why is that? I'd like to know. Let's start with a simple test.
 
 Is it the writing or the execution? Let’s strip things out and compare. 
 
-<!--more-->
+In the intro, when the Limbic System gives us a clue about what's out there, I remember that during my first playthrough, this is when I started to really lean in. Let's take a closer look at that
 
-Note this clip will only be meaningful if you’ve played the game; in isolation, this test will make zero sense.
 <div class="video-container">
   <video width="640" height="360" controls>
     <source src="/videos/disco_full.mp4" type="video/mp4">
