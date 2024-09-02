@@ -13,27 +13,31 @@ Is it the writing or the execution? Let’s strip things out and compare.
 <!--more-->
 
 Note this clip will only be meaningful if you’ve played the game; in isolation, this test will make zero sense.
-
-<video width="640" height="360" controls>
-  <source src="/videos/disco_full.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
+<div class="video-container">
+  <video width="640" height="360" controls>
+    <source src="/videos/disco_full.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
 
 Now let’s take away the VO and only run it with music.
 
-<video width="640" height="360" controls>
-  <source src="/videos/disco_music.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-
+<div class="video-container">
+  <video width="640" height="360" controls>
+    <source src="/videos/disco_music.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
 
 And finally, let’s just do VO.
 
-<video width="640" height="360" controls>
-  <source src="/videos/disco_vo.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<div class="video-container">
+  <video width="640" height="360" controls>
+    <source src="/videos/disco_vo.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+
 
 I think the strength of the VO is more in establishing a tone. It’s weird and bizarre, but the delivery of these specific lines isn’t anything outstanding.
 
