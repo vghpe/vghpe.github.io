@@ -6,31 +6,28 @@ tags: ["research", "AI"]
 image: "images/IMG_2727.jpeg"
 ---
 
-This translation project just got a lot more complicated. Here the assumed air-tight process I’ve used so far. 
+This translation project just got a lot more complicated. Here’s the previously assumed airtight process I’ve been using:
 
-I have the scans of the in dev diary in Japanese. I’ve get chat GTP to both transcribe then translated. That way, I can check against hallucinations in both phases. 
+I have scans of the in-development diary in Japanese. I use ChatGPT to both transcribe and translate them. This way, I can check for hallucinations at both stages.
 
-- The transcript must match the image. I check a few Japanese character at the start and end of paragraphs. 
+- The transcript must match the image. I verify a few Japanese characters at the start and end of paragraphs.
 
-- I cross compare the AI translation to Google translate of the transcript. 
+- I cross-compare the AI translation with Google Translate's version of the transcript.
 
-Hallucinations tend to go wild. So while the Google translation will be worse I can check that the gtp translation hasn’t gone rogue. 
+Hallucinations tend to run wild, so while the Google Translate version might be worse, I can ensure that the ChatGPT translation hasn’t gone rogue. However, ChatGPT doesn’t seem to handle blurred text well—it needs to be really crisp, or it will make up characters.
 
-However! GTP doesn’t seem to handles blurred text, it needs to be real crisp or will make up a characters. 
+I grew suspicious of the output because the text was so blurry, and the characters didn’t quite match up in the transcript.
 
-It was a bit suspicious on output because it was so blurry. And the characters didn’t quite match up in the transcript.
+I did some tests and realized just how fragile the image interpretation was. Even using sharpening tools made only a slight difference. This cast a giant shadow of doubt over all previous translations.
 
-I did some test and just started to realize how fragile the image interpretation was. And using sharpening tools really made mid difference. This casted a giant shadow of doubt in all previous translation. 
+I can’t read a word of Japanese, so spot-checking a few characters between the scan and the transcript is all I can do. But with this fragility my spot check just doesn't feel like enough and leaves a big room for error. 
 
-I can’t read a word of Japanese so spot comparison of a few character between the capture and the transcript is all I can do. But this fragility leave so much room for error. 
+I was ready to give up here. This AI project was never meant to be a true translation but rather a tool for the community to use to get there quickly. But fabricated AI falsehoods could actually be worse!
 
-I was ready to give up here. This AI project was never meant to be a true translation but a tool for the community to get there quickly. But made up AI falsehood could actually be worse!
+Google Translate gave me some hope. Its image interpreter seemed to perform much better here. While the translation was clearly off, it did a better job at reading the scans.
 
-But Google translate gave me some hope. Its image interpreter seemed to do much better here. Its translation was clearly wack but it seemed at reading the scans. 
+So, I tried Gemini, Google’s AI, and it produced a seemingly perfect transcript of the blurry scan! I tried to look really carefully through the whole sample text. 
 
-So I tried out Gemini googles AI and it produced a seemingly perfect transcript of the blurry scan! 
+Gemini also does a decent job at translating, though not as good as ChatGPT. So the new process is going to be: Gemini transcript -> ChatGPT translation.
 
-Gemini also does a decent job at translating but not as good as Chat-GTP. So the new process is going to be. Gemini transcript -> GTP translation. 
-
-The sucky thing is that I’m going to have to redo many hours of work to double check all previous done so far. 
-
+The unfortunate thing is that I’m going to have to redo many hours of work to double-check everything I’ve done so far.
