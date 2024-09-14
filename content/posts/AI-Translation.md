@@ -46,6 +46,10 @@ At this point, I was getting quite ready to give up. I had no idea how much GPT-
 Maybe GPT-4 has poor eyesight. It seems like old Google Translate was more capable of identifying the correct characters from those blurry scans. So, what if I instead try using Gemini to transcribe, then use a diff tool to compare the transcripts?
 
 <h2 style="text-align: center; margin: 0; padding: 0;">Phase 4</h2>
+
+![Meld](/images/meld.png)
+
+
 Using Gemini to transcribe and then Meld to compare its transcript against GPT-4's revealed just how many errors were present in the GPT-4 version. If the diff showed 20 conflicting characters, GPT-4 would be wrong 90% of the time. Frustratingly, Gemini also made mistakes, though much less frequently.
 
 **How do I know?**  
