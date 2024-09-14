@@ -56,4 +56,4 @@ I'm not entirely sure if the AIs were making things up, or if they were doing so
 <h2 style="text-align: center; margin: 0; padding: 0;">Phase 5</h2>
 When it comes to translation, GPT-4 is just a lot better than any other tool. It's quickly apparent when asking DeepL or Gemini to try the same. Throughout GPT's translation, Kojima's personality is consistent, and if you read his Twitter, you'll recognize that voice. The development story also rings true in its rawness of personal and professional struggles.
 
-This is still an AI translation; there are likely to be errors. But as a game developer, I believe I've gotten true insight into Kojima's process and struggle during MGS2 development. I just wouldn't quote any of the text or use it to write a book or anything before it has been properly vetted by a human translator.
+This is still an AI translation; there are likely to be errors. But as a game developer, I believe I've gotten genuine insight into Kojima's process and struggle during MGS2 development. I just wouldn't quote any of the text or use it to write a book or anything before it has been properly vetted by a human translator.
