@@ -2,25 +2,13 @@
 title = "About"
 description = "Hugo, the world's fastest framework for building websites"
 date = "2019-02-28"
-aliases = ["about-us", "about-hugo", "contact"]
+aliases = ["about-us", "contact"]
 author = "Hugo Authors"
 enableComments = false
 +++
 
-Written in Go, Hugo is an open source static site generator available under the [Apache Licence 2.0.](https://github.com/gohugoio/hugo/blob/master/LICENSE) Hugo supports TOML, YAML and JSON data file types, Markdown and HTML content files and uses shortcodes to add rich content. Other notable features are taxonomies, multilingual mode, image processing, custom output formats, HTML/CSS/JS minification and support for Sass SCSS workflows.
+Henrik Pettersson is best known as the Game Director of the time-bending Puzzle Adventure The Gardens Between. Described as "a masterwork" by The Guardian, the game picked up more than 20 international awards, including the 2019 Apple Design Award. 
 
-Hugo makes use of a variety of open source projects including:
+He's currenly working as Senior Designer at Nightschool Studio / Netflix
 
-* https://github.com/yuin/goldmark
-* https://github.com/alecthomas/chroma
-* https://github.com/muesli/smartcrop
-* https://github.com/spf13/cobra
-* https://github.com/spf13/viper
-
-Hugo is ideal for blogs, corporate websites, creative portfolios, online magazines, single page applications or even a website with thousands of pages.
-
-Hugo is for people who want to hand code their own website without worrying about setting up complicated runtimes, dependencies and databases.
-
-Websites built with Hugo are extremely fast, secure and can be deployed anywhere including, AWS, GitHub Pages, Heroku, Netlify and any other hosting provider.
-
-Learn more and contribute on [GitHub](https://github.com/gohugoio).
+[Reach out on X](https://x.com/vghpe)
