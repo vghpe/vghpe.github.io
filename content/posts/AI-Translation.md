@@ -3,9 +3,10 @@ title: "Translating Kojima's Diary: A Dive into AI Translation"
 date: 2024-09-14
 draft: false
 tags: ["research", "AI"]
+image: "images/kojima-drawing.jpg"
 ---
 
-I first learned about *Metal Gear Solid 2's* development diary from a [DidYouKnowGaming](https://www.youtube.com/watch?v=BVAlMgY4-5M) video on YouTube. After some online sleuthing, I discovered that the entire diary had been [uploaded to X](https://x.com/BadHumans/status/1744883721595924822). This diary was originally published in the book *Metal Gear Solid 2: The Making*, which was released exclusively in Japan 2002 and never translated into English.
+I learned about  *Metal Gear Solid 2's* development diary from a [DidYouKnowGaming](https://www.youtube.com/watch?v=BVAlMgY4-5M) video on YouTube. After some online sleuthing, I discovered that the entire content had been [uploaded to X](https://x.com/BadHumans/status/1744883721595924822). This dev-diary was originally published in the book *Metal Gear Solid 2: The Making*, which was released exclusively in Japan 2002 and never translated into English.
 
 I have previously used ChatGPT for various translation tasks and was impressed with its ability. Its translation of Swedish (my native language) was able to capture even the most obscure nuances, and it has been a super helpful tool as I’ve been learning Vietnamese. So, I was curious to try it out on the scans and gain insight into this never-before-translated Kojima Diary.
 
@@ -50,7 +51,7 @@ Maybe GPT-4 has poor eyesight. It seems like old Google Translate was more capab
 ![Meld](/images/meld.png)
 
 
-Using Gemini to transcribe and then Meld to compare its transcript against GPT-4's revealed just how many errors were present in the GPT-4 version. If the diff showed 20 conflicting characters, GPT-4 would be wrong 90% of the time. Frustratingly, Gemini also made mistakes, though much less frequently.
+Using Gemini to transcribe and then [Meld](https://meldmerge.org/) to compare its transcript against GPT-4's revealed just how many errors were present in the GPT-4 version. If the diff showed 20 conflicting characters, GPT-4 would be wrong 90% of the time. Frustratingly, Gemini also made mistakes, though much less frequently.
 
 **How do I know?**  
 Well, I would painstakingly compare each character in conflict to the scan and manually correct each paragraph for the almost 200 entries.
