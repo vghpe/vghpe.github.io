@@ -1,7 +1,7 @@
 ---
 title: Sneaky hallucinations 
 date: 2024-09-02T23:35:39-07:00
-draft: false
+draft: true
 tags: ["research", "AI"]
 image: "images/IMG_2727.jpeg"
 ---
