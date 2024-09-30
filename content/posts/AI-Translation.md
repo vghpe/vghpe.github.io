@@ -1,5 +1,5 @@
 ---
-title: "Translating Kojima's Diary using AI, The Good and Bad"
+title: "Translating Kojima's Diary: A Dive into AI Translation"
 date: 2024-09-14
 draft: false
 tags: ["research", "AI"]
