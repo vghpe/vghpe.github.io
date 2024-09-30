@@ -4,6 +4,7 @@ date: 2024-09-01T17:56:48-07:00
 draft: false
 tags: ["research", "journal"]
 image: "images/IMG_2718.jpeg"
+caption: "Official Concept art, published in Disco Elysium Digital Artbook"
 ---
 
 The writing in Disco Elysium really felt like it stood out? why is that? I'd like to know. Let's start with a simple test.
