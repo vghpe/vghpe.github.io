@@ -1,5 +1,5 @@
 ---
-title: Illustration for Kojima diary #1 
+title: Article Illustration 1 
 date: 2024-10-21T22:29:11-07:00
 draft: false
 tags: ["fluff", "sketches"]
