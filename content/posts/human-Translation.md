@@ -33,7 +33,7 @@ When I had gathered all the key differences, it was time to reach out to Jolie.
 
 ## Phase 7
 
-[Jolie Menzel](https://x.com/joliemenzel) is a Games Director with an extensive resume, having worked for Ubisoft in Osaka, Japan, among other places. Now back in the U.S., Jolie has maintained their Japanese skills. Their experience makes them an ideal reviewer for this diary, as they, like Kojima, are an experienced developer.
+[Jolie Menzel](https://x.com/joliemenzel) is a Design Director with an extensive resume, having worked for Ubisoft in Osaka, Japan, among other places. Now back in the U.S., Jolie has maintained their Japanese language skills. Their experience makes them an ideal reviewer for this diary, as they, like Kojima, are an experienced developer.
 
 I asked Jolie to review both the inconsistencies and the full quotes I plan to use in my article. Out of the nine listed inconsistencies, the AI was deemed correct six times, the human translation twice, and once, both were wrong.
 
