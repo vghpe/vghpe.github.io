@@ -1,10 +1,9 @@
 ---
-title: "A study of Hideo Kojima's Dev Diary"
+title: A study of Hideo Kojima's Dev Diary
 date: 2024-11-04
-description: "An exploration of Hideo Kojima's development diary during the creation of Metal Gear Solid 2."
+draft: false 
 tags: ["Design", "Research", "game-dev"]
 image: "images/features/img_article_kojima-diary-closed.png"
-
 ---
 
 Hideo Kojima's development diary for *Metal Gear Solid 2: Sons of Liberty* was penned between 1998 and 2001 and published in the book *METAL GEAR SOLID 2 THE MAKING* in 2002. It was never officially translated into English; however, after I discovered the original scans online, I dedicated an unhealthy amount of time to resource and puzzle together a verified good translation. [More on that here](https://vghpe.github.io/blog/posts/ai-translation/)
@@ -169,7 +168,3 @@ Something that did surprise me was how enjoyable it was to peek back at the turn
 I often wonder if doing these studies and writing these essays actually help me as a creative… or if I should put all that effort into actually… making stuff. It gives me comfort then to see that enjoying and understanding entertainment—and the people who create it—is something Kojima so openly embraces.
 
 I think my main takeaway is to let the things that inspire me guide me and, maybe, worry less about everyone's approval. If I feel confident in what I like and I can work out why I like it, I should chase that energy rather than trying to impress. I’ll probably have more fun too.
-
----
-
-
