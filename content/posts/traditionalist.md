@@ -61,5 +61,5 @@ The quotes below are gathered from users on Reddit, X, Youtube and Instagram. I 
 
 ---
 
-While I’m no less distressed about my habits, I do think this exercise was better than trying to comprehend outrage through the feed. It felt more like excavation—pulling out the repeating patterns and piecing them together as a whole. This approach let me detach, and better yet, avoid personalities with stakes in the debate.
+While I’m no less distressed about my habits, I do think this exercise was better than trying to comprehend outrage through the feed. It felt more like excavation—pulling out the repeating patterns and piecing them together as a whole. This approach let me detach, and better yet, avoid personalities with financial stakes in the debate.
 
