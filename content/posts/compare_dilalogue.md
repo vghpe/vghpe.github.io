@@ -2,7 +2,10 @@
 title: "Comparing Opening Dialogues: A Short Hike vs. Arranger"
 date: 2024-12-25
 tags: ["game writing", "dialogue analysis", "game design"]
+draft: true
 ---
+
+TEST TEST DRAFT
 
 One of my favorite games this year was *Arranger*, a tile-based puzzle adventure game. I played it on my iPad as I was recovering from a cold and was charmed by the style and excellent puzzle design. It was cozy, and a unique game that let me work through it at my own pace.  
 
