@@ -1,36 +1,37 @@
 ---
-title: "Comparing Opening Dialogues: A Short Hike vs. Arranger"
+title: "Comparing Dialogues: A Short Hike vs. Arranger"
 date: 2024-12-25
 tags: ["game writing", "dialogue analysis", "game design"]
 draft: true
 ---
 
-TEST TEST DRAFT
+One of my favorite games this year was *Arranger*, a tile-based puzzle adventure game. I played it on my iPad as I was recovering from a cold and was charmed by its style and excellent puzzle design.
 
-One of my favorite games this year was *Arranger*, a tile-based puzzle adventure game. I played it on my iPad as I was recovering from a cold and was charmed by the style and excellent puzzle design. It was cozy, and a unique game that let me work through it at my own pace.  
+However, I found myself struggling with the text and dialogue. My focus would quickly drift, and I struggled to parse the sentences. Why?
 
-However, I found myself struggling somehow with the text and dialogue. My focus would quickly drift, and I struggled to parse the sentences. Was it the writing or the presentation? Am I just too much of a simpleton?
+Let’s break it down and compare *Arranger* to another game, *A Short Hike*, which uses a similar dialogue design. But I remember being very drawn in by *A Short Hike*'s dialogue.
 
-Let’s compare *Arranger* to another game, *A Short Hike*, which also uses a similar dialogue design. I specifically remember being very drawn in by its dialogue. 
-
-Discalimer, I'm not a writer, english is my second languge and I've struggled struggled struggled with prose, so here is me trying to understand I had a preference for one over the other. First, let's start with a high-level look at how the dialogue systems are deployed.  
+**Disclaimer:** I'm not a writer, and English is my second language, so here is me trying to understand why I had a preference for one over the other. First, let's start with a high-level look at how the dialogue systems are deployed.
 
 ---
 
-## NPC Engagment Design
+## NPC Engagement Design
 
-*Arranger* uses a traditional adventure game flow for NPC conversations. An engagement is commonly force-triggered on approach. Once the dialogue is done, the player can chooce to re-engage the NPC for a short affirmation script (usually to remind the player of the goal) that can be re-triggered indefinitly. 
+*Arranger* uses a traditional adventure game flow for NPC conversations. An engagement is commonly force-triggered on approach. Once the dialogue is done, the player can choose to re-engage the NPC for a short affirmation script (usually to remind the player of the goal) that can be re-triggered indefinitely.
 
-*A Short Hike* leans into player agency and the toy-box nature of its core design. NPC engagement is always player-controlled and (entirely?) optional. 
+[Image of flow]
 
-It also uses a re-engagement design I'm a big fan of. On engagement, high-level information is frontloaded with a short script, when the player is released from the conversation, they can choose to re-engage for more narrative details or just move on. The twitchy player can go jump off a rock, and the curious player can get to know the characters more. 
+*A Short Hike* leans into player agency and the toy-box nature of its core design. NPC engagement is always player-controlled and (entirely?) optional.
 
+It also uses a re-engagement design I'm a big fan of. On engagement, high-level information is frontloaded with a short script. When the player is released from the conversation, they can choose to re-engage for more narrative details or just move on. The twitchy player can go jump off a rock, and the curious player can get to know the characters more.
+
+[Another flow]
 
 ---
 
 ## The Scripts
 
-Here's the script for for the first NPC interactions in both game. 
+Here's the script for the first NPC interactions in both games.
 
 #### A Short Hike
 
@@ -86,6 +87,7 @@ Here's the script for for the first NPC interactions in both game.
 
 </details>
 
+---
 
 #### Arranger
 
@@ -93,7 +95,7 @@ Here's the script for for the first NPC interactions in both game.
 > Morning, Susie Q!  
 
 > **SUSIE**  
-> I've ASKED you not to call me that, Jemma.  Susie, or Miss Susie will do just fine.  
+> I've ASKED you not to call me that, Jemma. Susie, or Miss Susie will do just fine.  
 
 <details>
 <summary>Expand Script</summary>
@@ -121,27 +123,39 @@ Here's the script for for the first NPC interactions in both game.
 
 </details>
 
+---
 
+I'm sure there are linguistic descriptions that can be used here. Again, I'm not a writer, so I'd describe the difference as: *A Short Hike*'s text feels like a conversation, and *Arranger*'s text feels more like writing.
 
-I'm sure there are many linguistic descriptions that can be used here. Again, I'm not a writer, so here's how I describe the difference: *A Short Hike*'s text feels like a conversation, and *Arranger*'s text feels like I'm reading "writing." 
+There's something I appreciate about the very brief lines in *A Short Hike*. It's like I can parse each one in a breath and then move on.
 
-There's also something nice about the very brief and short text in *A Short Hike* that I like. It's like I can parse it within a breath, and I'm not tripping over the words in my head. 
+*Arranger*'s lines are wordier, maybe more poetic, but I'm unable to flow through them in the same manner. There are several full stops within a line, and it occasionally deploys "eye dialect"—spelling that suggests a character's accent—which consistently trips me up. This, I think, contributes to me losing the conversational rhythm.
 
 ---
 
-## Animation -  Text & Character
+## The Text - Presentation and Features
 
-Both games animate the characters. *Arranger* appears to do a ping-pong ease on the sprite, while *A Short Hike* translates or scales the heads on the Y-axis.  
+The text speed in both games is fast. Neither game offers options to adjust text speed (some players have a preference for instant text reveal) but both games let allows tap to instantly complete the line. 
+
+Legibility in both games is excellent. The fonts are sharp and contrast well against the text boxes. *Arranger* plays a sound effect with each new box, while *A Short Hike* plays one when the speaker changes. *Arranger* also uses an idle animation on the text boxes, which keeps the screen from feeling too static.
+
+Both games animate the characters. *Arranger* appears to use a ping-pong ease on the sprite, while *A Short Hike* translates or scales the heads on the Y-axis.
 
 ---
 
 ## The Beeps
 
-I reached out to Adam Robinson-Yu creator of A Short Hike and he actually shared send me the code snippet of the text beep functionallity used in the game.  
+I couldn't quite work out how the beeps were implemented just by looking at footage, so I reached out to Adam Robinson-Yu, creator of *A Short Hike*, and he actually sent me the code snippet of the text beep functionality used in the game.
+
+>Each frame a number of characters are revealed based on a set speed. Whenever a character is revealed, it plays a beep (from a random set) if a certain amount of time has passed since the last beep.
+
+I didn't ask Adam if all NPCs use the same sound bank. My guess is: yes, but each NPC is assigned a pitch shift, giving everyone a unique voice, which also makes the back-and-forth feel like two different people talking.
+
+*Arranger*'s beeps appear to be implemented very similarly, but there is no variation between NPCs. The same pitch and sound bank are always used. They’ve done something quite unique with the sound design, though, which I’ve never heard before. It doesn’t try so much to be a voice like *A Short Hike*, but the "bloops" still have more personality through their variation than the typewriter sounds you find in *Ace Attorney* and many other visual novels.
+
+---
+
+## Summary
 
 Each frame, a number of text characters are revealed based on a set speed. A beep sound (chosen randomly from a predefined set) plays if any characters are revealed and a certain amount of time has passed since the last beep.
-
-I didn't ask Adam if all NPC uses the same bank, my guess is: yes, but each NPC is assigned a pitch shift giving eveyone an unique voice which also makes the back and forth the feel of 2 different people talking.
-
-
 
