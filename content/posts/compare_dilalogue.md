@@ -1,5 +1,5 @@
 ---
-title: "Comparing Dialogues: A Short Hike vs. Arranger"
+title: "Comparing Dialogue: A Short Hike vs. Arranger"
 date: 2024-12-25
 tags: ["game writing", "dialogue analysis", "game design"]
 draft: true
@@ -7,7 +7,7 @@ draft: true
 
 One of my favorite games this year was *Arranger*, a tile-based puzzle adventure game. I played it on my iPad as I was recovering from a cold and was charmed by its style and excellent puzzle design.
 
-However, I found myself struggling with the text and dialogue. My focus would quickly drift, and I struggled to parse the sentences. Why?
+However, I found myself struggling with the text and dialogue. My focus would quickly drift, and I struggled to parse the sentences. Why? Is it the text? The presentation or maybe the sounds?
 
 Let’s break it down and compare *Arranger* to another game, *A Short Hike*, which uses a similar dialogue design. But I remember being very drawn in by *A Short Hike*'s dialogue.
 
@@ -19,13 +19,13 @@ Let’s break it down and compare *Arranger* to another game, *A Short Hike*, wh
 
 *Arranger* uses a traditional adventure game flow for NPC conversations. An engagement is commonly force-triggered on approach. Once the dialogue is done, the player can choose to re-engage the NPC for a short affirmation script (usually to remind the player of the goal) that can be re-triggered indefinitely.
 
-[Image of flow]
+![Arrangers Engagment design is quite similar to a Zelda game](/images/arranger-flow.png)
 
 *A Short Hike* leans into player agency and the toy-box nature of its core design. NPC engagement is always player-controlled and (entirely?) optional.
 
 It also uses a re-engagement design I'm a big fan of. On engagement, high-level information is frontloaded with a short script. When the player is released from the conversation, they can choose to re-engage for more narrative details or just move on. The twitchy player can go jump off a rock, and the curious player can get to know the characters more.
 
-[Another flow]
+![In a Short Hike personaly and depth is revealed to players that re-engage ](/images/short-hike-flow.png)
 
 ---
 
@@ -129,13 +129,13 @@ I'm sure there are linguistic descriptions that can be used here. Again, I'm not
 
 There's something I appreciate about the very brief lines in *A Short Hike*. It's like I can parse each one in a breath and then move on.
 
-*Arranger*'s lines are wordier, maybe more poetic, but I'm unable to flow through them in the same manner. There are several full stops within a line, and it occasionally deploys "eye dialect"—spelling that suggests a character's accent—which consistently trips me up. This, I think, contributes to me losing the conversational rhythm.
+*Arranger*'s lines are wordier, maybe more poetic, but I'm unable to flow through them in the same manner. There are several full stops within a string, more complex vocabolary and it occasionally deploys "eye dialect"—spelling that suggests a character's accent—which consistently trips me up. This, I think, contributes to me losing the conversational rhythm.
 
 ---
 
-## The Text - Presentation and Features
+## Presentation and Features
 
-The text speed in both games is fast. Neither game offers options to adjust text speed (some players have a preference for instant text reveal) but both games let allows tap to instantly complete the line. 
+The text speed in both games is fast. Neither game offers options to adjust text speed. but both games let allows tap to instantly complete the line. 
 
 Legibility in both games is excellent. The fonts are sharp and contrast well against the text boxes. *Arranger* plays a sound effect with each new box, while *A Short Hike* plays one when the speaker changes. *Arranger* also uses an idle animation on the text boxes, which keeps the screen from feeling too static.
 
@@ -143,19 +143,42 @@ Both games animate the characters. *Arranger* appears to use a ping-pong ease on
 
 ---
 
-## The Beeps
+## The Voice Beeps
+
+
+
 
 I couldn't quite work out how the beeps were implemented just by looking at footage, so I reached out to Adam Robinson-Yu, creator of *A Short Hike*, and he actually sent me the code snippet of the text beep functionality used in the game.
 
 >Each frame a number of characters are revealed based on a set speed. Whenever a character is revealed, it plays a beep (from a random set) if a certain amount of time has passed since the last beep.
 
-I didn't ask Adam if all NPCs use the same sound bank. My guess is: yes, but each NPC is assigned a pitch shift, giving everyone a unique voice, which also makes the back-and-forth feel like two different people talking.
+<div style="margin: 0 auto; width: fit-content; text-align: center;">
 
-*Arranger*'s beeps appear to be implemented very similarly, but there is no variation between NPCs. The same pitch and sound bank are always used. They’ve done something quite unique with the sound design, though, which I’ve never heard before. It doesn’t try so much to be a voice like *A Short Hike*, but the "bloops" still have more personality through their variation than the typewriter sounds you find in *Ace Attorney* and many other visual novels.
+| A Short Hike - Captured VO beeps       |
+|--------------------|
+| <audio controls><source src="/audio/short-hike-beeps.ogg" type="audio/ogg">Your browser does not support the audio element.</audio> |
+
+</div>
+
+
+I didn't ask Adam, but it appears a couple of "sets" are used then I'm guessing each character is assigned a personal pitch shift for futher variations. This gives every NPC a unique voice which makes the back-and-forth feel like different people talking.
+
+
+*Arranger*'s beeps appear to be similarly implemented, but there is no variation between characters. The same pitch and sound bank are used for everyone. 
+
+<div style="margin: 0 auto; width: fit-content; text-align: center;">
+
+| Arranger - Captured VO beeps          |
+|--------------------|
+| <audio controls><source src="/audio/arranger-beeps.ogg" type="audio/ogg">Your browser does not support the audio element.</audio> |
+
+</div>
+
+It doesn’t try so much to be voices *A Short Hike*, it's more an audiolization of the text. But it still has a lot more personality than the typical typewriter sounds you find in *Ace Attorney* and many other visual novels. I really apprichiate the audio design, i've not heard bleeps like this before. 
+
 
 ---
 
 ## Summary
 
-Each frame, a number of text characters are revealed based on a set speed. A beep sound (chosen randomly from a predefined set) plays if any characters are revealed and a certain amount of time has passed since the last beep.
 
