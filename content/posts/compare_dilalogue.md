@@ -181,4 +181,5 @@ It doesn’t try so much to be voices *A Short Hike*, it's more an audiolization
 
 ## Summary
 
+My preference for a Short Hikes dialogue mainly comes down to my preference for casual rhythm and easy to vocalize text. Further, the short text strings and engagement design also gives me more agency in how much I wishes to read/learn. Finally, A Short Hike’s text beeps really helps adds personality and enforce the rhythm and back-forth of the dialogue. 
 
