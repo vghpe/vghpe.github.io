@@ -3,7 +3,7 @@ title: "Comparing Dialogue: A Short Hike vs. Arranger"
 date: 2025-01-02T04:06:55Z
 tags: ["game writing", "dialogue analysis", "game design"]
 image: "images/arranger-short-title.png"
-draft: false
+draft: true
 ---
 
 One of my favorite games this year was *Arranger*, a tile-based puzzle-adventure game. I played it on my iPad while I was recovering from a cold and was charmed by its style and excellent puzzle design.
@@ -27,13 +27,13 @@ Let’s break it down and compare *Arranger* to another game, *A Short Hike*, wh
 
 *Arranger* uses a traditional adventure game flow for NPC conversations. Engagement is commonly force-triggered on approach. Once the dialogue is done, the player can choose to re-engage the NPC for a short affirmation script (usually to remind the player of the goal) that can be re-triggered indefinitely.
 
-![Arranger's engagement design is quite similar to a Zelda game](/images/arranger-flow.png)
+![Arranger\'s engagement design is quite similar to a Zelda game](/images/arranger-flow.png)
 
 *A Short Hike* leans into player agency and the toy-box nature of its core design. NPC engagement is always player-controlled and (entirely?) optional.
 
 It also uses a re-engagement design I'm a big fan of. On engagement, high-level information is frontloaded with a short script. When the player is released from the conversation, they can choose to re-engage for more narrative details or just move on. The twitchy player can go jump off a rock, and the curious player can get to know the characters more.
 
-![In *A Short Hike*, personality and depth are revealed to players who re-engage](/images/short-hike-flow.png)
+![In A Short Hike, personality and depth are revealed to players who re-engage](/images/short-hike-flow.png)
 
 ---
 
