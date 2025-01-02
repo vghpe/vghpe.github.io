@@ -1,9 +1,9 @@
 ---
 title: "Comparing Dialogue: A Short Hike vs. Arranger"
-date: 2024-12-25
+date: 2025-01-02T04:06:55Z
 tags: ["game writing", "dialogue analysis", "game design"]
 image: "images/arranger-short-title.png"
-draft: true
+draft: false
 ---
 
 One of my favorite games this year was *Arranger*, a tile-based puzzle-adventure game. I played it on my iPad while I was recovering from a cold and was charmed by its style and excellent puzzle design.
@@ -145,11 +145,11 @@ There's something I appreciate about the very brief lines in *A Short Hike*. It'
 
 The text speed in both games is fast. *Arranger* is pretty much on par with my reading speed, while *A Short Hike* speeds ahead. Neither game offers options to adjust text speed, but both games allow tapping to instantly complete the line.
 
-![Arranger's textbox animation at 0.25 speed](/images/arranger-textbox-2.gif)
+![Arranger\'s textbox animation at 0.25 speed](/images/arranger-textbox-2.gif)
 
 Legibility in both games is excellent. The fonts are sharp and contrast well against the text boxes. *Arranger* plays a sound effect with each new box, while *A Short Hike* plays one when the speaker changes. *Arranger* also uses an idle animation on the text boxes, which keeps the screen from feeling too static.
 
-![A Short Hike's textbox animation at 0.25 speed](/images/shorthike-textbox-2.gif)
+![A Short Hike\'s textbox animation at 0.25 speed](/images/shorthike-textbox-2.gif)
 
 One notable difference in the presentation is that all NPCs in *A Short Hike* are assigned a unique color for their text. In *Arranger*, only Jemma gets a special text color treatment.
 
@@ -167,7 +167,7 @@ I couldn't quite work out how the beeps were implemented just by looking at foot
 
 | A Short Hike - Captured VO beeps       |
 |----------------------------------------|
-| <audio controls><source src="/audio/short-hike-beeps.ogg" type="audio/ogg">Your browser does not support the audio element.</audio> |
+| <audio controls><source src="/audio/short-hike-beeps.mp3" type="audio/mpeg"><source src="/audio/short-hike-beeps.ogg" type="audio/ogg">Your browser does not support the audio element.</audio> |
 
 </div>
 
@@ -179,7 +179,7 @@ I didn't ask Adam, but it appears a couple of "sets" are used; then I'm guessing
 
 | Arranger - Captured VO beeps          |
 |---------------------------------------|
-| <audio controls><source src="/audio/arranger-beeps.ogg" type="audio/ogg">Your browser does not support the audio element.</audio> |
+| <audio controls><source src="/audio/arranger-beeps.mp3" type="audio/mpeg"><source src="/audio/arranger-beeps.ogg" type="audio/ogg">Your browser does not support the audio element.</audio> |
 
 </div>
 
@@ -191,6 +191,6 @@ It doesn’t try so much to be “voices” like *A Short Hike*; it's more an au
 
 My preference for *A Short Hike*'s dialogue mainly comes down to its casual rhythm and easy-to-vocalize text. Further, the short text strings and engagement design give me more agency in how much I want to read or learn. Finally, *A Short Hike*’s text beeps really help add personality and reinforce the rhythm and back-and-forth of the dialogue.
 
-[add in note about how it leans into the design]
+<!-- add in note about how it leans into the design, effect pacing, and that this all probably was by design] -->
 
 ---
