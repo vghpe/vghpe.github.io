@@ -41,6 +41,42 @@ It also uses a re-engagement design I'm a big fan of. On engagement, high-level 
 
 Here's the script for the first NPC interactions in both games.
 
+#### Arranger
+
+> **JEMMA**  
+> Morning, Susie Q!  
+
+> **SUSIE**  
+> I've ASKED you not to call me that, Jemma. Susie, or Miss Susie will do just fine.  
+
+<details>
+<summary>Expand Script</summary>
+
+> **JEMMA**  
+> Aw, c'mon! This might be the last day I ever get to use it!  
+> Wouldn't that be sad if you never got to hear it again?  
+
+> **SUSIE**  
+> Devastating. Now today's a big day. Are you feeling ready?  
+> You'll need to be prepared for anything out there...  
+> ...no one would blame you if today WEREN'T the day, after all...  
+
+> **JEMMA**  
+> It's the day, Miss Susie! I'm ready!  
+
+> **SUSIE**  
+> Hmm. It pains me to say it, but you actually DO look ready this time.  
+
+> **JEMMA**  
+> I am! Will you come with me to open the gate?  
+
+> **SUSIE**  
+> I wouldn't miss it. Now where did I put that gate key?  
+
+</details>
+
+---
+
 #### A Short Hike
 
 > **AUNT MAY**  
@@ -92,42 +128,6 @@ Here's the script for the first NPC interactions in both games.
 > Just take White Beach Trail and head north at the fork.  
 > Then follow the signs to Hawk's Peak.  
 > No problem!
-
-</details>
-
----
-
-#### Arranger
-
-> **JEMMA**  
-> Morning, Susie Q!  
-
-> **SUSIE**  
-> I've ASKED you not to call me that, Jemma. Susie, or Miss Susie will do just fine.  
-
-<details>
-<summary>Expand Script</summary>
-
-> **JEMMA**  
-> Aw, c'mon! This might be the last day I ever get to use it!  
-> Wouldn't that be sad if you never got to hear it again?  
-
-> **SUSIE**  
-> Devastating. Now today's a big day. Are you feeling ready?  
-> You'll need to be prepared for anything out there...  
-> ...no one would blame you if today WEREN'T the day, after all...  
-
-> **JEMMA**  
-> It's the day, Miss Susie! I'm ready!  
-
-> **SUSIE**  
-> Hmm. It pains me to say it, but you actually DO look ready this time.  
-
-> **JEMMA**  
-> I am! Will you come with me to open the gate?  
-
-> **SUSIE**  
-> I wouldn't miss it. Now where did I put that gate key?  
 
 </details>
 
