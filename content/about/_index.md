@@ -7,8 +7,9 @@ author = "Hugo Authors"
 enableComments = false
 +++
 
-Henrik Pettersson is best known as the Game Director of the time-bending Puzzle Adventure The Gardens Between. Described as "a masterwork" by The Guardian, the game picked up more than 20 international awards, including the 2019 Apple Design Award. 
-
+Henrik Pettersson is best known as the Game Director of the time-bending Puzzle Adventure The Gardens Between. 
 He's currenly working as Senior Designer at Nightschool Studio / Netflix
 
 [Reach out on X](https://x.com/vghpe)
+
+[Reach out on Blue Sky](https://bsky.app/profile/vghpe.bsky.social)
