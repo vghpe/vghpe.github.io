@@ -8,7 +8,7 @@ draft: false
 
 One of my favorite games this year was *Arranger*, a tile-based puzzle-adventure game. I played it on my iPad while I was recovering from a cold and was charmed by its style and excellent puzzle design.
 
-However, I found myself struggling to connect with the text and dialogue. My focus would drift, and I struggled to parse the sentences. Why? Is it the text? The presentation? Or maybe the sounds?
+However, I struggled to engage with the text and dialogue. I wasn't connecting with the words, parsing felt difficult, and my focus would drift. Why? Was it the text? The presentation? Or something else?
 
 Let’s break it down and compare *Arranger* to another game, *A Short Hike*, which uses a similar dialogue design. But I remember being very drawn in by *A Short Hike*'s dialogue.
 
@@ -189,8 +189,13 @@ It doesn’t try so much to be “voices” like *A Short Hike*; it's more an au
 
 ## Summary
 
-My preference for *A Short Hike*'s dialogue mainly comes down to its casual rhythm and easy-to-vocalize text. Further, the short text strings and engagement design give me more agency in how much I want to read or learn. Finally, *A Short Hike*’s text beeps really help add personality and reinforce the rhythm and back-and-forth of the dialogue.
+The narrative intentions between both games are clearly different. Arranger is a linear game: every player will experience the dialogue along it's golden path. Meanwhile, A Short Hike’s “toybox” and explorative core extend into its dialogue design.
 
-<!-- add in note about how it leans into the design, effect pacing, and that this all probably was by design] -->
+My preference for A Short Hike’s dialogue mainly comes down to its casual rhythm and easy-to-vocalize text. Furthermore, the short text strings and engagement design give me more agency in how much I want to read or learn. Finally, A Short Hike’s text beeps really help add personality and reinforce the rhythm and back-and-forth of the dialogue.
+
+Is there a space where the two systems could meet somewhere in between? This is something I’ve been wondering about and part of my inspiration for this post. Linear storytelling delivers a controlled, artistically guided experience but risks alienating players who don’t vibe with the author’s style and pace—something I saw often when working on Night School Studio’s games.
+
+Also, could text beeps be effective for drama, or are they inherently best for comedic and lighthearted tones? I want to know! 
+
 
 ---
