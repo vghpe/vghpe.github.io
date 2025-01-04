@@ -2,7 +2,7 @@
 title: Article Illustration 6
 date: 2024-10-29T00:24:36-07:00
 draft: false
-tags: ["sketches"]
+tags: ["fluff", "sketches"]
 image: "images/IMG_2850.jpeg"
 ---
 

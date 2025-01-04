@@ -2,7 +2,7 @@
 title: Updated icon
 date: 2024-08-21T12:48:30-07:00
 draft: false
-tags: ["web-dev"]
+tags: ["web-dev","fluff"]
 image: "images/IMG_2642.jpeg"
 ---
 

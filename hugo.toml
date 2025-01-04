@@ -13,3 +13,8 @@ showPowerBy = false
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+
+[[menu.main]]
+  name = "Fluff"
+  url = "/fluff/"
+  weight = 2
