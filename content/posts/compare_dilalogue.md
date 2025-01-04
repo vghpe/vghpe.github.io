@@ -204,4 +204,4 @@ My preference for *A Short Hike*’s dialogue mainly comes down to its casual rh
 
 Linear storytelling delivers a controlled, artistically guided experience but risks alienating players who don’t vibe with the author’s style and pace—something I've seen plenty when working on Night School Studio’s games.
 
-Can a more linear story still work with A Short Hike’s engagement design? I would also like to explore the range of text beeps more. They’ve clearly worked well in comedic and lighthearted settings, but can they provide an effective performance for a drama?
+Can a more linear story still work with A Short Hike’s engagement design? I would also like to explore the range of text beeps more. They clearly worked well in comedic and lighthearted settings, but can they provide an effective performance for a drama?
