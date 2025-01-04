@@ -12,12 +12,17 @@ However, I struggled to engage with the text and dialogue. I wasn't connecting w
 
 Let’s break it down and compare *Arranger* to another game, *A Short Hike*, which uses a similar dialogue design. But I remember being very drawn in by *A Short Hike*'s dialogue.
 
-<div class="video-container">
-  <video width="640" height="360" controls>
-    <source src="/videos/short_arrange_comparison_capture.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
+<div class="video-wrapper">
+  <figure class="video-container">
+    <video width="640" height="360" controls>
+      <source src="/videos/short_arrange_comparison_capture.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </figure>
+  <figcaption class="image-caption">In the video, I’ve interspersed clips from both games. The first is <em>A Short Hike</em>, and the second is <em>Arranger</em>.</figcaption>
 </div>
+
+
 
 **Disclaimer:** I'm not a writer, and English is my second language, so here is me trying to understand why I had a preference for one over the other. First, let's start with a high-level look at how the dialogue systems are deployed.
 
@@ -153,7 +158,7 @@ Legibility in both games is excellent. The fonts are sharp and contrast well aga
 
 One notable difference in the presentation is that all NPCs in *A Short Hike* are assigned a unique color for their text. In *Arranger*, only Jemma gets a special text color treatment.
 
-Both games animate the speaker. *Arranger* appears to use a ping-pong ease on the sprite, while *A Short Hike* translates or scales the heads on the Y-axis.
+Both games animate the speaker with little bobs. *Arranger* appears to use a ping-pong ease on the sprite, while *A Short Hike* translates or scales the heads on the Y-axis.
 
 ---
 
@@ -189,13 +194,14 @@ It doesn’t try so much to be “voices” like *A Short Hike*; it's more an au
 
 ## Summary
 
-The narrative intentions between both games are clearly different. Arranger is a linear game: every player will experience the dialogue along it's golden path. Meanwhile, A Short Hike’s “toybox” and explorative core extend into its dialogue design.
+The narrative intentions between both games are clearly different. *Arranger* is a linear game: every player will experience the dialogue along its golden path. Meanwhile, *A Short Hike*’s “toybox” and explorative core extend into its dialogue design.
 
-My preference for A Short Hike’s dialogue mainly comes down to its casual rhythm and easy-to-vocalize text. Furthermore, the short text strings and engagement design give me more agency in how much I want to read or learn. Finally, A Short Hike’s text beeps really help add personality and reinforce the rhythm and back-and-forth of the dialogue.
-
-Is there a space where the two systems could meet somewhere in between? This is something I’ve been wondering about and part of my inspiration for this post. Linear storytelling delivers a controlled, artistically guided experience but risks alienating players who don’t vibe with the author’s style and pace—something I saw often when working on Night School Studio’s games.
-
-Also, could text beeps be effective for drama, or are they inherently best for comedic and lighthearted tones? I want to know! 
-
+My preference for *A Short Hike*’s dialogue mainly comes down to its casual rhythm and easy-to-vocalize text. Furthermore, the short text strings and engagement design give me more agency in how much I want to read or learn. Finally, *A Short Hike*’s text beeps really help add personality and reinforce the rhythm and back-and-forth of the dialogue.
 
 ---
+
+### Exploring Further
+
+Linear storytelling delivers a controlled, artistically guided experience but risks alienating players who don’t vibe with the author’s style and pace—something I saw often when working on Night School Studio’s games.
+
+Can a more linear story still work with A Short Hike’s engagement design? I would also like to explore the range of text beeps more. They’ve clearly worked well in comedic and lighthearted settings, but can they provide an effective performance for a drama?
