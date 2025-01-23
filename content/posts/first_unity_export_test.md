@@ -4,7 +4,7 @@ date: 2025-01-22T15:30:00-07:00
 tags: ["fluff"]
 ---
 
-Here's a quick test of a Unity Web project. I can only build uncompressed for now so it's an 80MB load instead of 6MB, not sure how to solve that yet. 
+Here's a quick test of a Unity Web project. I can only build uncompressed for now so it's an 80MB load instead of 6MB, and you might to flip that ringer switch on the side of you phone to hear the audio. 
 
 <div style="display: flex; justify-content: center; align-items: center; margin-top: 20px;">
   <iframe
@@ -17,4 +17,4 @@ Here's a quick test of a Unity Web project. I can only build uncompressed for no
   ></iframe>
 </div>
 
-Feel free to check it out and let me know if there are any issues!
+But this is pretty cool! I'll make an actual half decent level next. 
