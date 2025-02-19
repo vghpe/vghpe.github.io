@@ -1,7 +1,7 @@
 ---
 title: "Descriptions Used by Traditionalist Core Gamers on Their Grievances with the Intergalactic Reveal Trailer" 
 date: 2024-12-15T12:00:00Z
-draft: false
+draft: true
 ---
 
 I've been feeling a bit distressed recently about my habits of passive engagement in the online culture war. For the last decade, I've kept an eye on the outrage in gaming culture, particularly from those who might be described as the “Skeptical Core Fanbase.”
