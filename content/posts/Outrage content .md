@@ -1,7 +1,7 @@
 ---
 title: Gamer Outrage Content 
 date: 2024-08-18T15:39:31-07:00
-draft: false
+draft: true
 tags: ["fluff", "sketches", "gamesindustry"]
 image: "images/IMG_2639-2.jpeg"
 ---
