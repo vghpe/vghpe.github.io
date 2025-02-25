@@ -5,11 +5,19 @@ draft: false
 tags: ["AI", "Tools"]
 ---
 
-<div class="video-container">
-  <video width="640" height="360" controls>
-    <source src="/videos/analysis.mp4" type="video/mp4">
-  </video>
+<div class="video-wrapper">
+  <figure class="video-container">
+    <video width="640" height="360" controls>
+      <source src="/videos/analysis.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </figure>
+  <figcaption class="image-caption">
+    Bernie's famous plea sitting in as our test case
+  </figcaption>
 </div>
+
+
 
 
 There are a lot of YouTubers who release daily videos with long rants about their grievances with the video game industry. As a developer, it can be hard to take these rants at face value.
