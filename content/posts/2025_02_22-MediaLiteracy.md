@@ -84,9 +84,7 @@ As a reader tryign to analyze claims, the highlight does help me quickly parse t
 
 **Where does it fall apart**
 
-Tagging 5 minutes of transcripts seems to go pretty well, but after that the AI seems to get a more 'lazy' and less detailed in it's tagging. 
-
-Since most of the videos I was interested in lookint at are >10 minutes, some form of segmented call might be necessary to get a proper tagging done. 
+Tagging 5 minutes of transcripts seems to go pretty well, but after that the AI seems to get a more 'lazy' and less detailed in it's tagging. Since most of the videos I was interested in lookint at are >10 minutes, some form of segmented call might be necessary to get a proper tagging done. 
 
 Also, As of Feb 22, 2025, making an API call to use the fancy ChatGTO-01 model for a 10-minute transcript costs about $1, which can quickly add up when exploring the tool.
 
