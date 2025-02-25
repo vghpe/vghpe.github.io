@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Text Highlighter & Filter</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      max-width: 750px;
+      margin: auto;
+    }
+    textarea {
+      width: 100%;
+      height: 150px;
+      font-size: 14px;
+      margin-bottom: 10px;
+    }
+    .highlight-box {
+      padding: 10px;
+      border: 1px solid #ccc;
+      min-height: 100px;
+      white-space: pre-wrap;
+      background-color: #fafafa;
+    }
+    span {
+      position: relative;
+      cursor: pointer;
+    }
+    span::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: black;
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      visibility: hidden;
+      opacity: 0;
+      transition: opacity 0.2s ease-in-out;
+    }
+    span:hover::after {
+      visibility: visible;
+      opacity: 1;
+    }
+    
+    /* Hover effect: when not plain, text becomes bold and slightly lighter */
+    span:not(.plain):hover {
+      filter: brightness(1.1);
+    }
+    
+    /* Plain style: remove background when filtered */
+    .plain {
+      background-color: transparent !important;
+    }
+    
+    /* New highlight colors for latest tags */
+    .fc { background-color: #b3e5fc; } /* Factual Claim - Light Blue */
+    .op { background-color: #c8e6c9; } /* Opinion - Light Green */
+    .el { background-color: #ffcdd2; } /* Emotional Language - Light Pink */
+    .rt { background-color: #ffecb3; } /* Rhetorical Technique - Light Amber */
+    .sp { background-color: #d1c4e9; } /* Speculation - Light Purple */
+    
+    /* Filter panel */
+    #filters {
+      margin-bottom: 10px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      background-color: #eee;
+    }
+    #filters label {
+      margin-right: 10px;
+      padding: 3px 6px;
+      border-radius: 4px;
+      font-weight: bold;
+    }
+    /* Apply corresponding highlight colors to filter labels */
+    #filters label.fc { background-color: #b3e5fc; }
+    #filters label.op { background-color: #c8e6c9; }
+    #filters label.el { background-color: #ffcdd2; }
+    #filters label.rt { background-color: #ffecb3; }
+    #filters label.sp { background-color: #d1c4e9; }
+  </style>
+</head>
+<body>
+
+  <h2>Paste Tagged Text</h2>
+  <textarea id="inputText" placeholder="Paste text with [TAG]...[/TAG] here"></textarea>
+  <button onclick="highlightText()">Highlight</button>
+
+  <h2>Filter by Tag</h2>
+  <div id="filters">
+    <label class="fc"><input type="checkbox" class="filter-checkbox" value="fc" checked> Factual Claim [FC]</label>
+    <label class="op"><input type="checkbox" class="filter-checkbox" value="op" checked> Opinion [OP]</label>
+    <label class="el"><input type="checkbox" class="filter-checkbox" value="el" checked> Emotional Language [EL]</label>
+    <label class="rt"><input type="checkbox" class="filter-checkbox" value="rt" checked> Rhetorical Technique [RT]</label>
+    <label class="sp"><input type="checkbox" class="filter-checkbox" value="sp" checked> Speculation [SP]</label>
+  </div>
+
+  <h2>Highlighted Output</h2>
+  <div id="output" class="highlight-box"></div>
+
+  <script>
+    // Define tag mappings to CSS classes and tooltips for the latest tags
+    const tagMap = {
+      "FC": { class: "fc", tooltip: "Factual Claim (Verifiable fact)" },
+      "OP": { class: "op", tooltip: "Opinion (Subjective assertion)" },
+      "EL": { class: "el", tooltip: "Emotional Language (Designed to provoke emotion)" },
+      "RT": { class: "rt", tooltip: "Rhetorical Technique (Sarcasm, irony, flourish, etc.)" },
+      "SP": { class: "sp", tooltip: "Speculation (Guess or prediction)" }
+    };
+
+    // Highlight tagged text
+    function highlightText() {
+      let text = document.getElementById("inputText").value;
+      for (let tag in tagMap) {
+        let regex = new RegExp(`\\[${tag}\\](.*?)\\[\\/${tag}\\]`, "gs");
+        text = text.replace(regex, `<span class="${tagMap[tag].class}" data-tag="${tagMap[tag].class}" data-tooltip="${tagMap[tag].tooltip}">$1</span>`);
+      }
+      document.getElementById("output").innerHTML = text;
+      applyFilters();
+    }
+
+    // Apply filtering: if a tag is unchecked, remove its highlight by adding the "plain" class.
+    function applyFilters() {
+      const checkboxes = document.querySelectorAll('.filter-checkbox');
+      const visibleTags = {};
+      checkboxes.forEach(chk => {
+        visibleTags[chk.value] = chk.checked;
+      });
+      const spans = document.querySelectorAll('#output span');
+      spans.forEach(span => {
+        const tag = span.getAttribute('data-tag');
+        if (visibleTags[tag]) {
+          span.classList.remove("plain");
+        } else {
+          span.classList.add("plain");
+        }
+      });
+    }
+
+    // Add event listeners for filtering
+    document.querySelectorAll('.filter-checkbox').forEach(chk => {
+      chk.addEventListener('change', applyFilters);
+    });
+  </script>
+
+</body>
+</html>

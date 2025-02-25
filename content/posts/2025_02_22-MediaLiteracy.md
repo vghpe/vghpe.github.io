@@ -3,17 +3,24 @@ title: "Media Literacy and Rhetorical Analysis of YouTube Rants"
 date: 2025-02-22T15:09:56
 draft: false
 tags: ["AI", "Tools"]
-image: "images/2025_02_22.jpeg"
 ---
+
+<div class="video-container">
+  <video width="640" height="360" controls>
+    <source src="/videos/analysis.mp4" type="video/mp4">
+  </video>
+</div>
+
 
 There are a lot of YouTubers who release daily videos with long rants about their grievances with the video game industry. As a developer, it can be hard to take these rants at face value.
 
-- They often feature a lot of misconceptions about game development and the industry at large.  
+- They often feature a lot of misconceptions about game development
 - They are often emotionally charged and sometimes just plain hateful.  
 - The objectives of the content creator are dubious because they have a financial interest in creating content that provokes strong emotional reactions.  
-- The videos are often very long, rambling, and steeped in deep culture war lore.  
+- The videos are often long, rambling, and steeped in culture war lore.  
 
-Is there a way to strip all that away, get to the true grievances, and work out what the actual claims are?
+Is there a way to strip all that away, get to the true grievances, and work out what the actual claims are? How far away are they from the bad I see and believe is leading to more churn and less authentic art?
+
 
 Let's try using **TECHNOLOGY** to get to the core, build better communication, and save the world (or just make another tool for more hate)… Most likely, the AI will not do a great job, but let's try.
 
@@ -62,11 +69,22 @@ I want to be very clear: **this tool does not perform fact-checking.** A sentenc
 
 **Does it work?**
 
-Well... yes-ish. The results vary wildly between models, but I think the tagging done by the fancy reasoning models is pretty accurate. As of Feb 22, 2025, making an API call to use the ChatGTO-01 model for a 10-minute transcript costs about $1, which can quickly add up when exploring the tool.
+Well... yes-ish. The results vary wildly between models, but I think the tagging done by the fancy reasoning models is pretty accurate. A Human would still be able to do a much better job if they took their own time to analyse a transcript. But the AI is able to do a quite good analasys. 
 
-Additionally, I think it would struggle with longer videos. Some form of segmented API call might be necessary.
+As a reader tryign to analyze claims, the highlight does help me quickly parse the text, And the summary consitently quite good,  it's apt to see that work a done by an indifferent highschooler rather than someone profesional. 
 
-[Check out the tools and instruction on GitHub](https://github.com/vghpe/Youtube-Transcript-Rhetoric-Tagging)
 
+**Where does it fall apart**
+
+Tagging 5 minutes of transcripts seems to go pretty well, but after that the AI seems to get a more 'lazy' and less detailed in it's tagging. 
+
+Since most of the videos I was interested in lookint at are >10 minutes, some form of segmented call might be necessary to get a proper tagging done. 
+
+Also, As of Feb 22, 2025, making an API call to use the fancy ChatGTO-01 model for a 10-minute transcript costs about $1, which can quickly add up when exploring the tool.
+
+
+[Use the HTML highlighter tool here](/tool/index.html). You can grab YouTube's own transcript, then drop that along with the prompt into any chatbot to try it out.
+
+[Get the full toolset and instructions here](https://github.com/vghpe/Youtube-Transcript-Rhetoric-Tagging). I found that Whisper does a better job transcribing and also doesn't censor bad language.  
 
 
