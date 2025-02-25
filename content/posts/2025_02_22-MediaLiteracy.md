@@ -77,10 +77,9 @@ I want to be very clear: **this tool does not perform fact-checking.** A sentenc
 
 **Does it work?**
 
-Well... yes-ish. The results vary wildly between models, but I think the tagging done by the fancy reasoning models is pretty accurate. A Human would still be able to do a much better job if they took their own time to analyse a transcript. But the AI is able to do a quite good analasys. 
+Well… yes-ish. The results vary wildly between models, but I think the tagging done by the fancy reasoning models is pretty accurate. That said, a traditional fleshy person would still do a much better job if they took their time.
 
-As a reader tryign to analyze claims, the highlight does help me quickly parse the text, And the summary consitently quite good,  it's apt to see that work a done by an indifferent highschooler rather than someone profesional. 
-
+But as a reader trying to understand the claims, I think the tags and highlights do help me quickly parse the text. And the summary is consistently good.
 
 **Where does it fall apart**
 
