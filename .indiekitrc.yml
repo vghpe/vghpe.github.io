@@ -1,4 +1,8 @@
 ### IndieKit configuration for Hugo micro-blog (notes)
+publication:
+  me: "https://vghpe.github.io/blog/"
+  # base URL of your Hugo site, used for building post URLs
+ # plugins list below
 plugins:
   - '@indiekit/store-file-system'
   - '@indiekit/preset-hugo'
