@@ -1,5 +1,4 @@
 ---
-title: '{{ replace .File.BaseFileName "-" " " | title }}'
 date: {{ .Date }}
 syndication: ""
 photo: ""
