@@ -3,23 +3,13 @@ publication:
   me: "https://vghpe.github.io/blog/"
   # base URL of your Hugo site, used for building post URLs
  # plugins list below
+# Core plugins for file-based Micropub → Hugo notes
 plugins:
   - '@indiekit/store-file-system'
   - '@indiekit/preset-hugo'
   - '@indiekit/endpoint-auth'
-  - '@indiekit/endpoint-files'
-  - '@indiekit/endpoint-image'
-  - '@indiekit/endpoint-media'
   - '@indiekit/endpoint-micropub'
-  - '@indiekit/endpoint-posts'
-  - '@indiekit/endpoint-share'
-  - '@indiekit/endpoint-syndicate'
-  - '@indiekit/post-type-article'
-  - '@indiekit/post-type-bookmark'
-  - '@indiekit/post-type-like'
   - '@indiekit/post-type-note'
-  - '@indiekit/post-type-photo'
-  - '@indiekit/post-type-reply'
 
 # Configure the file system store to write to the project root
 '@indiekit/store-file-system':
