@@ -13,9 +13,6 @@
   {{ range $paginator.Pages }}
   
   <section class="item">
-    <div class="title">
-      <h1>{{ .Title }}</h1>
-    </div>
 
     <div class="content content-center">
       {{ if .Params.tweet }}
@@ -23,6 +20,11 @@
           <a href="{{ .Params.tweet }}"></a>
         </blockquote>
         <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        {{ if .Params.caption }}
+          <p class="image-caption">{{ .Params.caption }}</p>
+        {{ end }}
+      {{ else if .Params.photo }}
+        <img src="{{ .Params.photo | absURL }}" alt="{{ .Title }}">
         {{ if .Params.caption }}
           <p class="image-caption">{{ .Params.caption }}</p>
         {{ end }}

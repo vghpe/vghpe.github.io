@@ -1,0 +1,67 @@
+{{ define "main" }}
+
+<section id="single">
+    {{ if ne .Section "notes" }}
+      {{ with .Params.title }}
+        <h1 class="title">{{ . }}</h1>
+      {{ else }}
+        <h1 class="title">{{ .Title }}</h1>
+      {{ end }}
+    {{ end }}
+
+    <div class="tip">
+        <time datetime="{{ .PublishDate }}">{{ i18n "publishDateFull" . }}</time>
+        <span class="split">·</span>
+        <span>{{ i18n "wordCount" . }}</span>
+        <span class="split">·</span>
+        <span>{{ i18n "minuteRead" . }}</span>
+    </div>
+
+    {{ if or .Site.Params.showToc .Params.showToc }}
+        {{ partial "toc.html" . }}
+    {{ end }}
+
+    {{ if .Params.tweet }}
+    <div class="content content-center">
+        <blockquote class="twitter-tweet">
+          <a href="{{ .Params.tweet }}"></a>
+        </blockquote>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        {{ if .Params.caption }}
+        <p class="image-caption">{{ .Params.caption }}</p>
+        {{ end }}
+    </div>
+    {{ else if .Params.photo }}
+    <div class="content content-center">
+        <img src="{{ .Params.photo | absURL }}" alt="{{ .Title }}">
+        {{ if .Params.caption }}
+        <p class="image-caption">{{ .Params.caption }}</p>
+        {{ end }}
+    </div>
+    {{ else if .Params.image }}
+    <div class="content content-center">
+        <img src="{{ .Params.image | absURL }}" alt="{{ .Title }}">
+        {{ if .Params.caption }}
+        <p class="image-caption">{{ .Params.caption }}</p>
+        {{ end }}
+    </div>
+    {{ end }}
+
+<div class="content">
+    {{ $content := .Content | replaceRE "(<img [^>]*src=\"[^\"]*\"[^>]*alt=\"([^\"]*)\"[^>]*>)" "<div class=\"content-center\">$1<p class=\"image-caption\">$2</p></div>" }}
+    {{ $content | safeHTML }}
+</div>
+
+    {{ with .Params.tags }}
+    <div class="tags">
+        {{ range . }}
+            <a href="{{ "tags/" | absURL }}{{ . | urlize }}" class="tag {{ . | urlize }}">{{ . }}</a>
+        {{ end }}
+    </div>
+    {{ end }}
+
+    {{ partial "comment.html" . }}
+
+</section>
+
+{{ end }}
