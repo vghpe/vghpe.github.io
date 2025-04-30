@@ -1,1 +1,5 @@
-<iframe src="{{ .Get "src" }}" width="{{ .Get "width" | default "560" }}" height="{{ .Get "height" | default "315" }}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+<div class="iframe-container">
+  <iframe src="{{ .Get "src" }}" loading="lazy"
+          {{ if eq (lower .Get "allowfullscreen") "true" }}allowfullscreen{{ end }}>
+  </iframe>
+</div>

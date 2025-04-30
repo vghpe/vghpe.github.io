@@ -12,15 +12,7 @@ However, I struggled to engage with the text and dialogue. I wasn't connecting w
 
 Let’s break it down and compare *Arranger* to another game, *A Short Hike*, which uses a similar dialogue design. But I remember being very drawn in by *A Short Hike*'s dialogue.
 
-<div class="video-wrapper">
-  <figure class="video-container">
-    <video width="640" height="360" controls>
-      <source src="/videos/short_arrange_comparison_capture.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </figure>
-  <figcaption class="image-caption">In the video, I’ve interspersed clips from both games. The first is <em>A Short Hike</em>, and the second is <em>Arranger</em>.</figcaption>
-</div>
+{{< video src="/videos/short_arrange_comparison_capture.mp4" type="video/mp4" width="640" height="360" caption="In the video, I’ve interspersed clips from both games. The first is A Short Hike, and the second is Arranger." >}}
 
 
 
@@ -168,25 +160,13 @@ I couldn't quite work out how the beeps were implemented just by looking at foot
 
 > Each frame a number of characters are revealed based on a set speed. Whenever a character is revealed, it plays a beep (from a random set) if a certain amount of time has passed since the last beep.
 
-<div style="margin: 0 auto; width: fit-content; text-align: center;">
-
-| A Short Hike - Captured VO beeps       |
-|----------------------------------------|
-| <audio controls><source src="/audio/short-hike-beeps.mp3" type="audio/mpeg"><source src="/audio/short-hike-beeps.ogg" type="audio/ogg">Your browser does not support the audio element.</audio> |
-
-</div>
+{{< audio src="/audio/short-hike-beeps.mp3" type="audio/mpeg" caption="A Short Hike - Captured VO beeps" >}}
 
 I didn't ask Adam, but it appears a couple of "sets" are used; then I'm guessing each character is assigned a personal pitch shift for further variations. This gives every NPC a unique voice, which makes the back-and-forth feel like different people talking.
 
 *Arranger*'s beeps appear to be similarly implemented, but there is no variation between characters. The same pitch and sound bank are used for everyone.
 
-<div style="margin: 0 auto; width: fit-content; text-align: center;">
-
-| Arranger - Captured VO beeps          |
-|---------------------------------------|
-| <audio controls><source src="/audio/arranger-beeps.mp3" type="audio/mpeg"><source src="/audio/arranger-beeps.ogg" type="audio/ogg">Your browser does not support the audio element.</audio> |
-
-</div>
+{{< audio src="/audio/arranger-beeps.mp3" type="audio/mpeg" caption="Arranger - Captured VO beeps" >}}
 
 It doesn’t try so much to be “voices” like *A Short Hike*; it's more an auralization of the text. But it still has a lot more personality than the typical typewriter sounds you find in *Ace Attorney* and many other visual novels. I really appreciate the audio design; I've not heard bleeps like this before.
 
