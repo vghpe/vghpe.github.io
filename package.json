@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/vghpe/blog#readme",
   "devDependencies": {
-    "@indiekit/indiekit": "^1.0.0-beta.21"
+    "@indiekit/indiekit": "^1.0.0-beta.21",
+    "@indiekit/preset-hugo": "^1.0.0-beta.20"
   }
 }
