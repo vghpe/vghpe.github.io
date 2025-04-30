@@ -1,0 +1,102 @@
+{{ define "main" }}
+{{ partial "profile.html" . }}
+
+<div id="list-page">
+    <!-- 1) Grab all regular pages. -->
+    {{ $allPages := .Site.RegularPages }}
+
+    <!-- 2) Create an empty slice for pages we want to keep. -->
+    {{ $nonNotesPages := slice }}
+
+    <!-- 3) Loop over all pages, only keep those NOT in the notes section. -->
+    {{ range $allPages }}
+      {{ if ne .Section "notes" }}
+        {{ $nonNotesPages = $nonNotesPages | append . }}
+      {{ end }}
+    {{ end }}
+
+    <!-- 4) Now paginate the filtered slice. -->
+    {{ $paginator := .Paginate $nonNotesPages }}
+
+    <!-- 5) Loop over the pages as you do now. -->
+    {{ range $paginator.Pages }}
+  <section class="item">
+
+    <!-- Title below the image -->
+    <div class="title">
+      <h1>{{ .Title }}</h1> <!-- Title without link -->
+    </div>
+    
+    <!-- Image or Tweet content -->
+    <div class="content content-center">
+      {{ if .Params.tweet }}
+      <blockquote class="twitter-tweet">
+        <a href="{{ .Params.tweet }}"></a>
+      </blockquote>
+      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+      {{ if .Params.caption }}
+      <p class="image-caption">{{ .Params.caption }}</p>
+      {{ end }}
+      {{ else if .Params.image }}
+      <img src="{{ .Params.image | absURL }}" alt="{{ .Title }}">
+      {{ if .Params.caption }}
+      <p class="image-caption">{{ .Params.caption }}</p>
+      {{ end }}
+      {{ end }}
+    </div>
+
+    <!-- Summary below the title -->
+    <div class="summary-text">
+     {{ .Content | truncate 250 | markdownify | safeHTML }}
+    </div>
+
+    <!-- Conditional Read More link -->
+    {{ if .Truncated }}
+    <div class="read-more">
+      <a href="{{ .RelPermalink }}">Read More</a>
+    </div>
+    {{ end }}
+    
+    <!-- Tags and date -->
+    <div class="tags-date-container">
+      {{ with .Params.tags }}
+      <div class="tags">
+          {{ range . }}
+              <a href="{{ "tags/" | absURL }}{{ . | urlize }}" class="tag {{ . | urlize }}">{{ . }}</a>
+          {{ end }}
+      </div>
+      {{ end }}
+
+      <div class="date">
+        <a href="{{ .RelPermalink }}"><time datetime="{{ .PublishDate }}">{{ .PublishDate.Format "Jan 2, 2006" }}</time></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Divider between posts -->
+  <hr class="post-divider" />
+
+  {{ end }}
+
+  {{ if or ($paginator.HasPrev) ($paginator.HasNext) }}
+  <div class="pagination">
+    {{ if $paginator.HasPrev }}
+    <span class="prev">
+      <a href="{{.Paginator.Prev.URL}}">
+        <span class="arrow">←</span> {{ with .Site.Params.newerPosts }}{{ . }}{{ else }}{{ i18n "postsNewer" }}{{ end }}
+      </a>
+    </span>
+    {{ end }}
+    
+    {{ if $paginator.HasNext }}
+    <span class="next">
+      <a href="{{.Paginator.Next.URL}}">
+        {{ with .Site.Params.olderPosts }}{{ . }}{{ else }}{{ i18n "postsOlder" }}{{ end }} <span class="arrow">→</span>
+      </a>
+    </span>
+    {{ end }}
+  </div>
+  {{ end }}
+</div>
+
+{{ end }}

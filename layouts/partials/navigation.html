@@ -1,0 +1,17 @@
+<nav class="navigation">
+  <!-- Home / Feature Posts -->
+  <a href="{{ "/" | relURL }}">Feature Posts</a>
+
+  <!-- Notes Section -->
+  <a href="{{ "/notes/" | relURL }}">Notes</a>
+
+  <!-- About -->
+  <a href="{{ "/about/" | relURL }}">About</a>
+
+  <!-- RSS (only if enabled) -->
+  {{ if .Site.Params.enableRSS }}
+    <a class="button" href="{{ .Site.RSSLink }}">
+      {{ with .Site.Params.subscribe }}{{ . }}{{ else }}{{ i18n "subscribe" }}{{ end }}
+    </a>
+  {{ end }}
+</nav>

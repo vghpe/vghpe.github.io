@@ -15,6 +15,6 @@ showPowerBy = false
       unsafe = true
 
 [[menu.main]]
-  name = "Fluff"
-  url = "/fluff/"
+  name = "Notes"
+  url = "/notes/"
   weight = 2

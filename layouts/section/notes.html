@@ -1,0 +1,78 @@
+{{ define "main" }}
+
+{{ partial "profile.html" . }}
+
+<div id="notes-page">
+  <div id="list-page">
+
+  {{/* 1) Grab pages in the notes section */}}
+  {{ $notePages := where .Site.RegularPages "Section" "notes" }}
+  
+  {{/* 2) Paginate the results */}}
+  {{ $paginator := .Paginate $notePages }}
+  {{ range $paginator.Pages }}
+  
+  <section class="item">
+    <div class="title">
+      <h1>{{ .Title }}</h1>
+    </div>
+
+    <div class="content content-center">
+      {{ if .Params.tweet }}
+        <blockquote class="twitter-tweet">
+          <a href="{{ .Params.tweet }}"></a>
+        </blockquote>
+        <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        {{ if .Params.caption }}
+          <p class="image-caption">{{ .Params.caption }}</p>
+        {{ end }}
+      {{ else if .Params.image }}
+        <img src="{{ .Params.image | absURL }}" alt="{{ .Title }}">
+        {{ if .Params.caption }}
+          <p class="image-caption">{{ .Params.caption }}</p>
+        {{ end }}
+      {{ end }}
+    </div>
+
+    <div class="summary-text">
+      {{ .Content }}
+    </div>
+
+    <div class="tags-date-container">
+      {{ with .Params.tags }}
+      <div class="tags">
+        {{ range . }}
+          <a href="{{ "tags/" | absURL }}{{ . | urlize }}" class="tag {{ . | urlize }}">{{ . }}</a>
+        {{ end }}
+      </div>
+      {{ end }}
+
+      <div class="date">
+        <time datetime="{{ .PublishDate }}">{{ .PublishDate.Format "Jan 2, 2006" }}</time>
+      </div>
+    </div>
+  </section>
+  
+  <hr class="post-divider" />
+  {{ end }}
+
+  {{/* 3) Pagination controls */}}
+  {{ if or ($paginator.HasPrev) ($paginator.HasNext) }}
+    <div class="pagination">
+      {{ if $paginator.HasPrev }}
+        <span class="prev">
+          <a href="{{ $paginator.Prev.URL }}">← Newer</a>
+        </span>
+      {{ end }}
+
+      {{ if $paginator.HasNext }}
+        <span class="next">
+          <a href="{{ $paginator.Next.URL }}">Older →</a>
+        </span>
+      {{ end }}
+    </div>
+  {{ end }}
+  </div>
+</div>
+
+{{ end }}
