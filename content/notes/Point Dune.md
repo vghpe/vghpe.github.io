@@ -1,7 +1,7 @@
 ---
 title: Point Dune
 date: 2024-08-04T11:23:32-07:00
-draft: false
+draft: true
 image: "/images/IMG_2483.jpeg"
 tags: ["fluff"]
 
