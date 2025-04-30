@@ -1,5 +1,5 @@
 <div class="iframe-container">
   <iframe src="{{ .Get "src" }}" loading="lazy"
-          {{ if eq (lower .Get "allowfullscreen") "true" }}allowfullscreen{{ end }}>
+          {{ if eq (lower (.Get "allowfullscreen")) "true" }}allowfullscreen{{ end }}>
   </iframe>
 </div>
