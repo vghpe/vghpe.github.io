@@ -34,7 +34,7 @@ module.exports = {
     '@indiekit/syndicator-bluesky',
     '@indiekit/post-type-note',
     '@indiekit/post-type-photo',
-    photoToNotes
+    './plugins/photo-to-notes.js'
   ],
 
   '@indiekit/store-github': {
