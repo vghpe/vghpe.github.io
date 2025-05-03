@@ -32,10 +32,17 @@
         {{ end }}
     </div>
     {{ else if .Params.photo }}
+    {{ $page := . }}
     <div class="content content-center">
-        <img src="{{ .Params.photo | absURL }}" alt="{{ .Title }}">
-        {{ if .Params.caption }}
-        <p class="image-caption">{{ .Params.caption }}</p>
+        {{ with index $page.Params.photo 0 }}
+            {{ with .url }}
+                <img src="{{ . | absURL }}" alt="{{ $page.Title }}">
+            {{ else }}
+                <img src="{{ . | absURL }}" alt="{{ $page.Title }}">
+            {{ end }}
+        {{ end }}
+        {{ if $page.Params.caption }}
+        <p class="image-caption">{{ $page.Params.caption }}</p>
         {{ end }}
     </div>
     {{ else if .Params.image }}

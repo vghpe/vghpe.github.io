@@ -1,19 +1,32 @@
 ### IndieKit configuration for Hugo micro-blog (notes)
+
+application:
+  mongodbUrl: "mongodb://127.0.0.1:27017/indiekit"
+
+# Publication configuration
 publication:
   me: "https://vghpe.github.io/blog/"
   # base URL of your Hugo site, used for building post URLs
- # plugins list below
+  # plugins list below
 # Core plugins for file-based Micropub → Hugo notes
 plugins:
   - '@indiekit/store-file-system'
   - '@indiekit/preset-hugo'
-  - '@indiekit/endpoint-auth'
   - '@indiekit/endpoint-micropub'
+  - '@indiekit/endpoint-media'
+  - '@indiekit/endpoint-syndicate'
+  - '@indiekit/syndicator-bluesky'
   - '@indiekit/post-type-note'
 
 # Configure the file system store to write to the project root
 '@indiekit/store-file-system':
   directory: .
+
+# Configure Bluesky syndicator
+'@indiekit/syndicator-bluesky':
+  handle: 'vghpe.bsky.social'
+  # password pulled from env var BLUESKY_PASSWORD by default
+  checked: true
 
 # Use default front-matter format (YAML) for Hugo preset
 '@indiekit/preset-hugo':
