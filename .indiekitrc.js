@@ -1,4 +1,19 @@
 // .indiekitrc.js
+
+// Custom plugin to route Photo posts into the Notes section
+const photoToNotes = {
+  name: 'photo-to-notes',
+  init(Indiekit) {
+    const photo = Indiekit.postTypes.get('photo');
+    if (photo) {
+      photo.post.path  = 'content/notes/{slug}.md';
+      photo.post.url   = 'notes/{slug}';
+      photo.media.path = 'static/notes/{filename}';
+      photo.media.url  = 'notes/{filename}';
+    }
+  }
+};
+
 module.exports = {
   /* Mongo cache / token store (Atlas) */
   application: {
@@ -18,7 +33,8 @@ module.exports = {
     '@indiekit/endpoint-media',
     '@indiekit/syndicator-bluesky',
     '@indiekit/post-type-note',
-    '@indiekit/post-type-photo'
+    '@indiekit/post-type-photo',
+    photoToNotes
   ],
 
   '@indiekit/store-github': {
