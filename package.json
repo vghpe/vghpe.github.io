@@ -4,6 +4,7 @@
   "description": "Just doodles",
   "main": "index.js",
   "scripts": {
+    "start": "indiekit --config .indiekitrc.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +22,7 @@
     "@indiekit/indiekit": "^1.0.0-beta.21",
     "@indiekit/preset-hugo": "^1.0.0-beta.20",
     "@indiekit/store-file-system": "^1.0.0-beta.21",
-    "@indiekit/syndicator-bluesky": "^1.0.0-beta.22"
+    "@indiekit/syndicator-bluesky": "^1.0.0-beta.22",
+    "@indiekit/store-github": "^1.0.0-beta.21"
   }
 }

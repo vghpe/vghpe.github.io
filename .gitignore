@@ -2,7 +2,7 @@
 public/
 
 # macOS system files
- .DS_Store
+.DS_Store
 node_modules/
 # IndieKit logs and environment variables
 indiekit.log
