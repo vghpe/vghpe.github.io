@@ -4,6 +4,13 @@
  *
  *   indiekit --config .indiekitrc.js
  */
+console.log('⎇ ENV →', {
+  STORE_BACKEND:    process.env.STORE_BACKEND,
+  GITHUB_REPOSITORY: process.env.GITHUB_REPOSITORY,
+  GITHUB_TOKEN:     !!process.env.GITHUB_TOKEN && '[redacted]',
+  GITHUB_PATH:      process.env.GITHUB_PATH
+});
+
 module.exports = {
   application: {
     mongodbUrl: process.env.MONGODB_URL,
