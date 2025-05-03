@@ -1,16 +1,16 @@
 // .indiekitrc.js
 module.exports = {
-  /* Optional: Atlas URL, token storage, etc. */
+  /* Mongo cache / token store (Atlas) */
   application: {
-    mongodbUrl: process.env.MONGODB_URL
+    mongodbUrl: process.env.MONGODB_URL      // e.g. mongodb+srv://…
   },
 
-  /* Your public site URL */
+  /* Your public blog URL */
   publication: {
-    me: process.env.PUBLICATION_ME
+    me: process.env.PUBLICATION_ME          // https://vghpe.github.io/blog/
   },
 
-  /* Load plugins, including the GitHub store */
+  /* GitHub‑backed storage */
   plugins: [
     '@indiekit/store-github',
     '@indiekit/preset-hugo',
@@ -21,25 +21,21 @@ module.exports = {
     '@indiekit/post-type-photo'
   ],
 
-  /* ---------- Plugin‑specific configuration ---------- */
-
-  /* GitHub‑backed storage */
   '@indiekit/store-github': {
-    repo: process.env.GITHUB_REPOSITORY, // "vghpe/blog"
-    branch:     process.env.GITHUB_BRANCH  || 'main',
-    path:       process.env.GITHUB_PATH    || 'content/notes',
-    token:      process.env.GITHUB_TOKEN
+    user:  process.env.GITHUB_USER,         // vghpe
+    repo:  process.env.GITHUB_REPO,         // blog
+    branch: process.env.GITHUB_BRANCH || 'main',
+    path:   process.env.GITHUB_PATH   || 'content/notes',
+    token:  process.env.GITHUB_TOKEN        // PAT with “public_repo” or “repo” scope
   },
 
-  /* Hugo front‑matter style */
   '@indiekit/preset-hugo': {
     frontMatterFormat: 'yaml'
   },
 
-  /* Bluesky syndication */
   '@indiekit/syndicator-bluesky': {
-    handle:   process.env.BLUESKY_HANDLE,
-    password: process.env.BLUESKY_PASSWORD,
-    checked:  true   // tick “Syndicate” by default
+    handle:   process.env.BLUESKY_HANDLE,   // vghpe.bsky.social
+    password: process.env.BLUESKY_PASSWORD, // Bluesky password / app‑password
+    checked:  true                          // tick “Syndicate” by default
   }
 };
