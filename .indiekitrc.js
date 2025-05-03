@@ -25,7 +25,7 @@ module.exports = {
 
   /* GitHub‑backed storage */
   '@indiekit/store-github': {
-    repository: process.env.GITHUB_REPOSITORY, // "vghpe/blog"
+    repo: process.env.GITHUB_REPOSITORY, // "vghpe/blog"
     branch:     process.env.GITHUB_BRANCH  || 'main',
     path:       process.env.GITHUB_PATH    || 'content/notes',
     token:      process.env.GITHUB_TOKEN
