@@ -41,7 +41,15 @@ module.exports = {
 
   '@indiekit/syndicator-bluesky': {
     handle:   process.env.BLUESKY_HANDLE,   // vghpe.bsky.social
-    password: process.env.BLUESKY_PASSWORD, // Bluesky password / app‑password
+    password: process.env.BLUESKY_PASSWORD, // Bluesky password / app-password
     checked:  true                          // tick “Syndicate” by default
+  },
+
+  // Preserve animated GIFs when resizing via Sharp
+  '@indiekit/endpoint-media': {
+    imageProcessing: {
+      // keep all frames in animated images (GIFs)
+      sharpOptions: { animated: true }
+    }
   }
 };
