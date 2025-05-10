@@ -1,6 +1,7 @@
 ---
 date: 2025-05-10T14:02:35.282Z
 publishDate: 2025-05-10T14:02:35.282Z
+lastmod: 2025-05-10T14:03:41.287Z
 images:
   - notes/img-4334.jpg
 photo:
@@ -13,4 +14,4 @@ location:
   longitude: 106.71713
 ---
 
-i love this city. 
+i love this city. (and ive been sleeping well in this bed)
