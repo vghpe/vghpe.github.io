@@ -8,7 +8,7 @@ enableComments = false
 +++
 
 Henrik Pettersson is best known as the Game Director of the time-bending Puzzle Adventure The Gardens Between. 
-He's currenly working as Senior Designer at Nightschool Studio / Netflix
+He's currently working as Senior Designer at Nightschool Studio / Netflix
 
 [Reach out on X](https://x.com/vghpe)
 
