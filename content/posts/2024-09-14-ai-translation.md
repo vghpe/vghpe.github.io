@@ -6,7 +6,7 @@ tags: ["research", "AI"]
 image: "images/kojima-drawing.jpg"
 ---
 
-**Update:** I was about to source a Human Translation of the diary, Read more [here](https://vghpe.github.io/blog/posts/human-translation/)  
+**Update:** I was able to source a Human Translation of the diary, Read more [here](https://vghpe.github.io/blog/posts/human-translation/)  
 
 I learned about  *Metal Gear Solid 2's* development diary from a [DidYouKnowGaming](https://www.youtube.com/watch?v=BVAlMgY4-5M) video on YouTube. After some online sleuthing, I discovered that the entire content had been [uploaded to X](https://x.com/BadHumans/status/1744883721595924822). This dev-diary was originally published in the book *Metal Gear Solid 2: The Making*, which was released exclusively in Japan 2002 and never translated into English.
 

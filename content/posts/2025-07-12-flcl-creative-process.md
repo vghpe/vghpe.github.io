@@ -31,7 +31,7 @@ The intention was for FLCL to be the opposite of Evangelion’s somber tone, to 
 
 This sentiment not only encapsulates the experience of viewing FLCL, but it also speaks to its themes: growth, what it means to be an adult, and taking chances to learn new things — even if you look silly doing it.
 
-## Scribbles to Structures
+## From Scribbles to a Pitch
 
 In the 2019 book FLCL Archives, we can see the early scribbles by Tsurumaki in what would become FLCL. These notes already capture the theme, some of the characters, and the setting.
 
@@ -87,6 +87,10 @@ Making this choice in pre-production significantly skewed the tonality of the sh
 In traditional anime production, once an episode’s script is completed, it’s handed over to the Episode Director and Storyboard Artist, who draw a storyboard (a sequence of sketches to map out the scenes planned for the episode). Once drawn, the storyboard is returned, reviewed, and corrected by the Series Director. This was the formal structure GAINAX had been operating under.
 
 In FLCLick Noise, Tsurumaki alludes to the fact that the formality of this structure was loosened by letting the Storyboard Artist be part of the early development of the script.
+
+>Once I had written the core plot, I asked Imaishi to come up with ideas, and then I used what he came up with in the script.
+
+More radically, Tsurumaki would shape the script to the style of the animator responsible for the episode — even when it went against his personal preference — as long as it stayed in line with the theme, he let them go all-out.
 
 > I wanted to play to Imaishi’s strengths… (a) poetic and subdued tone… might have been my personal preference… but it wouldn’t have had the strength to make people still love it even after ten years .
 >
