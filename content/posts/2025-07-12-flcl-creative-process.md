@@ -1,8 +1,8 @@
 ---
 title: "FLCL — A dive into the creative process that shaped the cult anime" 
-date: 2025-07-12
+date: 2025-07-17
 draft: false 
-tags: ["Design", "Research"]
+tags: ["Research", "Narrative", "Production"]
 image: "images/features/flcl-title.jpg"
 description: "Research"
 ---
@@ -15,11 +15,13 @@ Having worked with interactive narrative for over a decade, I’ve found that my
 
 Through extensive research into interviews, production materials, and anime creation in general, this article deconstructs the creative process of the cult classic. At the end, I'll share my reflections, drawing from my own experience in the creative industry. 
 
+---
+
 ## My Next Girl Will Be Nothing Like My Ex-girl
 
 FLCL lives in the shadow of *Neon Genesis Evangelion*, the studio’s (*GAINAX*) pioneering series that aired in 1995 and concluded with the 1997 film *The End of Evangelion*.
 
-Speaking to *mynavi.jp* in 2010, Tsurumaki stated that in the year following *Evangelion*'s completion, he juggled numerous ideas for his directorial debut but struggled to solidify any one concept. After taking a break to assist with the production of *His and Her Circumstances (1998)*, he tried again, resolving to be less of a perfectionist, focusing more on the things he loved and less on the things that brought stress. 
+Speaking to *mynavi.jp* in 2010, Tsurumaki stated that in the year following *Evangelion*'s completion, he juggled numerous ideas for his directorial debut but struggled to solidify any one concept. After taking a break to assist with the production of *His and Her Circumstances (1998)*, he tried again, resolving to be less of a perfectionist, focusing more on the things he loved and less on the things that brought stress.¹ 
 
 ![Evangelion(TV) photo credit: twitter @telewaifus](/images/features/flcl-evangelion.jpg)
 
@@ -139,7 +141,7 @@ The work was supposed to be cleaned up, but a younger Animation Director felt in
 
 ![Shinya Ohira scene looks like nothing else in the show](/images/features/flcl-ohira.jpg)
 
-## What can creators learn from FLCL’s production?
+## What can creators learn from FLCL’s process
 
 Tsurumaki puts a lot of faith in the individual contributors and breaks production hierarchies. In order to even get there you have to be in a team that has a lot of confidence and respect for each other. A traditional production pyramid structure helps decisions get made, and too many cooks in the kitchen is almost always detrimental. 
 
@@ -159,26 +161,27 @@ I think it comes down to the original intention: "It's ok to be dumb! Now look a
 
 Music videos are often nonsense, but if we enjoy the song, it demands our attention to review over and over again. FLCL captures that energy, and if you're into it, the narrative depth underneath becomes an enticing puzzle to unravel.
 
+---
 
-[1] 10 years since then… (2010). Mynavi.jp, p.1,  
-[2] FLCLick Noise — Episode 5 (2010). Transcribed by Ash Kantor — Simulacra Realities. (2023)  
+[1] 10 years since then… (2010). [Mynavi.jp, p.1,](https://news.mynavi.jp/article/20101016-flcl/2)  
+[2] FLCLick Noise — Episode 5 (2010). [— Simulacra Realities.](https://simulacrarealities.substack.com/p/flclick-noise-episode-5) (2023)  
 [3] FLCL: Volume 1 [DVD] (2002). Episode 1, 00:08:21  
-[4] FLCLick Noise — Episode 4(2010). Transcribed by Ash Kantor — Simulacra Realities. (2023)  
+[4] FLCLick Noise — Episode 4(2010). [— Simulacra Realities.](https://simulacrarealities.substack.com/p/flclick-noise-episode-4) (2023)  
 [5] Afterword by Hiroki Sato. “FLCL Volume 1" TokyoPop 2008  
-[6] “GIANAX,” MyAnimeList, accessed on 8/10/2023  
-[7] GAINAX, “The FLCL Archives”, Udon Entertainment, 2019. Transcribed by Ash Kantor — Simulacra Realities. (2023)  
-[8] FLCLick Noise — Episode 4(2010). Transcribed by Ash Kantor — Simulacra Realities. (2023)  
-[9]Kazuya TSURUMAKI, Q&A session, Otokon Convention. Baltimore. 2001  
-[10] 10 years since then… (2010). Mynavi.jp, p.1,  
-[11] 10 years since then… (2010). Mynavi.jp, p.1,  
-[12] Kazuya TSURUMAKI, Q&A session, Otokon Convention. Baltimore. 2001  
-[13] FLCLick Noise — Prologue (2010). Transcribed by Ash Kantor - Simulacra Realities. (2023)  
+[6] “GIANAX,” MyAnimeList, [accessed on 8/10/2023](https://myanimelist.net/anime/producer/6/Gainax)  
+[7] GAINAX, “The FLCL Archives”, Udon Entertainment, 2019. [— Simulacra Realities.](https://simulacrarealities.substack.com/p/flcl-initial-proposal-early-treatments) (2023)  
+[8] FLCLick Noise — Episode 4(2010). [— Simulacra Realities.](https://simulacrarealities.substack.com/p/flclick-noise-episode-4) (2023)  
+[9][Kazuya TSURUMAKI, Q&A session, Otokon Convention. Baltimore.](https://web.archive.org/web/20080510144535/http://www.flclw.com/history/interview-with-kazuya-tsurumaki/) 2001  
+[10] 10 years since then… (2010). [Mynavi.jp, p.1](https://news.mynavi.jp/article/20101016-flcl/2),  
+[11] 10 years since then… (2010). [Mynavi.jp, p.1](https://news.mynavi.jp/article/20101016-flcl/2)  
+[12] [Kazuya TSURUMAKI, Q&A session, Otokon Convention. Baltimore. 2001](https://archive.org/details/manga_FLCL/FLCL%20-%20Volume%2001/page/n121/mode/2up)  
+[13] FLCLick Noise — Prologue (2010). [- Simulacra Realities.](https://simulacrarealities.substack.com/p/flclick-noise-prologue) (2023)  
 [14] FLCL: Volume 2[DVD] (2002). Episode 4, 00:12:22  
-[15] Trash Taste Highlights, “Professional Animator Explains How Anime is Made”, Youtube, published on 2021/02/14  
-[16] Washi Blog, Anime Production — Detailed Guide to How Anime is Made and the Talent Behind it! published on 2011/01/18  
-[17] FLCLick Noise — Episode 2(2010). Transcribed by Ash Kantor — Simulacra Realities. (2023) 
-[18]FLCLick Noise — Episode 1(2010). Transcribed by Ash Kantor — Simulacra Realities. (2023)  
-[19]FLCLick Noise — Episode 5(2010). Transcribed by Ash Kantor — Simulacra Realities. (2023)  
+[15] Trash Taste Highlights, “[Professional Animator Explains How Anime is Made](https://www.youtube.com/watch?v=GkLo4bYyMi4)”, Youtube, published on 2021/02/14  
+[16] Washi Blog, Anime Production — [Detailed Guide to How Anime is Made and the Talent Behind it!](https://washiblog.wordpress.com/2011/01/18/anime-production-detailed-guide-to-how-anime-is-made-and-the-talent-behind-it/) published on 2011/01/18  
+[17] FLCLick Noise — Episode 2(2010). [— Simulacra Realities.](https://simulacrarealities.substack.com/p/flclick-noise-episode-2) (2023) 
+[18]FLCLick Noise — Episode 1(2010). [— Simulacra Realities.](https://simulacrarealities.substack.com/p/flclick-noise-episode-1#:~:text=Tsurumaki%3A%20For%20example%2C%20there,that%27s%20when%20you%20face%20difficulties.) (2023)  
+[19]FLCLick Noise — Episode 5(2010). [— Simulacra Realities.](https://simulacrarealities.substack.com/p/flclick-noise-episode-5#:~:text=Sadamoto%3A%20Yes%2C%20that%27s%20right.%20I%20thought%20that%20the%20more%20mellow%20feeling%20from%20the%20first%20and%20second%20episodes%20would%20continue.%20Though%2C%20once%20we%20reached%20this%20point%2C%20I%20also%20was%20thinking%2C%20%22Go%20ahead%2C%20do%20whatever%20you%20wish!%22) (2023)  
 
 
 
