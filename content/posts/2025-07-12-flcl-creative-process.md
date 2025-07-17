@@ -163,6 +163,8 @@ Music videos are often nonsense, but if we enjoy the song, it demands our attent
 
 ---
 
+An eariler version of this article was posted on [Medium](https://medium.com/@gg02hpe/flcl-a-dive-into-the-creative-process-that-shaped-the-cult-anime-ce33903a38b2) (2023)
+
 [1] 10 years since then… (2010). [Mynavi.jp, p.1,](https://news.mynavi.jp/article/20101016-flcl/2)  
 [2] FLCLick Noise — Episode 5 (2010). [— Simulacra Realities.](https://simulacrarealities.substack.com/p/flclick-noise-episode-5) (2023)  
 [3] FLCL: Volume 1 [DVD] (2002). Episode 1, 00:08:21  
