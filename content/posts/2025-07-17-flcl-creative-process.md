@@ -4,7 +4,7 @@ date: 2025-07-17
 draft: false 
 tags: ["Research", "Narrative", "Production"]
 image: "images/features/flcl-title.jpg"
-description: "Research"
+description: "A heavly sourced article for creatives looking to understand how the cult anime was created from concept to final render"
 ---
 
 If the audience doesn’t understand what’s happening, they stop caring. Right? 
