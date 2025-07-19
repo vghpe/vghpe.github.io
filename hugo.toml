@@ -1,4 +1,5 @@
 baseURL = "https://vghpe.github.io/blog/"
+title = "vghpe - R&D"
 relativeURLs = false
 canonifyURLs = true
 languageCode = 'en-us'
@@ -9,6 +10,7 @@ theme = 'mini'
 [params]
 hiddenPostSummaryInHomePage = false
 enableRSS = true
+subscribe = "RSS"
 copyright = "© 2024 Henrik Pettersson. All rights reserved."
 showPowerBy = false
 
