@@ -8,10 +8,12 @@
   <!-- About -->
   <a href="{{ "/about/" | relURL }}">About</a>
 
-  <!-- RSS (only if enabled) -->
+  <!-- RSS (only if enabled and available) -->
   {{ if .Site.Params.enableRSS }}
-    <a class="button" href="{{ (.OutputFormats.Get "RSS").Permalink }}">
-      {{ with .Site.Params.subscribe }}{{ . }}{{ else }}{{ i18n "subscribe" }}{{ end }}
-    </a>
+    {{ with .OutputFormats.Get "RSS" }}
+      <a class="button" href="{{ .Permalink }}">
+        {{ with $.Site.Params.subscribe }}{{ . }}{{ else }}{{ i18n "subscribe" }}{{ end }}
+      </a>
+    {{ end }}
   {{ end }}
 </nav>
