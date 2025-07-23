@@ -1,6 +1,8 @@
 ---
 title: "Peeking into Kojima's Diary: Lessons in Creativity and Process" 
 date: 2024-11-04
+slug: kojima-diary-study
+aliases: ["/posts/KojimaDiaryStudy/"]
 draft: false 
 tags: ["Design", "Research", "game-dev"]
 image: "images/features/img_article_kojima-diary-closed.png"
