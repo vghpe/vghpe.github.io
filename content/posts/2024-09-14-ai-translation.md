@@ -2,6 +2,7 @@
 title: "Translating Kojima's Diary using AI, The Good and Bad"
 date: 2024-09-14
 draft: false
+slug: 'ai-translation'
 tags: ["research", "AI"]
 image: "images/kojima-drawing.jpg"
 ---
