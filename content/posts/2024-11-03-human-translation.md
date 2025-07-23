@@ -2,6 +2,8 @@
 title: "Translating Kojima's Diary Using Human Translation: The Good and Bad"
 date: 2024-11-03
 draft: false
+slug: 'human-translation'
+alias: ["/posts/human-translation/"]
 tags: ["research", "AI"]
 image: "images/kojima-drawing-inverted.jpg"
 ---

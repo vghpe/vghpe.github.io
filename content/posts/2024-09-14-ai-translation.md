@@ -28,7 +28,7 @@ The translated entries initially looked good, with Kojima talking about doing mo
 I'm feeding it too much information at once. I've seen this behavior with GPT, where it goes off the rails or just ignores data if I try to give it too much at once.
 
 ## Phase 2
-Instead of giving it a full page, I screen-grabbed smaller sections and I [made a tool]({{< relref "posts/image_stitch.md" >}}) to quickly stitch images when the entires wrapped. This time I was getting very authentic looking translations; I could read about Kojima's daily work with his colleagues, and I could follow a game development process that I'm well familiar with. I also developed a sense of when I was overloading the chatbot.
+Instead of giving it a full page, I screen-grabbed smaller sections and I [made a tool]({{< relref "posts/2024-08-28-image-stitch.md" >}}) to quickly stitch images when the entires wrapped. This time I was getting very authentic looking translations; I could read about Kojima's daily work with his colleagues, and I could follow a game development process that I'm well familiar with. I also developed a sense of when I was overloading the chatbot.
 
 **The Problem:**  
 While this all looks very correct, I still don't know if the AI is making things up.

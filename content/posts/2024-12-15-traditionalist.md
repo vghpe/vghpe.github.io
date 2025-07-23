@@ -1,6 +1,8 @@
 ---
 title: "Descriptions Used by Traditionalist Core Gamers on Their Grievances with the Intergalactic Reveal Trailer" 
 date: 2024-12-15T12:00:00Z
+slug: 'traditionalist'
+alias: ["/posts/traditionalist/"]
 draft: true
 ---
 

@@ -2,6 +2,8 @@
 title: Quick Stitch Image Tool
 date: 2024-08-28T23:38:26-07:00
 draft: false
+slug: 'image-stitch'
+alias: ["/posts/image_stitch/"]
 tags: ["research", "AI", "shell scripts"]
 image: "images/stitch.png"
 ---

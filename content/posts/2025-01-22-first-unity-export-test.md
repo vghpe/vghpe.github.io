@@ -1,7 +1,9 @@
 ---
 title: "Testing Unity Web Project Export"
 date: 2025-01-22T15:30:00-07:00
-tags: ["fluff"]
+tags: ["gamedev"]
+slug: 'first-unity-export-test'
+alias: ["/posts/first_unity_export_test/"]
 ---
 
 <div style="display:flex; justify-content:center; margin-top:20px; overflow:hidden;">

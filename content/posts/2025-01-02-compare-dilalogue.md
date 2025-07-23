@@ -3,6 +3,8 @@ title: "Comparing Dialogue: A Short Hike vs. Arranger"
 date: 2025-01-02T04:06:55Z
 tags: ["game writing", "dialogue analysis", "game design"]
 image: "images/arranger-short-title.png"
+slug: 'compare-dilalogue'
+alias: ["/posts/compare_dilalogue/"]
 draft: false
 ---
 

@@ -1,7 +1,9 @@
 ---
-title: Sneaky hallucinations 
+title: Sneaky hallucinations
 date: 2024-09-02T23:35:39-07:00
 draft: true
+slug: 'sneaky-hallucinations'
+alias: ["/posts/sneaky-hallucinations-/"]
 tags: ["research", "AI"]
 image: "images/IMG_2727.jpeg"
 ---

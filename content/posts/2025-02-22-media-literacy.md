@@ -2,7 +2,7 @@
 title: "Media Literacy and Rhetorical Analysis of YouTube Rants"
 date: 2025-02-22T15:09:56
 slug: 'media-literacy'
-aliases: ["/posts/2025_02_22-MediaLiteracy/"]
+aliases: ["/posts/2025_02_22-mediaLiteracy/"]
 draft: false
 tags: ["AI", "Tools"]
 ---

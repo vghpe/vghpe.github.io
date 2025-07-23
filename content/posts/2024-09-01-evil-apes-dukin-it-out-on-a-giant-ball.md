@@ -2,6 +2,8 @@
 title: Evil apes dukin’ it out on a giant ball
 date: 2024-09-01T17:56:48-07:00
 draft: false
+slug: 'evil-apes-dukin-it-out-on-a-giant-ball'
+alias: ["/posts/evil-apes-dukin-it-out-on-a-giant-ball/"]
 tags: ["research", "journal"]
 image: "images/IMG_2718.jpeg"
 caption: "Official Concept art, published in Disco Elysium Digital Artbook"

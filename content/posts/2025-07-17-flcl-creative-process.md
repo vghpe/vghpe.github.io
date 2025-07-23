@@ -1,7 +1,9 @@
 ---
 title: "FLCL — A dive into the creative process that shaped the cult anime" 
 date: 2025-07-17
-draft: false 
+draft: false
+slug: 'flcl-creative-process'
+alias: ["/posts/2025-07-12-flcl-creative-process/"]
 tags: ["Research", "Narrative", "Production"]
 image: "images/features/flcl-title.jpg"
 description: "A heavly sourced article for creatives looking to understand how the cult anime was created from concept to final render"
