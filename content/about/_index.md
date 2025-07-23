@@ -9,7 +9,7 @@ enableComments = false
 
 Henrik Pettersson is best known as the Game Director of the time-bending puzzle adventure The Gardens Between. He has worked as a Game Designer and Director across Australia, Vietnam, and most recently as a Lead Designer at Netflix Games in Hollywood.
 
-Henrik is currenly based in Sweden. 
+Henrik is currently based in Sweden. 
 
 [Reach out on X](https://x.com/vghpe)
 
