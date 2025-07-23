@@ -8,3 +8,5 @@ node_modules/
 indiekit.log
 .env
 .indiekitrc.local.yml
+# Ignore Obsidian config files
+**/.obsidian/
