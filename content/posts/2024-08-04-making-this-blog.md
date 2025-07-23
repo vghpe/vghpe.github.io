@@ -3,7 +3,7 @@ title: "Making this blog"
 date: 2024-08-04T18:26:20Z
 draft: false
 slug: 'making-this-blog'
-alias: ["/posts/makingthisblog/"]
+aliases: ["/posts/makingthisblog/"]
 image: "/images/IMG_2590.jpg"
 tags: ["blog", "dev", "github"]
 ---

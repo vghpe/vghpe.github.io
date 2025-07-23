@@ -3,7 +3,7 @@ title: "Saving Your References"
 date: 2024-08-11T12:00:00Z
 draft: false
 slug: 'saving-your-references'
-alias: ["/posts/saving-your-references/"]
+aliases: ["/posts/saving-your-references/"]
 tags: ["gamesindustry", "ai", "transcripts"]
 ---
 

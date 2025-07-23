@@ -3,7 +3,7 @@ title: MGS2 revisit
 date: 2024-08-27T23:53:28-07:00
 draft: false
 slug: 'mgs2-revisit'
-alias: ["/posts/mgs2-revisit-/"]
+aliases: ["/posts/mgs2-revisit-/"]
 tags: ["research", "journal"]
 image: "images/IMG_2703.jpeg"
 ---
