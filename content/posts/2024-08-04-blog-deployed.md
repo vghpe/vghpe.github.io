@@ -2,6 +2,7 @@
 title: Blog deployed
 date: 2024-08-04T22:52:22-07:00
 draft: false
+slug: blog-deployed
 image: "images/IMG_2592.jpeg"
 ---
 
