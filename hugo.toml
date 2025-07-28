@@ -1,9 +1,10 @@
 baseURL = "https://vghpe.github.io/blog/"
-title = "vghpe - R&D"
+title = "vghpe"
 relativeURLs = false
 canonifyURLs = true
 languageCode = 'en-us'
 theme = 'mini'
+summaryLength = 45
 [outputs]
   home = ["HTML", "RSS"]
   section = ["HTML", "RSS"]

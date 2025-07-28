@@ -26,6 +26,7 @@
     <div class="title">
       <h1>{{ .Title }}</h1> <!-- Title without link -->
     </div>
+
     
     <!-- Image or Tweet content -->
     <div class="content content-center">
@@ -38,24 +39,20 @@
       <p class="image-caption">{{ .Params.caption }}</p>
       {{ end }}
       {{ else if .Params.image }}
-      <img src="{{ .Params.image | absURL }}" alt="{{ .Title }}">
+      <a href="{{ .RelPermalink }}">
+        <img src="{{ .Params.image | absURL }}" alt="{{ .Title }}">
+</a>
+
       {{ if .Params.caption }}
       <p class="image-caption">{{ .Params.caption }}</p>
       {{ end }}
       {{ end }}
     </div>
 
-    <!-- Summary below the title -->
-    <div class="summary-text">
-     {{ .Content | truncate 250 | markdownify | safeHTML }}
-    </div>
+<p class="summary-text">
+  {{ .Summary | replaceRE "</p>$" "" | markdownify | safeHTML }} <a class="read-more" href="{{ .RelPermalink }}">Read More</a>
+</p>
 
-    <!-- Conditional Read More link -->
-    {{ if .Truncated }}
-    <div class="read-more">
-      <a href="{{ .RelPermalink }}">Read More</a>
-    </div>
-    {{ end }}
     
     <!-- Tags and date -->
     <div class="tags-date-container">
