@@ -1,17 +1,20 @@
 ---
-title: "FLCL — A dive into the creative process that shaped the cult anime" 
+title: FLCL — A dive into the creative process that shaped the cult anime
 date: 2025-07-17
 draft: false
-slug: 'flcl-creative-process'
-aliases: ["/posts/2025-07-17-flcl-creative-process/"]
-tags: ["Research", "Narrative", "Production"]
-image: "images/features/flcl-title.jpg"
-description: "A heavly sourced article for creatives looking to understand how the cult anime was created from concept to final render"
+slug: flcl-creative-process
+aliases:
+  - /posts/2025-07-17-flcl-creative-process/
+tags:
+  - article
+  - research
+image: images/features/flcl-title.jpg
+description: A heavly sourced article for creatives looking to understand how the cult anime was created from concept to final render
 ---
 
 If the audience doesn’t understand what’s happening, they stop caring. Right? 
 
-Yet one of my favorite pieces of fiction, the 2000 anime mini-series *FLCL*, manages to be incredibly engaging despite being nearly incomprehensible on a first watch. Why doesn’t the viewer bounce out? How was this erratic, absurd, stylish thing even made?
+Yet one of my favorite pieces of fiction, the 2000 anime mini-series *FLCL*, manages to be incredibly engaging despite being nearly incomprehensible on a first watch. Why doesn’t the viewer bounce out? How was this erratic, absurd, stylish thing even made? <!--more-->
 
 Having worked with interactive narrative for over a decade, I’ve found that my curiosity for how  "FLCL" was made has only grown stronger.
 

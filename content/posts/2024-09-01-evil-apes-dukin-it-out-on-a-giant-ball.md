@@ -2,16 +2,18 @@
 title: Evil apes dukin’ it out on a giant ball
 date: 2024-09-01T17:56:48-07:00
 draft: false
-slug: 'evil-apes-dukin-it-out-on-a-giant-ball'
-aliases: ["/posts/evil-apes-dukin-it-out-on-a-giant-ball/"]
-tags: ["research", "journal"]
-image: "images/IMG_2718.jpeg"
-caption: "Official Concept art, published in Disco Elysium Digital Artbook"
+slug: evil-apes-dukin-it-out-on-a-giant-ball
+aliases:
+  - /posts/evil-apes-dukin-it-out-on-a-giant-ball/
+tags:
+  - narrative
+image: images/IMG_2718.jpeg
+caption: Official Concept art, published in Disco Elysium Digital Artbook
 ---
 
 The writing in Disco Elysium really felt like it stood out? why is that? I'd like to know. Let's start with a simple test.
 
-Is it the writing or the execution? Let’s strip things out and compare. 
+Is it the writing or the execution? Let’s strip things out and compare. <!--more-->
 
 In the intro, when the Limbic System gives us a clue about what's out there, I remember that during my first playthrough, this is when I started to really lean in. Let's take a closer look at that
 

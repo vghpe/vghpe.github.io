@@ -1,16 +1,20 @@
 ---
-title: "Translating Kojima's Diary using AI, The Good and Bad"
+title: "Translating Kojima's Diary using AI: The Good and Bad"
 date: 2024-09-14
 draft: false
-slug: 'ai-translation'
-aliases: ["/posts/2024-09-14-ai-translation/"]
-tags: ["research", "AI"]
-image: "images/kojima-drawing.jpg"
+slug: ai-translation
+aliases:
+  - /posts/2024-09-14-ai-translation/
+tags:
+  - research
+  - AI
+image: images/kojima-drawing.jpg
 ---
+Kojima's dev-diary was originally published in the book *Metal Gear Solid 2: The Making*, which was released exclusively in Japan 2002 and never translated into English. <!--more-->
+
+After some online sleuthing, I discovered that the entire content had been [uploaded to X](https://x.com/BadHumans/status/1744883721595924822). Can I use AI to translate it? <!--more-->
 
 **Update:** I was able to source a Human Translation of the diary, Read more [here](https://vghpe.github.io/blog/posts/human-translation/)  
-
-I learned about  *Metal Gear Solid 2's* development diary from a [DidYouKnowGaming](https://www.youtube.com/watch?v=BVAlMgY4-5M) video on YouTube. After some online sleuthing, I discovered that the entire content had been [uploaded to X](https://x.com/BadHumans/status/1744883721595924822). This dev-diary was originally published in the book *Metal Gear Solid 2: The Making*, which was released exclusively in Japan 2002 and never translated into English.
 
 I have previously used ChatGPT for various translation tasks and was impressed with its ability. Its translation of Swedish (my native language) was able to capture even the most obscure nuances, and it has been a super helpful tool as I’ve been learning Vietnamese. So, I was curious to try it out on the scans and gain insight into this never-before-translated Kojima Diary.
 

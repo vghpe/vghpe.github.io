@@ -1,10 +1,13 @@
 ---
-title: "Media Literacy and Rhetorical Analysis of YouTube Rants"
+title: Automated Media Literacy and Rhetorical Analysis of YouTube Videos
 date: 2025-02-22T15:09:56
-slug: 'media-literacy'
-aliases: ["/posts/2025_02_22-mediaLiteracy/"]
+slug: media-literacy
+aliases:
+  - /posts/2025_02_22-mediaLiteracy/
 draft: false
-tags: ["AI", "Tools"]
+tags:
+  - tool
+  - research
 ---
 
 <div class="video-wrapper">
@@ -22,7 +25,7 @@ tags: ["AI", "Tools"]
 
 
 
-There are a lot of YouTubers who release daily videos with long rants about their grievances with the video game industry. As a developer, it can be hard to take these rants at face value.
+There are a lot of YouTubers who release daily videos with long rants about their grievances with the video game industry. As a developer, it can be hard to take these rants at face value. <!--more-->
 
 - They often feature a lot of misconceptions about game development
 - They are often emotionally charged and sometimes just plain hateful.  

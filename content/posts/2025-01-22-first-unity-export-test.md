@@ -1,12 +1,14 @@
 ---
-title: "Testing Unity Web Project Export"
+title: Testing Unity Web Project Export
 date: 2025-01-22T15:30:00-07:00
-tags: ["gamedev"]
-slug: 'first-unity-export-test'
-aliases: ["/posts/first_unity_export_test/"]
+tags:
+  - design
+slug: first-unity-export-test
+aliases:
+  - /posts/first_unity_export_test/
 ---
 
-<div style="display:flex; justify-content:center; margin-top:20px; overflow:hidden;">
+<div style="display:flex; justify-content:center; margin-bottom:20px; overflow:hidden;">
   <iframe
     src="/unity-project/index.html"
     width="270"

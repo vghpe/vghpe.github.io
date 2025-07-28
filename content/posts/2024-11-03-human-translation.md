@@ -1,18 +1,20 @@
 ---
-title: "Translating Kojima's Diary Using Human Translation: The Good and Bad"
+title: "Translating Kojima's Diary Using Humans: The Good and Bad"
 date: 2024-11-03
 draft: false
-slug: 'human-translation'
-aliases: ["/posts/human-translation/"]
-tags: ["research", "AI"]
-image: "images/kojima-drawing-inverted.jpg"
+slug: human-translation
+aliases:
+  - /posts/human-translation/
+tags:
+  - research
+  - AI
+image: images/kojima-drawing-inverted.jpg
 ---
+I was able source a translation of Kojima's diary that was done commissioned by the youtube channel *Did You Know Gaming?* After I completed my own AI translation and began working on an article, it arrived in my inbox. How does it compare to the AI version? <!--more-->
 
-Note: [Go here](https://vghpe.github.io/blog/posts/ai-translation/) to read the previous entry about this translation work.
+[Go here](https://vghpe.github.io/blog/posts/ai-translation/) to read the previous entry 
 
-When I started this project, I reached out to *Did You Know Gaming?* and the people credited in their video to see if they could provide me with their translation of the diary. They never got back to me, but the source for their original uploaded scan did. After I completed the AI translation and began working on an article, they sent me the translation work that *DYKG* had sourced.
-
-I was very curious to compare this human translation to the AI-generated one I'd been working on. I wanted to see just how accurate the chatbots had been—and, more importantly, to gain greater confidence in my understanding and takeaways. On initial examination, I noticed some differences in language and tone, as well as a few concerning inconsistencies.
+I wanted to see just how accurate the chatbots had been—and, more importantly, to gain greater confidence in my understanding and takeaways. On initial examination, I noticed some differences in language and tone, as well as a few concerning inconsistencies.
 
 ## Phase 6
 

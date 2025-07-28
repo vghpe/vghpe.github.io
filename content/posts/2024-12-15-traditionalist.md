@@ -1,16 +1,16 @@
 ---
-title: "Descriptions Used by Traditionalist Core Gamers on Their Grievances with the Intergalactic Reveal Trailer" 
+title: What does the angry mob actually "say" about Intergalactic
 date: 2024-12-15T12:00:00Z
-slug: 'traditionalist'
-aliases: ["/posts/traditionalist/"]
-draft: true
+slug: traditionalist
+aliases:
+  - /posts/traditionalist/
+draft: false
+tags:
+  - research
 ---
+I decided to catalog internet "grievances" over the *Intergalactic* reveal trailer at The Game Awards 2024. 
 
-I've been feeling a bit distressed recently about my habits of passive engagement in the online culture war. For the last decade, I've kept an eye on the outrage in gaming culture, particularly from those who might be described as the “Skeptical Core Fanbase.”
-
-I’ve often argued that my engagement is, at least in part, to understand the anger and to avoid getting too caught up in my own bubble. But I wonder if I’ve just gotten addicted to reading rage bait without really learning or understanding much.
-
-Maybe out of desperation to try something different, I decided to catalog grievances on a hot topic to see if it could help me gain a deeper perspective. This week’s rage was all about the *Intergalactic* reveal trailer at The Game Awards 2024.
+Why am I doing this? Well. I.. don't.. get it. So let's do some science!! <!--more-->
 
 It can be hard to pull out the true grievances from the layers of memes, obsession over like/dislike ratios, and content creators with questionable motives who financially benefit from outrage.
 
@@ -63,5 +63,4 @@ The quotes below are gathered from users on Reddit, X, Youtube and Instagram. I 
 
 ---
 
-While I’m no less distressed about my habits, I do think this exercise was better than trying to comprehend outrage through the feed. It felt more like excavation—pulling out the repeating patterns and piecing them together as a whole. This approach let me detach, and better yet, avoid personalities with financial stakes in the debate.
-
+Did we learn anything?  

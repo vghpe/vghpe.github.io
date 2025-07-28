@@ -1,10 +1,12 @@
 ---
-title: "Saving Your References"
+title: Saving Youtube videos for personal reference
 date: 2024-08-11T12:00:00Z
 draft: false
-slug: 'saving-your-references'
-aliases: ["/posts/saving-your-references/"]
-tags: ["gamesindustry", "ai", "transcripts"]
+slug: saving-your-references
+aliases:
+  - /posts/saving-your-references/
+tags:
+  - tool
 ---
 
 {{< video src="/videos/segment_20240811_171525_480p.mp4" type="video/mp4" width="640" height="360" >}}

@@ -1,11 +1,12 @@
 ---
-title: Gamer Outrage Content 
+title: Gamer Outrage Content
 date: 2024-08-18T15:39:31-07:00
 draft: true
-slug: 'outrage-content'
-aliases: ["/posts/outrage-content/"]
-tags: ["fluff", "sketches", "gamesindustry"]
-image: "images/IMG_2639-2.jpeg"
+slug: outrage-content
+aliases:
+  - /posts/outrage-content/
+tags: []
+image: images/IMG_2639-2.jpeg
 ---
 
 Imagine a job that requires you to daily find or manufacture the next outrage. Stability, for you, means there’s new anger to tap into.
