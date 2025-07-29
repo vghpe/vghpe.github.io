@@ -4,6 +4,3 @@
 [submodule "themes/hugo-book"]
 	path = themes/hugo-book
 	url = https://github.com/alex-shpak/hugo-book
-[submodule "themes/mini"]
-	path = themes/mini
-	url = https://github.com/vghpe/hugo-theme-mini-remix.git
