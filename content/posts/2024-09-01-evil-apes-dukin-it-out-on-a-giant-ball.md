@@ -1,5 +1,5 @@
 ---
-title: Evil apes dukin’ it out on a giant ball
+title: Is It the Words, the Voice, or the Mood?
 date: 2024-09-01T17:56:48-07:00
 draft: false
 slug: evil-apes-dukin-it-out-on-a-giant-ball
