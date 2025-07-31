@@ -10,8 +10,8 @@
 
   <!-- RSS (only if enabled and available) -->
   {{ if .Site.Params.enableRSS }}
-    {{ with .OutputFormats.Get "RSS" }}
-      <a href="{{ .Permalink }}">
+    {{ with .Site.Home.OutputFormats.Get "RSS" }}
+      <a href="{{ .RelPermalink }}">
         {{ with $.Site.Params.subscribe }}{{ . }}{{ else }}{{ i18n "subscribe" }}{{ end }}
       </a>
     {{ end }}
