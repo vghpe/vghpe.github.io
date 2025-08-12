@@ -1,0 +1,15 @@
+#list-page.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+#list-page.posts-grid .item {
+  margin: 0;
+}
+
+@media (max-width: 600px) {
+  #list-page.posts-grid {
+    grid-template-columns: 1fr;
+  }
+}
