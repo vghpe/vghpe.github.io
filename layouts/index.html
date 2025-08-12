@@ -1,7 +1,7 @@
 {{ define "main" }}
 {{ partial "profile.html" . }}
 
-<div id="list-page">
+<div id="list-page" class="posts-grid">
     <!-- 1) Grab all regular pages. -->
     {{ $allPages := .Site.RegularPages }}
 
@@ -69,9 +69,6 @@
       </div>
     </div>
   </section>
-
-  <!-- Divider between posts -->
-  <hr class="post-divider" />
 
   {{ end }}
 

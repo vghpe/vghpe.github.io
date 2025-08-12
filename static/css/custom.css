@@ -1,0 +1,31 @@
+#list-page.posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 2rem;
+  max-width: none;
+  width: 100%;
+  margin: 0;
+  padding: 0 24px;
+}
+
+#list-page.posts-grid .item {
+  margin: 0;
+}
+
+#list-page.posts-grid .tags-date-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#list-page.posts-grid .date {
+  float: none;
+  width: auto;
+  text-align: right;
+}
+
+@media (max-width: 600px) {
+  #list-page.posts-grid {
+    grid-template-columns: 1fr;
+  }
+}
