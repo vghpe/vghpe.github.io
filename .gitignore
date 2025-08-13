@@ -10,3 +10,4 @@ indiekit.log
 .indiekitrc.local.yml
 # Ignore Obsidian config files
 **/.obsidian/
+content/images
