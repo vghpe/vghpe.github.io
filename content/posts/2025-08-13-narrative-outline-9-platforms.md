@@ -81,8 +81,11 @@ The decision splits the ending:
 
 - **Stay** — The protagonist puts the older passengers to sleep, denying them the return to their lives. The younger rushes toward the 9th platform, and the protagonist follows, discovering they have entered the layers. A final descent deep into the ninth platform’s layers is required to bring the youngest passenger back.
 
+
 ![When the Protagonist returns to the 9th platform, the Guide and Yougest Passenger are already far down the layers](/images/nine-platforms-transporter.gif)
   
-The Guide is able to help but must push themselves further than they can handle, paying a great cost. After completing a difficult sequence of repairs, the protagonist succeeds in bringing the youngest passenger back. The Guide then asks the protagonist to take on their role as steward of the platforms. While the youngest passenger shows potential for the role, it is not yet their time.
+  The Guide is able to help but must push themselves further than they can handle, paying a great cost. After completing a difficult sequence of puzzles, the protagonist succeeds in bringing the youngest passenger back. The Guide then asks the protagonist to take on their role as steward of the platforms. While the youngest passenger shows potential for the role, it is not yet their time.
   
-  By accepting, the protagonist undergoes a complete transition. They are no longer a passenger but a caretaker and steward of the station. This change alters the return rule of the train, as there are now only three passengers left.
+  By accepting, the protagonist undergoes a transition. They are no longer a passenger but a caretaker and steward of the station. This change alters the return rule of the train, as there are now only three passengers left. 
+  
+  The 3 passenger board the train and return to their lives just as they were, no memory of the events that happened. The train departs the station continuing toward it's cosmic destination far far away. 
