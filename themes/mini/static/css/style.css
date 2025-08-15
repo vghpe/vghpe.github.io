@@ -620,6 +620,7 @@ nav.navigation a.button {
   display: inline-block;
   color: #999;
   min-width: 60px;
+  margin-right: 10px;
 }
 #archive .group .value .title {
   display: inline;

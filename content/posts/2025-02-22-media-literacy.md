@@ -4,6 +4,7 @@ date: 2025-02-22T15:09:56
 slug: media-literacy
 aliases:
   - /posts/2025_02_22-mediaLiteracy/
+  - /posts/2025_02_22-medialiteracy/
 draft: false
 tags:
   - tool
