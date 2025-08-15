@@ -367,7 +367,7 @@ nav.navigation a.button {
 /* profile  */
 
 .profile {
-  margin: 60px auto 0 auto;
+  margin: 50px auto 0 auto;
   margin-bottom: 60px auto 0 auto;
 
   text-align: center;
@@ -453,7 +453,7 @@ nav.navigation a.button {
   font-weight: 400;
   letter-spacing: 0px;
   font-size: 20px;
-  color: #404040;
+  color: #364e4a;
   margin-bottom: 0;
   margin-top: 0;
 }
@@ -534,6 +534,10 @@ nav.navigation a.button {
 }
 #list-page .pagination .next {
   float: right;
+}
+
+#notes-page {
+  margin-top: 30px; /* adjust as needed */
 }
 
 /* single page */
