@@ -19,6 +19,14 @@ a:hover {
   color: #0366d6;
 }
 
+html {
+  /* For older browsers */
+  overflow-y: scroll;
+
+  /* For modern browsers */
+  scrollbar-gutter: stable;
+}
+
 /* Image Styling */
 .content-center img {
     display: block;
