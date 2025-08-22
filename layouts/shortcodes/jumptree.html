@@ -95,7 +95,7 @@
   <script>
     const JUMP_STRENGTH = 6;
     const GRAVITY = 0.3; 
-    const PLAYER_SPEED = 1;
+    const PLAYER_SPEED = 100; // pixels per second
     const START_FREEZE_TIME = 1000;
     const DEATH_FREEZE_TIME = 500;
     const PLAYER_START_OFFSET = 10;
@@ -116,6 +116,7 @@
     let frozen = true;
     let wiggleInterval = null;
     let clearedFirst = false;
+    let lastTime = null;
 
     function setFrozenStart(state) {
       frozen = state;
@@ -170,9 +171,13 @@
       );
     }
 
-    function gameLoop() {
+    function gameLoop(timestamp) {
+      if (!lastTime) lastTime = timestamp;
+      const delta = (timestamp - lastTime) / 1000; // seconds
+      lastTime = timestamp;
+
       if (!won && !frozen) {
-        playerX += PLAYER_SPEED;
+        playerX += PLAYER_SPEED * delta;
         player.style.left = playerX + "px";
 
         if (isJumping) {
@@ -248,7 +253,7 @@
     setTimeout(() => { setFrozenStart(false); }, START_FREEZE_TIME);
 
     resetPlayer();
-    gameLoop();
+    requestAnimationFrame(gameLoop);
   </script>
 </body>
 </html>
