@@ -5,7 +5,8 @@
   <style>
     #game {
       position: relative;
-      width: 500px;
+      width: 100%;
+      max-width: 500px;
       height: 100px;
       background: #e8f5e9;
       overflow: hidden;
@@ -56,7 +57,7 @@
       border-radius: 50%;
     }
     #message {
-      margin: 20px 0 10px 0;
+      margin: 30px 0 15px 0;
       font-size: 16px;
       color: #37474f;
       text-align: center;
@@ -83,11 +84,11 @@
   </style>
 </head>
 <body>
-  <div id="message">Clear the obstacles to see my email. Press Space or Click to jump</div>
+  <div id="message">Clear the obstacles to see my email. Tap to jump</div>
   <div id="game">
     <div id="player" class="frozen-start"></div>
-    <div id="tree1" class="tree" style="left: 125px;"></div>
-    <div id="tree2" class="tree" style="left: 365px;"></div>
+    <div id="tree1" class="tree" style="left: 25%;"></div>
+    <div id="tree2" class="tree" style="left: 75%;"></div>
     <button id="resetBtn">↻</button>
   </div>
 
@@ -153,7 +154,7 @@
       player.style.left = playerX + "px";
       player.style.bottom = jumpHeight + "px";
       player.style.transform = "scaleY(1) scaleX(1)";
-      message.innerHTML = "Clear the obstacles to see my email. Press Space or Click to jump";
+      message.innerHTML = "Clear the obstacles to see my email. Tap to jump";
       resetBtn.style.display = "none";
       setFrozenStart(true);
       setTimeout(() => { setFrozenStart(false); }, START_FREEZE_TIME);
@@ -201,7 +202,7 @@
           player.style.bottom = jumpHeight + "px";
         }
 
-        if (!clearedFirst && playerX > parseInt(tree1.style.left) + 10) {
+        if (!clearedFirst && playerX > tree1.offsetLeft + 10) {
           clearedFirst = true;
         }
 
