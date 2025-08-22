@@ -14,6 +14,7 @@
       margin: 20px auto;
       text-align: center;
       border-radius: 6px;
+      touch-action: manipulation;
     }
     #player {
       position: absolute;
@@ -26,18 +27,10 @@
       transform-origin: center bottom;
       transition: transform 0.1s ease-out;
     }
-    .frozen-start {
-      background: #fffde7;
-      outline: 2px solid #fbc02d;
-    }
-    .normal {
-      background: #4db6ac;
-      outline: none;
-    }
-    .frozen-death {
-      background: #ef9a9a;
-      outline: none;
-    }
+    .frozen-start { background: #fffde7; outline: 2px solid #fbc02d; }
+    .normal       { background: #4db6ac; outline: none; }
+    .frozen-death { background: #ef9a9a; outline: none; }
+
     .tree {
       position: absolute;
       bottom: 0;
@@ -93,14 +86,13 @@
   </div>
 
   <script>
-    // Tunables
-// Tunable jump parameters
-    const JUMP_STRENGTH = 6;   // higher = taller jump
-    const GRAVITY_UP = 0.28;   // gravity applied while rising
-    const GRAVITY_MID = 0.09;  // gravity applied near peak
-    const GRAVITY_DOWN = 0.55; // gravity applied while falling
-    const GRAVITY = 0.15;          // per-60fps baseline
-    const PLAYER_SPEED = 130;     // px per second (time-based)
+    // Tunables (60fps baseline for jump)
+    const JUMP_STRENGTH = 7;   // higher = taller jump
+    const GRAVITY_UP = 0.32;   // gravity applied while rising
+    const GRAVITY_MID = 0.40;  // gravity applied near peak
+    const GRAVITY_DOWN = 0.65; // gravity applied while falling
+
+    const PLAYER_SPEED = 130;    // px/sec (time-based)
     const START_FREEZE_TIME = 1000;
     const DEATH_FREEZE_TIME = 500;
     const PLAYER_START_OFFSET = 10;
@@ -125,11 +117,7 @@
 
     function setFrozenStart(state) {
       frozen = state;
-      if (state) {
-        player.className = 'frozen-start';
-      } else {
-        player.className = 'normal';
-      }
+      player.className = state ? 'frozen-start' : 'normal';
     }
 
     function setFrozenDeath() {
@@ -143,10 +131,7 @@
     }
 
     function clearWiggle() {
-      if (wiggleInterval) {
-        clearInterval(wiggleInterval);
-        wiggleInterval = null;
-      }
+      if (wiggleInterval) { clearInterval(wiggleInterval); wiggleInterval = null; }
     }
 
     function resetPlayer() {
@@ -178,50 +163,44 @@
 
     function gameLoop(ts) {
       if (lastTime === null) lastTime = ts;
-      // Clamp to avoid huge jumps on tab switch
-      const deltaSec = Math.min((ts - lastTime) / 1000, 0.05);
+      const deltaSec = Math.min((ts - lastTime) / 1000, 0.05); // clamp huge gaps
       const dt60 = deltaSec * 60; // 60fps baseline scaler
       lastTime = ts;
 
       if (!won && !frozen) {
-        // Time-based horizontal speed
+        // Horizontal: time-based
         playerX += PLAYER_SPEED * deltaSec;
         player.style.left = playerX + 'px';
 
-        // Time-based vertical physics using 60fps baseline
+        // Vertical: normalized to 60fps baseline
         if (isJumping) {
-          jumpHeight += velocity;
+          jumpHeight += velocity * dt60;
 
           if (velocity > 2) {
-            velocity -= GRAVITY_UP;
+            velocity -= GRAVITY_UP * dt60;
           } else if (velocity > -2) {
-            velocity -= GRAVITY_MID;
+            velocity -= GRAVITY_MID * dt60;
           } else {
-            velocity -= GRAVITY_DOWN;
+            velocity -= GRAVITY_DOWN * dt60;
           }
 
           if (jumpHeight <= 0) {
             jumpHeight = 0;
             isJumping = false;
-            // squash & stretch at landing
-            player.style.transform = "scaleY(0.6) scaleX(1.4)";
-            setTimeout(() => {
-              player.style.transform = "scaleY(1) scaleX(1)";
-            }, 150);
+            player.style.transform = 'scaleY(0.6) scaleX(1.4)';
+            setTimeout(() => { player.style.transform = 'scaleY(1) scaleX(1)'; }, 150);
           } else {
-            let stretch = 1 + Math.max(0, velocity) * 0.05;
-            let squash = 1 - Math.max(0, velocity) * 0.02;
+            const v = Math.max(0, velocity);
+            const stretch = 1 + v * 0.05;
+            const squash  = 1 - v * 0.02;
             player.style.transform = `scaleY(${stretch}) scaleX(${squash})`;
           }
 
-          player.style.bottom = jumpHeight + "px";
+          player.style.bottom = jumpHeight + 'px';
         }
 
-
-        // First obstacle cleared?
         if (!clearedFirst && playerX > tree1.offsetLeft + 10) clearedFirst = true;
 
-        // Collisions
         if (checkCollision(tree1) || checkCollision(tree2)) {
           if (clearedFirst && checkCollision(tree2)) {
             message.innerHTML = 'Good enough <span style="margin:0 4px;">💪</span> Email: gg02hpe [at] gmail [dot] com';
@@ -233,7 +212,6 @@
           }
         }
 
-        // Win at right edge
         if (playerX + player.offsetWidth >= game.offsetWidth) {
           message.innerHTML = 'You did it! Email: gg02hpe [at] gmail [dot] com';
           won = true;
@@ -247,21 +225,18 @@
     function jump() {
       if (isJumping || frozen) return;
       isJumping = true;
-      velocity = JUMP_STRENGTH; // per-60fps baseline
+      velocity = JUMP_STRENGTH; // 60fps baseline
     }
 
     document.addEventListener('keydown', (e) => {
       if (e.code === 'Space') jump();
     });
-
-    // Use pointer events to cover mouse + touch without double-firing
     document.addEventListener('pointerdown', () => {
       if (!won) jump();
     });
 
     resetBtn.addEventListener('click', resetPlayer);
 
-    // Init
     resetPlayer();
     requestAnimationFrame(gameLoop);
   </script>
