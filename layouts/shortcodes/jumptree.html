@@ -116,6 +116,7 @@
     let frozen = true;
     let wiggleInterval = null;
     let clearedFirst = false;
+
     let lastTime = null;
 
     function setFrozenStart(state) {
@@ -172,14 +173,16 @@
     }
 
     function gameLoop(timestamp) {
-      if (!lastTime) lastTime = timestamp;
-      const delta = (timestamp - lastTime) / 1000; // seconds
+      if (lastTime === null) lastTime = timestamp;
+      const deltaTime = (timestamp - lastTime) / 1000; // seconds
       lastTime = timestamp;
 
       if (!won && !frozen) {
-        playerX += PLAYER_SPEED * delta;
+        // Horizontal movement scaled by time
+        playerX += PLAYER_SPEED * deltaTime;
         player.style.left = playerX + "px";
 
+        // Jump physics remain frame-based
         if (isJumping) {
           jumpHeight += velocity;
 
