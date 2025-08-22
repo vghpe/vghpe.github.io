@@ -63,7 +63,7 @@
       text-align: center;
       line-height: 1.4em;
       min-height: 2em;
-      font-family: inherit; /* Match blog font */
+      font-family: inherit;
     }
     #resetBtn {
       display: none;
@@ -93,20 +93,21 @@
   </div>
 
   <script>
-    const JUMP_STRENGTH = 6;
-    const GRAVITY = 0.3; 
-    const PLAYER_SPEED = 100; // pixels per second
+    // Tunables
+    const JUMP_STRENGTH = 6;      // per-60fps baseline
+    const GRAVITY = 0.3;          // per-60fps baseline
+    const PLAYER_SPEED = 100;     // px per second (time-based)
     const START_FREEZE_TIME = 1000;
     const DEATH_FREEZE_TIME = 500;
     const PLAYER_START_OFFSET = 10;
     const DEATH_WIGGLE_DISTANCE = 1;
 
-    const player = document.getElementById("player");
-    const tree1 = document.getElementById("tree1");
-    const tree2 = document.getElementById("tree2");
-    const game = document.getElementById("game");
-    const message = document.getElementById("message");
-    const resetBtn = document.getElementById("resetBtn");
+    const player = document.getElementById('player');
+    const tree1 = document.getElementById('tree1');
+    const tree2 = document.getElementById('tree2');
+    const game = document.getElementById('game');
+    const message = document.getElementById('message');
+    const resetBtn = document.getElementById('resetBtn');
 
     let isJumping = false;
     let jumpHeight = 0;
@@ -116,24 +117,23 @@
     let frozen = true;
     let wiggleInterval = null;
     let clearedFirst = false;
-
     let lastTime = null;
 
     function setFrozenStart(state) {
       frozen = state;
       if (state) {
-        player.className = "frozen-start";
+        player.className = 'frozen-start';
       } else {
-        player.className = "normal";
+        player.className = 'normal';
       }
     }
 
     function setFrozenDeath() {
       frozen = true;
-      player.className = "frozen-death";
+      player.className = 'frozen-death';
       let direction = 1;
       wiggleInterval = setInterval(() => {
-        player.style.left = (playerX + (direction * DEATH_WIGGLE_DISTANCE)) + "px";
+        player.style.left = (playerX + (direction * DEATH_WIGGLE_DISTANCE)) + 'px';
         direction *= -1;
       }, 100);
     }
@@ -153,11 +153,11 @@
       isJumping = false;
       won = false;
       clearedFirst = false;
-      player.style.left = playerX + "px";
-      player.style.bottom = jumpHeight + "px";
-      player.style.transform = "scaleY(1) scaleX(1)";
-      message.innerHTML = "Clear the obstacles to see my email. Tap to jump";
-      resetBtn.style.display = "none";
+      player.style.left = playerX + 'px';
+      player.style.bottom = jumpHeight + 'px';
+      player.style.transform = 'scaleY(1) scaleX(1)';
+      message.innerHTML = 'Clear the obstacles to see my email. Tap to jump';
+      resetBtn.style.display = 'none';
       setFrozenStart(true);
       setTimeout(() => { setFrozenStart(false); }, START_FREEZE_TIME);
     }
@@ -172,89 +172,91 @@
       );
     }
 
-    function gameLoop(timestamp) {
-      if (lastTime === null) lastTime = timestamp;
-      const deltaTime = (timestamp - lastTime) / 1000; // seconds
-      lastTime = timestamp;
+    function gameLoop(ts) {
+      if (lastTime === null) lastTime = ts;
+      // Clamp to avoid huge jumps on tab switch
+      const deltaSec = Math.min((ts - lastTime) / 1000, 0.05);
+      const dt60 = deltaSec * 60; // 60fps baseline scaler
+      lastTime = ts;
 
       if (!won && !frozen) {
-        // Horizontal movement scaled by time
-        playerX += PLAYER_SPEED * deltaTime;
-        player.style.left = playerX + "px";
+        // Time-based horizontal speed
+        playerX += PLAYER_SPEED * deltaSec;
+        player.style.left = playerX + 'px';
 
-        // Jump physics remain frame-based
+        // Time-based vertical physics using 60fps baseline
         if (isJumping) {
-          jumpHeight += velocity;
+          jumpHeight += velocity * dt60;
 
           if (velocity > 2) {
-            velocity -= GRAVITY * 1.2;
+            velocity -= GRAVITY * 1.2 * dt60;   // fast up decel
           } else if (velocity > -2) {
-            velocity -= GRAVITY * 0.2;
+            velocity -= GRAVITY * 0.2 * dt60;   // slow mid air
           } else {
-            velocity -= GRAVITY * 2;
+            velocity -= GRAVITY * 2 * dt60;     // fast down accel
           }
 
           if (jumpHeight <= 0) {
             jumpHeight = 0;
             isJumping = false;
-            player.style.transform = "scaleY(0.6) scaleX(1.4)";
+            player.style.transform = 'scaleY(0.6) scaleX(1.4)';
             setTimeout(() => {
-              player.style.transform = "scaleY(1) scaleX(1)";
+              player.style.transform = 'scaleY(1) scaleX(1)';
             }, 150);
           } else {
-            let stretch = 1 + Math.max(0, velocity) * 0.05;
-            let squash = 1 - Math.max(0, velocity) * 0.02;
+            const v = Math.max(0, velocity);
+            const stretch = 1 + v * 0.05;
+            const squash = 1 - v * 0.02;
             player.style.transform = `scaleY(${stretch}) scaleX(${squash})`;
           }
 
-          player.style.bottom = jumpHeight + "px";
+          player.style.bottom = jumpHeight + 'px';
         }
 
-        if (!clearedFirst && playerX > tree1.offsetLeft + 10) {
-          clearedFirst = true;
-        }
+        // First obstacle cleared?
+        if (!clearedFirst && playerX > tree1.offsetLeft + 10) clearedFirst = true;
 
+        // Collisions
         if (checkCollision(tree1) || checkCollision(tree2)) {
           if (clearedFirst && checkCollision(tree2)) {
-            message.innerHTML = "Good enough <span style=\"margin:0 4px;\">💪</span> Email: gg02hpe [at] gmail [dot] com";
+            message.innerHTML = 'Good enough <span style="margin:0 4px;">💪</span> Email: gg02hpe [at] gmail [dot] com';
             won = true;
-            resetBtn.style.display = "block";
+            resetBtn.style.display = 'block';
           } else {
             setFrozenDeath();
             setTimeout(() => { resetPlayer(); }, DEATH_FREEZE_TIME);
           }
         }
 
+        // Win at right edge
         if (playerX + player.offsetWidth >= game.offsetWidth) {
-          message.innerHTML = "You did it! Email: gg02hpe [at] gmail [dot] com";
+          message.innerHTML = 'You did it! Email: gg02hpe [at] gmail [dot] com';
           won = true;
-          resetBtn.style.display = "block";
+          resetBtn.style.display = 'block';
         }
       }
+
       requestAnimationFrame(gameLoop);
     }
 
     function jump() {
       if (isJumping || frozen) return;
       isJumping = true;
-      velocity = JUMP_STRENGTH;
+      velocity = JUMP_STRENGTH; // per-60fps baseline
     }
 
-    document.addEventListener("keydown", (e) => {
-      if (e.code === "Space") jump();
+    document.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') jump();
     });
 
-    document.addEventListener("mousedown", () => {
+    // Use pointer events to cover mouse + touch without double-firing
+    document.addEventListener('pointerdown', () => {
       if (!won) jump();
     });
 
-    resetBtn.addEventListener("click", () => {
-      resetPlayer();
-    });
+    resetBtn.addEventListener('click', resetPlayer);
 
-    setFrozenStart(true);
-    setTimeout(() => { setFrozenStart(false); }, START_FREEZE_TIME);
-
+    // Init
     resetPlayer();
     requestAnimationFrame(gameLoop);
   </script>
