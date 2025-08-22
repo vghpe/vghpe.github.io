@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Jump Over Tree</title>
+  <style>
+    #game {
+      position: relative;
+      width: 500px;
+      height: 100px;
+      background: #e8f5e9;
+      overflow: hidden;
+      border: 2px solid #81c784;
+      margin: 20px auto;
+      text-align: center;
+      border-radius: 6px;
+    }
+    #player {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 20px;
+      height: 20px;
+      box-sizing: border-box;
+      border-radius: 4px;
+      transform-origin: center bottom;
+      transition: transform 0.1s ease-out;
+    }
+    .frozen-start {
+      background: #fffde7;
+      outline: 2px solid #fbc02d;
+    }
+    .normal {
+      background: #4db6ac;
+      outline: none;
+    }
+    .frozen-death {
+      background: #ef9a9a;
+      outline: none;
+    }
+    .tree {
+      position: absolute;
+      bottom: 0;
+      width: 10px;
+      height: 30px;
+      background: #8d6e63;
+      border-radius: 2px;
+    }
+    #tree1::after, #tree2::after {
+      content: '';
+      position: absolute;
+      bottom: 20px;
+      left: -5px;
+      width: 20px;
+      height: 20px;
+      background: #66bb6a;
+      border-radius: 50%;
+    }
+    #message {
+      margin: 20px 0 10px 0;
+      font-size: 16px;
+      color: #37474f;
+      text-align: center;
+      line-height: 1.4em;
+      min-height: 2em;
+      font-family: inherit; /* Match blog font */
+    }
+    #resetBtn {
+      display: none;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      background: #fff;
+      border: 2px solid #81c784;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      line-height: 36px;
+      color: #388e3c;
+    }
+  </style>
+</head>
+<body>
+  <div id="message">Clear the obstacles to see my email. Press Space or Click to jump</div>
+  <div id="game">
+    <div id="player" class="frozen-start"></div>
+    <div id="tree1" class="tree" style="left: 125px;"></div>
+    <div id="tree2" class="tree" style="left: 365px;"></div>
+    <button id="resetBtn">↻</button>
+  </div>
+
+  <script>
+    const JUMP_STRENGTH = 6;
+    const GRAVITY = 0.3; 
+    const PLAYER_SPEED = 1;
+    const START_FREEZE_TIME = 1000;
+    const DEATH_FREEZE_TIME = 500;
+    const PLAYER_START_OFFSET = 10;
+    const DEATH_WIGGLE_DISTANCE = 1;
+
+    const player = document.getElementById("player");
+    const tree1 = document.getElementById("tree1");
+    const tree2 = document.getElementById("tree2");
+    const game = document.getElementById("game");
+    const message = document.getElementById("message");
+    const resetBtn = document.getElementById("resetBtn");
+
+    let isJumping = false;
+    let jumpHeight = 0;
+    let velocity = 0;
+    let playerX = PLAYER_START_OFFSET;
+    let won = false;
+    let frozen = true;
+    let wiggleInterval = null;
+    let clearedFirst = false;
+
+    function setFrozenStart(state) {
+      frozen = state;
+      if (state) {
+        player.className = "frozen-start";
+      } else {
+        player.className = "normal";
+      }
+    }
+
+    function setFrozenDeath() {
+      frozen = true;
+      player.className = "frozen-death";
+      let direction = 1;
+      wiggleInterval = setInterval(() => {
+        player.style.left = (playerX + (direction * DEATH_WIGGLE_DISTANCE)) + "px";
+        direction *= -1;
+      }, 100);
+    }
+
+    function clearWiggle() {
+      if (wiggleInterval) {
+        clearInterval(wiggleInterval);
+        wiggleInterval = null;
+      }
+    }
+
+    function resetPlayer() {
+      clearWiggle();
+      playerX = PLAYER_START_OFFSET;
+      jumpHeight = 0;
+      velocity = 0;
+      isJumping = false;
+      won = false;
+      clearedFirst = false;
+      player.style.left = playerX + "px";
+      player.style.bottom = jumpHeight + "px";
+      player.style.transform = "scaleY(1) scaleX(1)";
+      message.innerHTML = "Clear the obstacles to see my email. Press Space or Click to jump";
+      resetBtn.style.display = "none";
+      setFrozenStart(true);
+      setTimeout(() => { setFrozenStart(false); }, START_FREEZE_TIME);
+    }
+
+    function checkCollision(tree) {
+      const playerRect = player.getBoundingClientRect();
+      const treeRect = tree.getBoundingClientRect();
+      return (
+        playerRect.left < treeRect.right &&
+        playerRect.right > treeRect.left &&
+        playerRect.bottom > treeRect.top
+      );
+    }
+
+    function gameLoop() {
+      if (!won && !frozen) {
+        playerX += PLAYER_SPEED;
+        player.style.left = playerX + "px";
+
+        if (isJumping) {
+          jumpHeight += velocity;
+
+          if (velocity > 2) {
+            velocity -= GRAVITY * 1.2;
+          } else if (velocity > -2) {
+            velocity -= GRAVITY * 0.2;
+          } else {
+            velocity -= GRAVITY * 2;
+          }
+
+          if (jumpHeight <= 0) {
+            jumpHeight = 0;
+            isJumping = false;
+            player.style.transform = "scaleY(0.6) scaleX(1.4)";
+            setTimeout(() => {
+              player.style.transform = "scaleY(1) scaleX(1)";
+            }, 150);
+          } else {
+            let stretch = 1 + Math.max(0, velocity) * 0.05;
+            let squash = 1 - Math.max(0, velocity) * 0.02;
+            player.style.transform = `scaleY(${stretch}) scaleX(${squash})`;
+          }
+
+          player.style.bottom = jumpHeight + "px";
+        }
+
+        if (!clearedFirst && playerX > parseInt(tree1.style.left) + 10) {
+          clearedFirst = true;
+        }
+
+        if (checkCollision(tree1) || checkCollision(tree2)) {
+          if (clearedFirst && checkCollision(tree2)) {
+            message.innerHTML = "Good enough <span style=\"margin:0 4px;\">💪</span> Email: gg02hpe [at] gmail [dot] com";
+            won = true;
+            resetBtn.style.display = "block";
+          } else {
+            setFrozenDeath();
+            setTimeout(() => { resetPlayer(); }, DEATH_FREEZE_TIME);
+          }
+        }
+
+        if (playerX + player.offsetWidth >= game.offsetWidth) {
+          message.innerHTML = "You did it! Email: gg02hpe [at] gmail [dot] com";
+          won = true;
+          resetBtn.style.display = "block";
+        }
+      }
+      requestAnimationFrame(gameLoop);
+    }
+
+    function jump() {
+      if (isJumping || frozen) return;
+      isJumping = true;
+      velocity = JUMP_STRENGTH;
+    }
+
+    document.addEventListener("keydown", (e) => {
+      if (e.code === "Space") jump();
+    });
+
+    document.addEventListener("mousedown", () => {
+      if (!won) jump();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      resetPlayer();
+    });
+
+    setFrozenStart(true);
+    setTimeout(() => { setFrozenStart(false); }, START_FREEZE_TIME);
+
+    resetPlayer();
+    gameLoop();
+  </script>
+</body>
+</html>
