@@ -1,241 +1,369 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-  <title>Jump Over Tree</title>
-  <style>
-    #game {
-      position: relative;
-      width: 100%;
-      max-width: 500px;
-      height: 100px;
-      background: #e8f5e9;
-      overflow: hidden;
-      border: 2px solid #81c784;
-      margin: 10px auto 0;
-      text-align: center;
-      border-radius: 6px;
-      touch-action: manipulation;
-    }
-    #player {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 20px;
-      height: 20px;
-      box-sizing: border-box;
-      border-radius: 4px;
-      transform-origin: center bottom;
-      transition: transform 0.1s ease-out;
-    }
-    .frozen-start { background: #fffde7; outline: 2px solid #fbc02d; }
-    .normal       { background: #4db6ac; outline: none; }
-    .frozen-death { background: #ef9a9a; outline: none; }
+  <head>
+    <title>Jump Over Tree</title>
+    <style>
+      #game {
+        position: relative;
+        width: 100%;
+        max-width: 500px;
+        height: 100px;
+        background: #e8f5e9;
+        overflow: hidden;
+        border: 2px solid #81c784;
+        margin: 10px auto 0;
+        text-align: center;
+        border-radius: 6px;
+        touch-action: manipulation;
+      }
 
-    .tree {
-      position: absolute;
-      bottom: 0;
-      width: 10px;
-      height: 30px;
-      background: #8d6e63;
-      border-radius: 2px;
-    }
-    #tree1::after, #tree2::after {
-      content: '';
-      position: absolute;
-      bottom: 20px;
-      left: -5px;
-      width: 20px;
-      height: 20px;
-      background: #66bb6a;
-      border-radius: 50%;
-    }
-    #message {
-      margin: 15px 0 0 0;
-      font-size: 16px;
-      color: #37474f;
-      text-align: center;
-      line-height: 1.4em;
-      min-height: 2em;
-      font-family: inherit;
-    }
-    #resetBtn {
-      display: none;
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      font-size: 24px;
-      background: #fff;
-      border: 2px solid #81c784;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      cursor: pointer;
-      line-height: 36px;
-      color: #388e3c;
-    }
-  </style>
-</head>
-<body>
-  <div id="game">
-    <div id="player" class="frozen-start"></div>
-    <div id="tree1" class="tree" style="left: 35%;"></div>
-    <div id="tree2" class="tree" style="left: 65%;"></div>
-    <button id="resetBtn">↻</button>
-  </div>
-  <div id="message">Tap to jump</div>
+      #player {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        box-sizing: border-box;
+        border-radius: 4px;
+        transform-origin: center bottom;
+        transition: transform 0.1s ease-out;
+      }
 
-  <script>
-    // Tunables (60fps baseline for jump)
-    const JUMP_STRENGTH = 7;   // higher = taller jump
-    const GRAVITY_UP = 0.32;   // gravity applied while rising
-    const GRAVITY_MID = 0.40;  // gravity applied near peak
-    const GRAVITY_DOWN = 0.65; // gravity applied while falling
+      .frozen-start {
+        background: #fffde7;
+        box-shadow: inset 0 0 0 2px #fbc02d;
+      }
 
-    const PLAYER_SPEED = 130;    // px/sec (time-based)
-    const START_FREEZE_TIME = 1000;
-    const DEATH_FREEZE_TIME = 500;
-    const PLAYER_START_OFFSET = 10;
-    const DEATH_WIGGLE_DISTANCE = 1;
+      .normal {
+        background: #4db6ac;
+        box-shadow: none;
+      }
 
-    const player = document.getElementById('player');
-    const tree1 = document.getElementById('tree1');
-    const tree2 = document.getElementById('tree2');
-    const game = document.getElementById('game');
-    const message = document.getElementById('message');
-    const resetBtn = document.getElementById('resetBtn');
-    const emailSpan = document.getElementById('jumptree-email');
+      .frozen-death {
+        background: #ef9a9a;
+        box-shadow: none;
+      }
 
-    const encodedEmail = 'Z2cwMmhwZUBnbWFpbC5jb20=';
+      .tree {
+        position: absolute;
+        bottom: 0;
+        width: 10px;
+        height: 30px;
+        background: #8d6e63;
+        border-radius: 2px;
+      }
 
-    let isJumping = false;
-    let jumpHeight = 0;
-    let velocity = 0;
-    let playerX = PLAYER_START_OFFSET;
-    let won = false;
-    let frozen = true;
-    let wiggleInterval = null;
-    let lastTime = null;
+      #tree1::after,
+      #tree2::after {
+        content: "";
+        position: absolute;
+        bottom: 20px;
+        left: -5px;
+        width: 20px;
+        height: 20px;
+        background: #66bb6a;
+        border-radius: 50%;
+      }
 
-    function setFrozenStart(state) {
-      frozen = state;
-      player.className = state ? 'frozen-start' : 'normal';
-    }
+      /* Countdown */
+      #countdown {
+        position: absolute;
+        display: none;
+        font-size: 16px;
+        font-weight: 700;
+        font-family: "Trebuchet MS", "Verdana", "Geneva", sans-serif;
+        color: #fbc02d;
+        pointer-events: none;
+        transform: translate(-50%, 0) scale(1);
+        opacity: 0;
+      }
 
-    function setFrozenDeath() {
-      frozen = true;
-      player.className = 'frozen-death';
-      let direction = 1;
-      wiggleInterval = setInterval(() => {
-        player.style.left = (playerX + (direction * DEATH_WIGGLE_DISTANCE)) + 'px';
-        direction *= -1;
-      }, 100);
-    }
-
-    function clearWiggle() {
-      if (wiggleInterval) { clearInterval(wiggleInterval); wiggleInterval = null; }
-    }
-
-    function resetPlayer() {
-      clearWiggle();
-      playerX = PLAYER_START_OFFSET;
-      jumpHeight = 0;
-      velocity = 0;
-      isJumping = false;
-      won = false;
-      player.style.left = playerX + 'px';
-      player.style.bottom = jumpHeight + 'px';
-      player.style.transform = 'scaleY(1) scaleX(1)';
-      message.innerHTML = 'Tap to jump';
-      resetBtn.style.display = 'none';
-      setFrozenStart(true);
-      setTimeout(() => { setFrozenStart(false); }, START_FREEZE_TIME);
-    }
-
-    function checkCollision(tree) {
-      const playerRect = player.getBoundingClientRect();
-      const treeRect = tree.getBoundingClientRect();
-      return (
-        playerRect.left < treeRect.right &&
-        playerRect.right > treeRect.left &&
-        playerRect.bottom > treeRect.top
-      );
-    }
-
-    function gameLoop(ts) {
-      if (lastTime === null) lastTime = ts;
-      const deltaSec = Math.min((ts - lastTime) / 1000, 0.05); // clamp huge gaps
-      const dt60 = deltaSec * 60; // 60fps baseline scaler
-      lastTime = ts;
-
-      if (!won && !frozen) {
-        // Horizontal: time-based
-        playerX += PLAYER_SPEED * deltaSec;
-        player.style.left = playerX + 'px';
-
-        // Vertical: normalized to 60fps baseline
-        if (isJumping) {
-          jumpHeight += velocity * dt60;
-
-          if (velocity > 2) {
-            velocity -= GRAVITY_UP * dt60;
-          } else if (velocity > -2) {
-            velocity -= GRAVITY_MID * dt60;
-          } else {
-            velocity -= GRAVITY_DOWN * dt60;
-          }
-
-          if (jumpHeight <= 0) {
-            jumpHeight = 0;
-            isJumping = false;
-            player.style.transform = 'scaleY(0.6) scaleX(1.4)';
-            setTimeout(() => { player.style.transform = 'scaleY(1) scaleX(1)'; }, 150);
-          } else {
-            const v = Math.max(0, velocity);
-            const stretch = 1 + v * 0.05;
-            const squash  = 1 - v * 0.02;
-            player.style.transform = `scaleY(${stretch}) scaleX(${squash})`;
-          }
-
-          player.style.bottom = jumpHeight + 'px';
+      /* Hold until 70%, fade/scale out in last 30% */
+      @keyframes countdownAnim {
+        0% {
+          opacity: 0;
+          transform: translate(-50%, 0) scale(0.9);
         }
-
-        if (checkCollision(tree1) || checkCollision(tree2)) {
-          setFrozenDeath();
-          setTimeout(() => { resetPlayer(); }, DEATH_FREEZE_TIME);
+        15% {
+          opacity: 1;
+          transform: translate(-50%, 0) scale(1);
         }
-
-        if (playerX + player.offsetWidth >= game.offsetWidth) {
-          const email = atob(encodedEmail);
-          if (emailSpan) {
-            const link = document.createElement('a');
-            link.href = 'mailto:' + email;
-            link.textContent = email;
-            emailSpan.replaceChildren(link);
-          }
-          message.textContent = 'You did it.';
-          won = true;
-          resetBtn.style.display = 'block';
+        70% {
+          opacity: 1;
+          transform: translate(-50%, 0) scale(1.05);
+        }
+        100% {
+          opacity: 0;
+          transform: translate(-50%, 0) scale(1.5);
         }
       }
 
+      .animate {
+        animation-name: countdownAnim;
+        animation-timing-function: ease-in-out;
+        animation-fill-mode: forwards;
+      }
+
+      #resetBtn {
+        display: none;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 24px;
+        background: #fff;
+        border: 2px solid #81c784;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        cursor: pointer;
+        line-height: 36px;
+        color: #388e3c;
+      }
+
+      #message {
+        margin: 15px 0 0 0;
+        font-size: 16px;
+        color: #37474f;
+        text-align: center;
+        line-height: 1.4em;
+        min-height: 2em;
+        font-family: inherit;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="game">
+      <div id="player" class="frozen-start"></div>
+      <div id="tree1" class="tree" style="left: 35%"></div>
+      <div id="tree2" class="tree" style="left: 65%"></div>
+      <div id="countdown">3</div>
+      <button id="resetBtn" title="Reset">↻</button>
+    </div>
+    <div id="message">Tap to jump</div>
+
+    <script>
+      const JUMP_STRENGTH = 7;
+      const GRAVITY_UP = 0.32,
+        GRAVITY_MID = 0.4,
+        GRAVITY_DOWN = 0.65;
+      const PLAYER_SPEED = 130;
+      const START_FREEZE_TIME = 3000;
+      const DEATH_FREEZE_TIME = 500;
+      const PLAYER_START_OFFSET = 10;
+      const DEATH_WIGGLE_DISTANCE = 1;
+
+      const player = document.getElementById("player");
+      const tree1 = document.getElementById("tree1");
+      const tree2 = document.getElementById("tree2");
+      const game = document.getElementById("game");
+      const resetBtn = document.getElementById("resetBtn");
+      const countdownEl = document.getElementById("countdown");
+      const message = document.getElementById("message");
+      const emailSpan = document.getElementById("jumptree-email");
+
+      const encodedEmail = "Z2cwMmhwZUBnbWFpbC5jb20=";
+
+      let isJumping = false,
+        jumpHeight = 0,
+        velocity = 0,
+        playerX = PLAYER_START_OFFSET,
+        won = false;
+      let frozenStart = true,
+        frozenDeath = false;
+      let wiggleInterval = null,
+        lastTime = null;
+
+      // Countdown
+      let countdownTimeout = null,
+        countdownSteps = 0,
+        countdownStepMs = 0;
+
+      function startStartCountdown() {
+        countdownSteps = Math.max(2, Math.ceil(START_FREEZE_TIME / 1000));
+        countdownStepMs = START_FREEZE_TIME / countdownSteps;
+        countdownEl.style.display = "block";
+        playTick(countdownSteps);
+      }
+
+      function playTick(num) {
+        countdownEl.textContent = String(num);
+        countdownEl.style.animationDuration = countdownStepMs + "ms";
+        countdownEl.classList.remove("animate");
+        void countdownEl.offsetWidth;
+        countdownEl.classList.add("animate");
+
+        clearTimeout(countdownTimeout);
+        countdownTimeout = setTimeout(() => {
+          const next = num - 1;
+          if (next >= 1) {
+            playTick(next);
+          } else {
+            countdownEl.style.display = "none";
+          }
+        }, countdownStepMs);
+      }
+
+      function stopCountdown() {
+        clearTimeout(countdownTimeout);
+        countdownEl.style.display = "none";
+        countdownEl.classList.remove("animate");
+      }
+
+      function updateCountdownPosition() {
+        if (countdownEl.style.display !== "block") return;
+        const x = playerX + player.offsetWidth / 2;
+        const y = jumpHeight + player.offsetHeight + 10;
+        countdownEl.style.left = x + "px";
+        countdownEl.style.bottom = y + "px";
+      }
+
+      function setFrozenStart(state) {
+        frozenStart = state;
+        player.className = state ? "frozen-start" : "normal";
+        if (state) startStartCountdown();
+        else stopCountdown();
+      }
+
+      function setFrozenDeath() {
+        frozenDeath = true;
+        player.className = "frozen-death";
+        let direction = 1;
+        wiggleInterval = setInterval(() => {
+          player.style.left =
+            playerX + direction * DEATH_WIGGLE_DISTANCE + "px";
+          direction *= -1;
+        }, 100);
+      }
+
+      function clearWiggle() {
+        if (wiggleInterval) {
+          clearInterval(wiggleInterval);
+          wiggleInterval = null;
+        }
+      }
+
+      function resetPlayer() {
+        clearWiggle();
+        stopCountdown();
+        playerX = PLAYER_START_OFFSET;
+        jumpHeight = 0;
+        velocity = 0;
+        isJumping = false;
+        won = false;
+        frozenDeath = false;
+        player.style.left = playerX + "px";
+        player.style.bottom = jumpHeight + "px";
+        player.style.transform = "scaleY(1) scaleX(1)";
+        resetBtn.style.display = "none";
+        if (message) message.textContent = "Tap to jump";
+        setFrozenStart(true);
+        setTimeout(() => {
+          setFrozenStart(false);
+        }, START_FREEZE_TIME);
+      }
+
+      function checkCollision(tree) {
+        const pr = player.getBoundingClientRect();
+        const tr = tree.getBoundingClientRect();
+        return pr.left < tr.right && pr.right > tr.left && pr.bottom > tr.top;
+      }
+
+      function reachedRightEdge() {
+        return playerX + player.offsetWidth >= game.offsetWidth;
+      }
+
+      function snapToRightEdge() {
+        playerX = game.offsetWidth - player.offsetWidth;
+        player.style.left = playerX + "px";
+      }
+
+      function gameLoop(ts) {
+        if (lastTime === null) lastTime = ts;
+        const deltaSec = Math.min((ts - lastTime) / 1000, 0.05);
+        const dt60 = deltaSec * 60;
+        lastTime = ts;
+        updateCountdownPosition();
+
+        if (!won) {
+          if (!frozenStart && !frozenDeath) {
+            playerX += PLAYER_SPEED * deltaSec;
+            if (reachedRightEdge()) {
+              snapToRightEdge();
+              const email = atob(encodedEmail);
+              if (emailSpan) {
+                const link = document.createElement("a");
+                link.href = "mailto:" + email;
+                link.textContent = email;
+                emailSpan.replaceChildren(link);
+              }
+              won = true;
+              resetBtn.style.display = "block";
+            } else {
+              player.style.left = playerX + "px";
+            }
+          }
+
+          if (!frozenDeath && isJumping) {
+            jumpHeight += velocity * dt60;
+            if (velocity > 2) {
+              velocity -= GRAVITY_UP * dt60;
+            } else if (velocity > -2) {
+              velocity -= GRAVITY_MID * dt60;
+            } else {
+              velocity -= GRAVITY_DOWN * dt60;
+            }
+
+            if (jumpHeight <= 0) {
+              jumpHeight = 0;
+              isJumping = false;
+              player.style.transform = "scaleY(0.6) scaleX(1.4)";
+              setTimeout(() => {
+                player.style.transform = "scaleY(1) scaleX(1)";
+              }, 150);
+            } else {
+              const v = Math.max(0, velocity);
+              const stretch = 1 + v * 0.05;
+              const squash = 1 - v * 0.02;
+              player.style.transform = `scaleY(${stretch}) scaleX(${squash})`;
+            }
+            player.style.bottom = jumpHeight + "px";
+          }
+
+          if (
+            !frozenStart &&
+            !frozenDeath &&
+            (checkCollision(tree1) || checkCollision(tree2))
+          ) {
+            setFrozenDeath();
+            setTimeout(() => {
+              resetPlayer();
+            }, DEATH_FREEZE_TIME);
+          }
+        }
+        requestAnimationFrame(gameLoop);
+      }
+
+      function jump() {
+        if (isJumping || frozenDeath) return;
+        isJumping = true;
+        velocity = JUMP_STRENGTH;
+      }
+
+      document.addEventListener("pointerdown", (e) => {
+        if (won || e.target === resetBtn) return;
+
+        const rect = game.getBoundingClientRect();
+        const withinX = e.clientX >= rect.left && e.clientX <= rect.right;
+        const withinY =
+          e.clientY >= rect.top && e.clientY <= rect.bottom + rect.height * 2;
+
+        if (withinX && withinY) jump();
+      });
+      resetBtn.addEventListener("click", resetPlayer);
+
+      resetPlayer();
       requestAnimationFrame(gameLoop);
-    }
-
-    function jump() {
-      if (isJumping || frozen) return;
-      isJumping = true;
-      velocity = JUMP_STRENGTH; // 60fps baseline
-    }
-
-    game.addEventListener('pointerdown', (e) => {
-      if (e.target !== resetBtn && !won) jump();
-    });
-
-    resetBtn.addEventListener('click', resetPlayer);
-
-    resetPlayer();
-    requestAnimationFrame(gameLoop);
-  </script>
-</body>
+    </script>
+  </body>
 </html>
