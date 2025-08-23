@@ -13,12 +13,10 @@ Over the past 14 years, he has designed games played by over 20 million people w
 
 Henrik is currently based in Sweden.
 
-<div id="contact-details">
-[View Resume](/resume/Henrik_Pettersson_Resume.pdf)<br>
-[Reach out on X](https://x.com/vghpe)<br>
-[Reach out on Blue Sky](https://bsky.app/profile/vghpe.bsky.social)<br>
-Email: <span id="jumptree-email">[jump over trees to show]</span>
-</div>
+- [View Resume]({{ "/resume/Henrik_Pettersson_Resume.pdf" | relURL }})
+- [Reach out on X](https://x.com/vghpe)
+- [Reach out on Blue Sky](https://bsky.app/profile/vghpe.bsky.social)
+- Email: <span id="jumptree-email">&lt;jump over trees to show&gt;</span>
 
 {{< jumptree >}}
 

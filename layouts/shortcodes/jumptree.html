@@ -84,7 +84,6 @@
     <button id="resetBtn">↻</button>
   </div>
   <div id="message">Tap to jump</div>
-  <div id="email-reveal"></div>
 
   <script>
     // Tunables (60fps baseline for jump)
@@ -104,8 +103,8 @@
     const tree2 = document.getElementById('tree2');
     const game = document.getElementById('game');
     const message = document.getElementById('message');
-    const emailReveal = document.getElementById('email-reveal');
     const resetBtn = document.getElementById('resetBtn');
+    const emailSpan = document.getElementById('jumptree-email');
 
     const encodedEmail = 'Z2cwMmhwZUBnbWFpbC5jb20=';
 
@@ -208,13 +207,11 @@
 
         if (playerX + player.offsetWidth >= game.offsetWidth) {
           const email = atob(encodedEmail);
-          const emailLink = '<a href="mailto:' + email + '">' + email + '</a>';
-          const contactDetails = document.getElementById('contact-details');
-          if (contactDetails) {
-            contactDetails.innerHTML = 'Email: ' + emailLink;
-          }
-          if (emailReveal) {
-            emailReveal.innerHTML = emailLink;
+          if (emailSpan) {
+            const link = document.createElement('a');
+            link.href = 'mailto:' + email;
+            link.textContent = email;
+            emailSpan.replaceChildren(link);
           }
           message.textContent = 'You did it.';
           won = true;
