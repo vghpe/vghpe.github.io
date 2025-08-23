@@ -83,7 +83,7 @@
     <div id="tree2" class="tree" style="left: 65%;"></div>
     <button id="resetBtn">↻</button>
   </div>
-  <div id="message">Jump trees to see email. Tap inside game to jump</div>
+  <div id="message">Tap to jump</div>
 
   <script>
     // Tunables (60fps baseline for jump)
@@ -145,7 +145,7 @@
       player.style.left = playerX + 'px';
       player.style.bottom = jumpHeight + 'px';
       player.style.transform = 'scaleY(1) scaleX(1)';
-      message.innerHTML = 'Jump trees to see email. Tap inside game to jump';
+      message.innerHTML = 'Tap to jump';
       resetBtn.style.display = 'none';
       setFrozenStart(true);
       setTimeout(() => { setFrozenStart(false); }, START_FREEZE_TIME);
@@ -207,6 +207,10 @@
         if (playerX + player.offsetWidth >= game.offsetWidth) {
           const email = atob(encodedEmail);
           message.innerHTML = 'You did it! Email: <a href="mailto:' + email + '">' + email + '</a>';
+          const placeholder = document.getElementById('jumptree-email');
+          if (placeholder) {
+            placeholder.innerHTML = '<a href="mailto:' + email + '">' + email + '</a>';
+          }
           won = true;
           resetBtn.style.display = 'block';
         }
