@@ -19,4 +19,3 @@ Henrik is currently based in Sweden.
 - Email: <span id="jumptree-email">&lt;jump over trees to show&gt;</span>
 
 {{< jumptree >}}
-
