@@ -11,7 +11,7 @@
       background: #e8f5e9;
       overflow: hidden;
       border: 2px solid #81c784;
-      margin: 20px auto;
+      margin: 10px auto 0;
       text-align: center;
       border-radius: 6px;
       touch-action: manipulation;
@@ -50,7 +50,7 @@
       border-radius: 50%;
     }
     #message {
-      margin: 30px 0 15px 0;
+      margin: 15px 0 0 0;
       font-size: 16px;
       color: #37474f;
       text-align: center;
@@ -77,13 +77,13 @@
   </style>
 </head>
 <body>
-  <div id="message">Clear the obstacles to see my email. Tap to jump</div>
   <div id="game">
     <div id="player" class="frozen-start"></div>
     <div id="tree1" class="tree" style="left: 35%;"></div>
     <div id="tree2" class="tree" style="left: 65%;"></div>
     <button id="resetBtn">↻</button>
   </div>
+  <div id="message">Jump trees to see email. Tap inside game to jump</div>
 
   <script>
     // Tunables (60fps baseline for jump)
@@ -105,6 +105,8 @@
     const message = document.getElementById('message');
     const resetBtn = document.getElementById('resetBtn');
 
+    const encodedEmail = 'Z2cwMmhwZUBnbWFpbC5jb20=';
+
     let isJumping = false;
     let jumpHeight = 0;
     let velocity = 0;
@@ -112,7 +114,6 @@
     let won = false;
     let frozen = true;
     let wiggleInterval = null;
-    let clearedFirst = false;
     let lastTime = null;
 
     function setFrozenStart(state) {
@@ -141,11 +142,10 @@
       velocity = 0;
       isJumping = false;
       won = false;
-      clearedFirst = false;
       player.style.left = playerX + 'px';
       player.style.bottom = jumpHeight + 'px';
       player.style.transform = 'scaleY(1) scaleX(1)';
-      message.innerHTML = 'Jump trees to see email. Tap to jump';
+      message.innerHTML = 'Jump trees to see email. Tap inside game to jump';
       resetBtn.style.display = 'none';
       setFrozenStart(true);
       setTimeout(() => { setFrozenStart(false); }, START_FREEZE_TIME);
@@ -199,21 +199,14 @@
           player.style.bottom = jumpHeight + 'px';
         }
 
-        if (!clearedFirst && playerX > tree1.offsetLeft + 10) clearedFirst = true;
-
         if (checkCollision(tree1) || checkCollision(tree2)) {
-          if (clearedFirst && checkCollision(tree2)) {
-            message.innerHTML = 'Good enough <span style="margin:0 4px;">💪</span> Email: gg02hpe [at] gmail [dot] com';
-            won = true;
-            resetBtn.style.display = 'block';
-          } else {
-            setFrozenDeath();
-            setTimeout(() => { resetPlayer(); }, DEATH_FREEZE_TIME);
-          }
+          setFrozenDeath();
+          setTimeout(() => { resetPlayer(); }, DEATH_FREEZE_TIME);
         }
 
         if (playerX + player.offsetWidth >= game.offsetWidth) {
-          message.innerHTML = 'You did it! Email: gg02hpe [at] gmail [dot] com';
+          const email = atob(encodedEmail);
+          message.innerHTML = 'You did it! Email: <a href="mailto:' + email + '">' + email + '</a>';
           won = true;
           resetBtn.style.display = 'block';
         }
@@ -228,11 +221,8 @@
       velocity = JUMP_STRENGTH; // 60fps baseline
     }
 
-    document.addEventListener('keydown', (e) => {
-      if (e.code === 'Space') jump();
-    });
-    document.addEventListener('pointerdown', () => {
-      if (!won) jump();
+    game.addEventListener('pointerdown', (e) => {
+      if (e.target !== resetBtn && !won) jump();
     });
 
     resetBtn.addEventListener('click', resetPlayer);
