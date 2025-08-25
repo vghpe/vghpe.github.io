@@ -11,7 +11,7 @@ Henrik Pettersson is best known as the Game Director of the award-winning, time-
 
 Over the past 14 years, he has designed games played by over 20 million people worldwide, leading creative teams across Australia, Vietnam, and most recently as a Lead Designer at Netflix Games in Hollywood.
 
-Henrik is currently based in Sweden.
+Henrik is currently based in Sweden and looking for creative collaborations.
 
 - [View Resume](/resume/Henrik_Pettersson_Resume.pdf)
 - [Reach out on X](https://x.com/vghpe)
