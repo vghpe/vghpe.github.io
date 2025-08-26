@@ -1,7 +1,7 @@
 ---
 title: How to download and organize every image and video you've liked or bookmarked on X/Twitter
 date: 2025-08-25T13:17:00
-draft: false
+draft: true
 slug: twitter-dl-guide
 aliases:
 tags:
@@ -63,11 +63,12 @@ Desktop
 ---
 ## Step 1.5: Install Homebrew (macOS only)
 
-On macOS we use [Homebrew](https://www.google.com/search?q=Homebrew) to install gallery-dl. Homebrew (or brew) is a package manager, you can think of it as an App store for open source projects. 
+Before we can proceed on MacOS we need to get *Homebrew* so we can install gallery-dl. Homebrew (or brew) is a package manager, you can think of it as an App store for open source projects. 
 
 To begin press `⌘ + SPACE`  then type 'Terminal' and press enter. For the next steps I recommend following along this 4 minutes video to complete the brew installation: 
 
-https://www.youtube.com/watch?v=IWJKRmFLn-g (search for 'install Homebrew Mac tutorial' if this link doesn't work)
+https://www.youtube.com/watch?v=IWJKRmFLn-g 
+
 
 ---
 ## Step 2: Install gallery-dl
