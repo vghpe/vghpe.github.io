@@ -17,7 +17,7 @@ description: Guide to download liked and bookmarked images or videos on X (Twitt
 - [ ] Review with Windows user 
 - [ ] Non explicit header image that shows meta data
 
-This is a how-to guide for batch downloading all the media posts you’ve liked or bookmarked over the years. It was originally written for artists who want to collect references, but it can be used by anyone who wants a local copy of memes or anything else they’ve saved.
+This is a how-to guide for batch downloading all the media posts you’ve ever liked or bookmarked on X (Twitter). I wrote this with artists in mind, that want to collect references, but it can be used by anyone who wants a local copy of their memes gallery or anything else saved.
 
 The guide covers both Windows and macOS and is designed for people who haven’t used command-line tools before. Command-line tools let you talk directly to programs that don’t have a graphical interface (and look like a cool hacker in front of your friends).
 
