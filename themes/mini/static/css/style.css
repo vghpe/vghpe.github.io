@@ -212,8 +212,8 @@ p {
 }
 p,
 pre {
-  word-break: normal;
-/*  overflow-wrap: anywhere; */
+  overflow-wrap: normal;         /* don’t force long strings to wrap */
+  -webkit-text-size-adjust: 100%; /* stop iOS Safari from scaling the text */
 }
 .markdown-image img {
   max-width: 100%;
