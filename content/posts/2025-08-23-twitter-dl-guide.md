@@ -11,7 +11,7 @@ description: Guide to download liked and bookmarked images or videos on X (Twitt
 ---
 
 ⚠️ This guide is in review ⚠️
-
+<!--more-->
 - [ ] Finish step 6 
 - [ ] Review with Mac user
 - [ ] Review with Windows user 
