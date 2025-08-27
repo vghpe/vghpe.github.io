@@ -14,7 +14,7 @@ description: Guide to download liked and bookmarked images or videos on X (Twitt
 <!--more-->
 - [ ] Finish step 6 
 - [ ] Review with Mac user
-- [ ] Review with Windows user 
+- [x] Review with Windows user 
 - [ ] Non explicit header image that shows meta data
 
 This is a how-to guide for batch downloading all the media posts you’ve ever liked or bookmarked on X (Twitter). I wrote this with artists in mind, that want to collect references, but it can be used by anyone who wants a local copy of their memes gallery or anything else saved.
@@ -110,10 +110,9 @@ To do this we use a browser extension called **Get cookies.txt LOCALLY**.
    - [Chrome/Edge/Brave](https://www.google.com/search?q=get+cookies+locally+chrome)  
    - [Firefox](https://www.google.com/search?q=get+cookies+locally+firefox)  
 
-2. Log in to Twitter/X in your browser.  
+1. Go to x/Twitter and make sure you're signed in. 
 
-3. Click the extension button and export cookies.  
-   Save the file into your **TwitterDownloader** folder with the name:  
+2. While on the website, open the "Get cookies.txt LOCALLY" extension. Set export format to *Netscape*, Press Export As, navigate to our *TwitterDownloader* folder on the desktop and save it as:
 
    ```
    twitter_cookies.txt
@@ -140,6 +139,7 @@ This file is called `config.json`.
 
 ```json
 {
+  "base-directory": "downloads",
   "extractor": {
     "twitter": {
       "cookies": "twitter_cookies.txt",
@@ -147,23 +147,22 @@ This file is called `config.json`.
       "retweets": false,
       "quoted": false,
       "replies": false,
-      "filename": "{tweet_id}_{user[screen_name]}_{num}.{extension}"
+      "directory": [],
+      "filename": "{tweet_id}_{author[name]}_{num}.{extension}"
     }
-  },
-  "output": {
-    "base-directory": "downloads"
   }
 }
+
 ```
 3. Save the file as **config.json** inside your **TwitterDownloader** folder.  Make sure it is saved as `config.json` and not `config.json.txt`.
 
 
 ### What this config does
+- **base-directory** → tells gallery-dl to save everything in the `downloads` folder. 
 - **cookies** → points gallery-dl to the file you exported in Step 3.  
 - **videos: true** → downloads videos as well as images.  
 - **retweets / quoted / replies: false** → only downloads media from original tweets you liked or bookmarked. Adjust if needed. 
-- **filename** → gives every file a name that includes the tweet ID and author.  
-- **base-directory** → tells gallery-dl to save everything in the `downloads` folder.  
+- **filename** → gives every file a name that includes the tweet ID and author. 
 
 After this step, your folder should look like this:
 
@@ -177,32 +176,30 @@ Desktop
 ```
 
 ---
-## Step 5: Start downloading
+# Step 5: Start downloading
 
-Now we’re ready to use gallery-dl to download your likes and bookmarks. 
+We're now ready to transfer, this is the fun part! For either Windows or Mac we just need to make sure we're in the right folder then, we're good to start the batch download. 
 
-Before we run the commands, open a terminal inside your **TwitterDownloader** folder.
+**macOS**
+On your Desktop, right-click *TwitterDownloader → Services → New Terminal at Folder.* Then one at a time run:
 
-**macOS**  
-On your Desktop, right-click the **TwitterDownloader** folder.  
-Choose **Services → New Terminal at Folder**.  
-This will open Terminal already in the right place.
-
-**Windows**  
-On your Desktop, right-click the **TwitterDownloader** folder.  
-Choose **Open in Terminal** (or **Open PowerShell window here** on older versions).  
-This will open PowerShell already in the right place.
-
-**Download Bookmarks**  
 ```bash
 gallery-dl --config config.json "https://x.com/i/bookmarks"
 ```
 
-**Download Likes**  
-Replace `<your-username>` with your actual Twitter handle.
-
 ```bash
 gallery-dl --config config.json "https://x.com/<your-username>/likes"
+```
+
+**Windows**
+On your Desktop, right-click *TwitterDownloader → Open in Terminal* (or Open PowerShell window here on older versions). Then one at a time run:
+
+```powershell
+.\gallery-dl.exe --config .\config.json "https://x.com/i/bookmarks"
+```
+
+```powershell
+.\gallery-dl.exe --config .\config.json "https://x.com/<your-username>/likes"
 ```
 
 ---
