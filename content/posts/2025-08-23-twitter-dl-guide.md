@@ -1,5 +1,5 @@
 ---
-title: How to download and organize every image and video you've liked or bookmarked on X/Twitter
+title: How to download and every image and video you've liked or bookmarked on X/Twitter
 date: 2025-08-25T13:17:00
 draft: false
 slug: twitter-dl-guide
@@ -10,14 +10,8 @@ image: images/img-eagle.jpg
 description: Guide to download liked and bookmarked images or videos on X (Twitter)
 ---
 
-⚠️ This guide is in review ⚠️
-<!--more-->
-- [ ] Finish step 6 
-- [ ] Review with Mac user
-- [x] Review with Windows user 
-- [ ] Non explicit header image that shows meta data
-
 This is a how-to guide for batch downloading all the media posts you’ve ever liked or bookmarked on X (Twitter). I wrote this with artists in mind, that want to collect references, but it can be used by anyone who wants a local copy of their memes gallery or anything else saved.
+<!--more-->
 
 The guide covers both Windows and macOS and is designed for people who haven’t used command-line tools before. Command-line tools let you talk directly to programs that don’t have a graphical interface (and look like a cool hacker in front of your friends).
 
@@ -61,31 +55,28 @@ Desktop
 
 
 ---
-## Step 1.5: Install Homebrew (macOS only)
-
-Before we can proceed on MacOS we need to get *Homebrew* so we can install gallery-dl. Homebrew (or brew) is a package manager, you can think of it as an App store for open source projects. 
-
-To begin press `⌘ + SPACE`  then type 'Terminal' and press enter. For the next steps I recommend following along this 4 minutes video to complete the brew installation: 
-
-https://www.youtube.com/watch?v=IWJKRmFLn-g 
-
-
----
 ## Step 2: Install gallery-dl
 
 Now we’ll install the program that does the downloading.
 
 **macOS**  
-If you’ve installed Homebrew, simply run:
-```bash
-brew install gallery-dl
-```
 
-Check it worked:
+Install **gallery-dl** through the terminal with Python:  
+```bash
+python3 -m pip install -U gallery-dl
+```  
+You’ll likely see a warning such as:  
+```bash
+WARNING: The script gallery-dl is installed in '/Users/yourname/Library/Python/3.9/bin' which is not on PATH.
+```  
+Note the path and version number (e.g. `3.9`). If you now try `gallery-dl --version` the command may fail because that folder isn’t yet in your PATH. To fix it, open Finder and to go to your home folder(**CMD+Shift+H**), note the folder name (your username), then show hidden files (**CMD+Shift+.**) and open **.zshrc** (or on older macOS, **.bash_profile**). Add this line at the end:  
+```bash
+export PATH="/Users/yourname/Library/Python/3.9/bin:$PATH"
+```  
+Replace `yourname` and `3.9` with what the warning showed. Restart the terminal and check with:  
 ```bash
 gallery-dl --version
-```
-
+```  
 **Windows**  
 1. Go to [gallery-dl github](https://github.com/mikf/gallery-dl).  
 2. Scroll down to Standalone Executable and download `gallery-dl.exe`.  
@@ -204,13 +195,8 @@ On your Desktop, right-click *TwitterDownloader → Open in Terminal* (or Open P
 
 ---
 
-All the media will appear inside the **downloads** folder.  
-Each file name will include the tweet ID, so you can always reconstruct the original link:
+All the media will appear inside the **downloads** folder.  Each file name will include the tweet ID, so you can always reconstruct the original link:
 
 ```
 https://x.com/i/status/<tweet_id>
 ```
-
-## Step 6: Organize in Eagle (Optional)
-
-Since is going to sound like and ad. but I love this app. It's local only, it's single purchase, in 2025!!! I love the chrome extension that instantly let's me right click and add new images. I love the filters and the meta data. 
