@@ -7,6 +7,7 @@ aliases:
 tags:
   - tool
 image: images/img-eagle.jpg
+caption: All references stored locally and organized inside Eagle.
 description: Guide to download liked and bookmarked images or videos on X (Twitter)
 ---
 
@@ -21,7 +22,6 @@ On Windows we’ll use **PowerShell** (the built-in command tool), and on macOS 
 
 - **gallery-dl** — the program that will download the media from X.  
 - **Get cookies.txt LOCALLY** — a browser extension that saves your login session into a text file so gallery-dl can fetch your bookmarks and likes.  
-- **Eagle** — (OPTIONAL) A Window/macOS software for organizing art and video references. 
 
 Here is a very brief outline of what we’ll do:  
 
