@@ -26,7 +26,6 @@ On Windows we’ll use **PowerShell** (the built-in command tool), and on macOS 
 Here is a very brief outline of what we’ll do:  
 
 1. [Set up a folder](#step-1-set-up-a-folder)  
-1.5. [Install Homebrew (macOS only)](#step-15-install-homebrew-macos-only)  
 2. [Install gallery-dl](#step-2-install-gallery-dl)  
 3. [Install Get cookies.txt LOCALLY and export your cookies](#step-3-install-get-cookiestxt-locally-and-export-your-cookies)  
 4. [Create the config file](#step-4-create-the-config-file)  
