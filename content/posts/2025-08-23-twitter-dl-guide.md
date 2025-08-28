@@ -211,4 +211,4 @@ https://x.com/i/status/<tweet_id>
 
 Getting “not a valid application” in PowerShell? 
 
-First install the Microsoft Visual C++ Redistributable referenced on the GitHub page for your download. If it still fails, grab the x86 build from the [release page](https://github.com/gdl-org/builds/releases?utm_source=chatgpt.com) and run it using its exact filename, e.g. `.\gallery-dl_x86.exe` instead of `.\gallery-dl.exe`.
+First install the Microsoft Visual C++ Redistributable referenced on the GitHub page for your download. If it still fails, grab the x86 build from the [release page](https://github.com/mikf/gallery-dl/releases) and run it using its exact filename, e.g. `.\gallery-dl_x86.exe` instead of `.\gallery-dl.exe`.
