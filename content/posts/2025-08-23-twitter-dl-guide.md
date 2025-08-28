@@ -22,7 +22,7 @@ On Windows we’ll use **PowerShell** (the built-in command tool), and on macOS 
 
 Here is a very brief outline of what we’ll do:  
 
-1. [Set up a folder](#step-1-set-up-a-folder)  
+1. [Set up folders](#step-1-set-up-folders)  
 2. [Install gallery-dl](#step-2-install-gallery-dl)  
 3. [Install Get cookies.txt LOCALLY and export your cookies](#step-3-install-get-cookiestxt-locally-and-export-your-cookies)  
 4. [Create the config file](#step-4-create-the-config-file)  
@@ -35,7 +35,7 @@ This method uses your Twitter login cookies. Cookies are small files your browse
 The applications we're going to use (*gallery-dl* & *Get cookies.txt LOCALLY*) are both open source, well regarded and widely checked. I recommend you confirm this yourself, never share your `cookies.txt`, and delete it when you’re done.
 
 ---
-## Step 1: Set up a folders
+## Step 1: Set up folders
 
 On your Desktop create a new folder called **TwitterDownloader**.  Inside it, create another folder called **downloads**.  
 
@@ -63,7 +63,9 @@ After it's done you’ll likely see a warning such as:
 ```bash
 WARNING: The script gallery-dl is installed in '/Users/yourname/Library/Python/3.9/bin' which is not on PATH.
 ```  
-Note the path and version number (e.g. `3.9`). If you now try `gallery-dl --version` the command may fail because that folder isn’t yet in your PATH. To fix it, open Finder and go to your home folder(**CMD+Shift+H**), note the folder name (your username), then show hidden files (**CMD+Shift+.**) and open **.zshrc** (or on older macOS, **.bash_profile**). Add this line at the end:  
+Note the path and version number (e.g. `3.9`). If you now try `gallery-dl --version` the command likely fails because your system doesn’t yet know where to look for the new program. 
+
+To fix it, open Finder and go to your home folder(**CMD+Shift+H**), note the folder name (your username), then show hidden files (**CMD+Shift+.**) and open **.zshrc** (or on older macOS, **.bash_profile**). Add this line at the end:  
 ```bash
 export PATH="/Users/yourname/Library/Python/3.9/bin:$PATH"
 ```  
@@ -119,7 +121,7 @@ Desktop
 We now need to create a file that tells gallery-dl what to download and where to save it.  
 This file is called `config.json`.
 
-1. Open a text editor (TextEdit on macOS, Notepad on Windows).  
+1. Open a text editor like Notepad on Windows or TextEdit on Mac (if using TextEdit make sure you're in plaintext mode "Format > Make Plaintext") 
 2. Copy the following content into the file:  
 
 ```json
