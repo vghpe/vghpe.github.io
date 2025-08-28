@@ -94,16 +94,15 @@ We need your Twitter login cookies so gallery-dl can fetch your likes and bookma
 To do this we use a browser extension called **Get cookies.txt LOCALLY**. 
 
 1. Install the extension:  
-   - [Chrome/Edge/Brave](https://www.google.com/search?q=get+cookies+locally+chrome)  
-   - [Firefox](https://www.google.com/search?q=get+cookies+locally+firefox)  
+   - [Chrome/Edge/Brave](https://chromewebstore.google.com/detail/get-cookiestxt-locally/cclelndahbckbenkjhflpdbgdldlbecc)  
+   - [Firefox](https://addons.mozilla.org/en-US/firefox/addon/get-cookies-txt-locally/)  
 
 1. Go to x/Twitter and make sure you're signed in. 
 
-2. While on the website, open the "Get cookies.txt LOCALLY" extension. Set export format to *Netscape*, Press Export As, navigate to our *TwitterDownloader* folder on the desktop and save it as:
+2. While on the website, open the "Get cookies.txt LOCALLY" extension. Set export format to *Netscape*, Press Export As, navigate to our *TwitterDownloader* folder on the desktop and save it as: `x.com_cookies.txt`
 
-   ```
-   twitter_cookies.txt
-   ```
+
+![Export Window of the extension](/images/get_cookies_locally.png)
 
 After this step, your folder should look like this:
 
@@ -111,7 +110,7 @@ After this step, your folder should look like this:
 Desktop
 └── TwitterDownloader
     ├── downloads
-    ├── twitter_cookies.txt
+    ├── x.com_cookies.txt
     └── gallery-dl.exe   (Windows only)
 ```
 
@@ -129,7 +128,7 @@ This file is called `config.json`.
   "base-directory": "downloads",
   "extractor": {
     "twitter": {
-      "cookies": "twitter_cookies.txt",
+      "cookies": "x.com_cookies.txt",
       "videos": true,
       "retweets": false,
       "quoted": false,
@@ -157,7 +156,7 @@ After this step, your folder should look like this:
 Desktop
 └── TwitterDownloader
     ├── downloads
-    ├── twitter_cookies.txt
+    ├── x.com_cookies.txt
     ├── config.json
     └── gallery-dl.exe   (Windows only)
 ```
