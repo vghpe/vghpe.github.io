@@ -61,7 +61,8 @@ python3 -m pip install -U gallery-dl
 ```  
 After it's done you’ll likely see a warning such as:  
 ```bash
-WARNING: The script gallery-dl is installed in '/Users/yourname/Library/Python/3.9/bin' which is not on PATH.
+WARNING: The script gallery-dl is installed in
+'/Users/yourname/Library/Python/3.9/bin' which is not on PATH.
 ```  
 Note the path and version number (e.g. `3.9`). If you now try `gallery-dl --version` the command likely fails because your system doesn’t yet know where to look for the new program. 
 
@@ -164,10 +165,20 @@ Desktop
 ---
 # Step 5: Start downloading
 
-We're ready to transfer! For either Windows or Mac we just need to make sure we're in the right folder:
+For either Windows or Mac we just need to make sure we're in the right folder. Open Powershell or Terminal type first type
+
+```bash
+cd
+```
+
+Hit **space** then drag-and-drop the TwitterDownloader folder into the window. That will print out it's path. Hit **enter**
+
+![This works both on Windows and MacOS](/images/twitter_path.png)
+
+
+We're ready to transfer! Run these commands one at a time. Make sure to replace `<your-username>` with your own username and remove the brackets '<>'. 
 
 **macOS**
-On your Desktop, right-click *TwitterDownloader → Services → New Terminal at Folder.* Then one at a time run:
 
 ```bash
 gallery-dl --config config.json "https://x.com/i/bookmarks"
@@ -178,7 +189,6 @@ gallery-dl --config config.json "https://x.com/<your-username>/likes"
 ```
 
 **Windows**
-On your Desktop, right-click *TwitterDownloader → Open in Terminal* (or Open PowerShell window here on older versions). Then one at a time run:
 
 ```powershell
 .\gallery-dl.exe --config .\config.json "https://x.com/i/bookmarks"
@@ -195,3 +205,10 @@ All the media will appear inside the **downloads** folder.  Each file name will 
 ```
 https://x.com/i/status/<tweet_id>
 ```
+
+
+## Troubleshooting:
+
+Getting “not a valid application” in PowerShell? 
+
+First install the Microsoft Visual C++ Redistributable referenced on the GitHub page for your download. If it still fails, grab the x86 build from the [release page](https://github.com/gdl-org/builds/releases?utm_source=chatgpt.com) and run it using its exact filename, e.g. `.\gallery-dl_x86.exe` instead of `.\gallery-dl.exe`.

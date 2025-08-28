@@ -15,11 +15,14 @@ subscribe = "RSS"
 copyright = "© 2024 Henrik Pettersson. All rights reserved."
 showPowerBy = false
 
-
 [markup]
   [markup.goldmark]
     [markup.goldmark.renderer]
       unsafe = true
+  [markup.highlight]
+    style = 'rose-pine-dawn'
+    lineNumbersInTable = false
+    lineNos = false
 
 [[menu.main]]
   name = "Notes"

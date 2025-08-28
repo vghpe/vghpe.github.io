@@ -212,8 +212,8 @@ p {
 }
 p,
 pre {
-  overflow-wrap: normal;         /* don’t force long strings to wrap */
-  -webkit-text-size-adjust: 100%; /* stop iOS Safari from scaling the text */
+  word-break: normal;
+  overflow-wrap: anywhere;
 }
 .markdown-image img {
   max-width: 100%;
@@ -229,19 +229,14 @@ h3:hover a,
 h4:hover a { 
   visibility: visible
 }
-.highlight {
-  background-color: #323232;
-  padding: 0.5em;
-  margin-left: 2em;
-  overflow-x: auto;       /* keep horizontal scroll if needed */
+.highlight pre {
+  padding: 7px;
+  overflow-x: auto;
 }
 
-.highlight pre,
-.highlight code {
-  background: transparent !important;  /* clear any inherited background */
-  padding: 0;
-  margin: 0;
-  line-height: 1.2;
+.highlight {
+  max-width: 100%;
+  overflow-x: auto;
 }
 p code {
   font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, Courier, monospace;
