@@ -1,5 +1,5 @@
 ---
-title: How to download every image and video you've liked or bookmarked on X/Twitter
+title: How to batch download every image and video you've liked or bookmarked on X/Twitter
 date: 2025-08-25T13:17:00
 draft: false
 slug: twitter-dl-guide
@@ -11,10 +11,7 @@ caption: All references stored locally and organized inside Eagle.
 description: Guide to download liked and bookmarked images or videos on X (Twitter)
 ---
 
-This is a how-to guide for batch downloading all the media posts you’ve ever liked or bookmarked on X (Twitter). I wrote this with artists in mind, that want to collect references, but it can be used by anyone who wants a local copy of their memes gallery or anything else saved.
-<!--more-->
-
-The guide covers both Windows and macOS and is designed for people who haven’t used command-line tools before. Command-line tools let you talk directly to programs that don’t have a graphical interface (and look like a cool hacker in front of your friends).
+The guide covers both Windows and macOS and is designed for people who haven’t used command-line tools before. Command-line tools let you talk directly to programs that don’t have a graphical interface. <!--more-->
 
 What we’re doing here is fairly simple. Still, I encourage you to double-check the sources and confirm the commands rather than blindly trusting a blog.
 
@@ -37,10 +34,8 @@ This method uses your Twitter login cookies. Cookies are small files your browse
 
 The applications we're going to use (*gallery-dl* & *Get cookies.txt LOCALLY*) are both open source, well regarded and widely checked. I recommend you confirm this yourself, never share your `cookies.txt`, and delete it when you’re done.
 
-**The non LOCALLY version of *Get cookies.txt* should not be used**
-
 ---
-## Step 1: Set up a folder
+## Step 1: Set up a folders
 
 On your Desktop create a new folder called **TwitterDownloader**.  Inside it, create another folder called **downloads**.  
 
@@ -60,11 +55,11 @@ Now we’ll install the program that does the downloading.
 
 **macOS**  
 
-Install **gallery-dl** through the terminal with Python:  
+First open the Terminal app and use this command to download gallery-dl:
 ```bash
 python3 -m pip install -U gallery-dl
 ```  
-You’ll likely see a warning such as:  
+After it's done you’ll likely see a warning such as:  
 ```bash
 WARNING: The script gallery-dl is installed in '/Users/yourname/Library/Python/3.9/bin' which is not on PATH.
 ```  
