@@ -1,5 +1,5 @@
 ---
-title: How to download and every image and video you've liked or bookmarked on X/Twitter
+title: How to download every image and video you've liked or bookmarked on X/Twitter
 date: 2025-08-25T13:17:00
 draft: false
 slug: twitter-dl-guide
@@ -68,7 +68,7 @@ You’ll likely see a warning such as:
 ```bash
 WARNING: The script gallery-dl is installed in '/Users/yourname/Library/Python/3.9/bin' which is not on PATH.
 ```  
-Note the path and version number (e.g. `3.9`). If you now try `gallery-dl --version` the command may fail because that folder isn’t yet in your PATH. To fix it, open Finder and to go to your home folder(**CMD+Shift+H**), note the folder name (your username), then show hidden files (**CMD+Shift+.**) and open **.zshrc** (or on older macOS, **.bash_profile**). Add this line at the end:  
+Note the path and version number (e.g. `3.9`). If you now try `gallery-dl --version` the command may fail because that folder isn’t yet in your PATH. To fix it, open Finder and go to your home folder(**CMD+Shift+H**), note the folder name (your username), then show hidden files (**CMD+Shift+.**) and open **.zshrc** (or on older macOS, **.bash_profile**). Add this line at the end:  
 ```bash
 export PATH="/Users/yourname/Library/Python/3.9/bin:$PATH"
 ```  
@@ -168,7 +168,7 @@ Desktop
 ---
 # Step 5: Start downloading
 
-We're now ready to transfer, this is the fun part! For either Windows or Mac we just need to make sure we're in the right folder then, we're good to start the batch download. 
+We're ready to transfer! For either Windows or Mac we just need to make sure we're in the right folder:
 
 **macOS**
 On your Desktop, right-click *TwitterDownloader → Services → New Terminal at Folder.* Then one at a time run:
