@@ -14,6 +14,7 @@ Reality rips, and 4 strangers comes to on a stalled star-born train. To return, 
 
 <!--more-->
 
+	*If offered to disappear from you current like to learn the mysteries of the universe. Would you leave?* 
 ## Theme
 
 *Authentic Belonging vs. Expected Duty*
@@ -23,9 +24,9 @@ Sub-themes: *Desire, Identity, Determinism*
 
 ## Core Concepts
 
-- **The Line** — The train carries each life forward along its ordinary course
+- **The Line** — A cosmic train carries sleeping passengers forward on a seemingly endless track. The sleeping passengers conscience experience regular life on earth.    
 
-- **Snap‑Out / Snap‑In** — When the train stops, people are pulled **out** of their lives to the station. When it moves again, they **snap back in** to the exact instant they left; no time passes for their world.
+- **Snap‑Out / Snap‑In** — If the train stops ,people are pulled **out** of their lives to the station. When it moves again, they **snap back in** to the exact instant they left; no time passes 
 
 - **Stops** — The train only stops when a station malfunctions.
 
