@@ -49,44 +49,48 @@ Desktop
 
 
 ---
-## Step 2: Install gallery-dl
 
-Now we’ll install the program that does the downloading.
+## Step 2: Install gallery-dl  
+
+How you install depends on OS, version, and any previous Python installs. The steps below are the route that works for most people.
 
 **macOS**  
+1. Install Python 3 from [python.org](https://www.python.org/downloads/).  
+   - Download the latest macOS installer and run it. This also sets up `pip`.  
+2. Install gallery-dl:  
+   ```bash
+   python3 -m pip install -U gallery-dl
+   ```  
+3. Verify the install:  
+   ```bash
+   python3 -m gallery_dl --version
+   ```  
 
-First open the Terminal app and use this command to download gallery-dl:
-```bash
-python3 -m pip install -U gallery-dl
-```  
-After it's done you’ll likely see a warning such as:  
-```bash
-WARNING: The script gallery-dl is installed in
-'/Users/yourname/Library/Python/3.9/bin' which is not on PATH.
-```  
-Note the path and version number (e.g. `3.9`). If you now try `gallery-dl --version` the command likely fails because your system doesn’t yet know where to look for the new program. 
+<details><summary>Troubleshooting error:  externally-managed-enviroment </summary>
+You've probably installed brew. If you've installed brew I trust that you can work out the next step to complete the installation.
+</details>
 
-To fix it, open Finder and go to your home folder(**CMD+Shift+H**), note the folder name (your username), then show hidden files (**CMD+Shift+.**) and open **.zshrc** (or on older macOS, **.bash_profile**). Add this line at the end:  
-```bash
-export PATH="/Users/yourname/Library/Python/3.9/bin:$PATH"
-```  
-Replace `yourname` and `3.9` with what the warning showed. Restart the terminal and check with:  
-```bash
-gallery-dl --version
-```  
+---
+
 **Windows**  
-1. Go to [gallery-dl github](https://github.com/mikf/gallery-dl).  
-2. Scroll down to Standalone Executable and download `gallery-dl.exe`.  
-3. Place `gallery-dl.exe` inside your **TwitterDownloader** folder.  
+1. Download the standalone executable from the [gallery-dl GitHub releases page](https://github.com/mikf/gallery-dl/releases).  
+2. Put `gallery-dl.exe` in your **TwitterDownloader** folder (created in Step 1).  
+3. Open PowerShell at the right folder:  
+   - Right-click the **TwitterDownloader** (Windows 11) folder or Shift + Right-click (older Windows)
+   - Choose **Open in Terminal** (Windows 11) or **Open PowerShell window here** (older Windows).  
+4. Verify the install:  
+   ```powershell
+   .\gallery-dl.exe --version
+   ```  
 
-After this step, your folder should look like this:
+<details><summary>Troubleshooting error: not a valid application</summary>
+If you see a “Not a valid application for this platform” error:  
 
-```
-Desktop
-└── TwitterDownloader
-    ├── downloads
-    └── gallery-dl.exe   (Windows only)
-```
+- First install the Microsoft Visual C++ Redistributable referenced on the gallery-dl GitHub page.  
+- If it still fails, download the **x86** build from the releases page and run it using its exact filename, for example:  `.\gallery-dl_x86.exe` instead of `.\gallery-dl.exe`
+</details>
+
+
 
 ---
 ## Step 3: Install Get cookies.txt LOCALLY and export your cookies
@@ -181,11 +185,11 @@ We're ready to transfer! Run these commands one at a time. Make sure to replace 
 **macOS**
 
 ```bash
-gallery-dl --config config.json "https://x.com/i/bookmarks"
+python3 gallery-dl --config config.json "https://x.com/i/bookmarks"
 ```
 
 ```bash
-gallery-dl --config config.json "https://x.com/<your-username>/likes"
+python3 gallery-dl --config config.json "https://x.com/<your-username>/likes"
 ```
 
 **Windows**
@@ -205,10 +209,3 @@ All the media will appear inside the **downloads** folder.  Each file name will 
 ```
 https://x.com/i/status/<tweet_id>
 ```
-
-
-## Troubleshooting:
-
-Getting “not a valid application” in PowerShell? 
-
-First install the Microsoft Visual C++ Redistributable referenced on the GitHub page for your download. If it still fails, grab the x86 build from the [release page](https://github.com/mikf/gallery-dl/releases) and run it using its exact filename, e.g. `.\gallery-dl_x86.exe` instead of `.\gallery-dl.exe`.
