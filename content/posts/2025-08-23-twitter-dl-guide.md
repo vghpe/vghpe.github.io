@@ -5,6 +5,7 @@ draft: false
 slug: twitter-dl-guide
 aliases:
 tags:
+  - documentation
   - tool
 image: images/img-eagle.jpg
 caption: All references stored locally and organized inside Eagle.
