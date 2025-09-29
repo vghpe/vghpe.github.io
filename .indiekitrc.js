@@ -48,6 +48,13 @@ module.exports = {
   // Preserve animated GIFs when resizing via Sharp
   '@indiekit/endpoint-media': {
     imageProcessing: {
+      // Constrain longest side to 1000px, keep aspect ratio
+      resize: {
+        width: 1000,
+        height: 1000,
+        fit: 'inside',
+        withoutEnlargement: true
+      },
       // keep all frames in animated images (GIFs)
       sharpOptions: { animated: true }
     }
