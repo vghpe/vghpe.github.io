@@ -548,6 +548,46 @@ nav.navigation a.button {
   margin-top: 30px; /* adjust as needed */
 }
 
+/* Sketchbook (formerly Notes) grid layout */
+#notes-page #list-page.sketchbook-grid {
+  /* Two columns of 350px items with 50px gutter when space allows */
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 8px; /* minimal outer padding to favor 2 columns */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 350px));
+  column-gap: 50px; /* requested column spacing */
+  row-gap: 0;       /* no vertical spacing between items */
+  justify-content: center;
+}
+
+#notes-page #list-page.sketchbook-grid .item {
+  max-width: 350px; /* clamp item cell to 350px */
+  width: 100%;      /* follow column width (300–350px) */
+  margin: 0; /* grid handles spacing */
+}
+
+/* In grid, use width-based constraint and keep aspect ratio */
+#notes-page #list-page.sketchbook-grid .content-center img {
+  width: 100%;       /* fill the item column width */
+  height: auto;      /* maintain aspect ratio */
+  max-width: 350px;  /* width cap instead of height */
+  max-height: none;  /* ensure height isn't capped in grid */
+}
+
+/* Date at top of each item, tight to image */
+#notes-page #list-page.sketchbook-grid .date-top {
+  text-align: right;
+  color: #bbb;
+  font-size: 0.9rem;
+  margin: 0; /* no margins as requested */
+}
+
+/* Summary text alignment within grid items */
+#notes-page #list-page.sketchbook-grid .summary-text {
+  text-align: left;
+}
+
 /* single page */
 #single {
   max-width: 680px;
@@ -770,4 +810,3 @@ details[open] summary::after { content: " ▲"; }
     margin-block-start: 0em;
     margin-block-end: 0em;
 }
-

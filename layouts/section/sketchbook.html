@@ -3,7 +3,7 @@
 {{ partial "profile.html" . }}
 
 <div id="notes-page">
-  <div id="list-page">
+  <div id="list-page" class="sketchbook-grid">
 
   {{/* Aggregate pages from the notes section and present as Sketchbook */}}
   {{ $notePages := where .Site.RegularPages "Section" "notes" }}
@@ -11,6 +11,10 @@
   {{ range $paginator.Pages }}
   
   <section class="item">
+    <!-- Date at top, right-aligned, tight to image -->
+    <div class="date-top">
+      <time datetime="{{ .PublishDate }}">{{ .PublishDate.Format "Jan 2, 2006" }}</time>
+    </div>
 
     <div class="content content-center">
       {{ if .Params.tweet }}
@@ -44,23 +48,7 @@
     <div class="summary-text">
       {{ .Content }}
     </div>
-
-    <div class="tags-date-container">
-      {{ with .Params.tags }}
-      <div class="tags">
-        {{ range . }}
-          <a href="{{ "tags/" | absURL }}{{ . | urlize }}" class="tag {{ . | urlize }}">{{ . }}</a>
-        {{ end }}
-      </div>
-      {{ end }}
-
-      <div class="date">
-        <time datetime="{{ .PublishDate }}">{{ .PublishDate.Format "Jan 2, 2006" }}</time>
-      </div>
-    </div>
   </section>
-  
-  <hr class="post-divider" />
   {{ end }}
 
   {{ if or ($paginator.HasPrev) ($paginator.HasNext) }}
@@ -82,4 +70,3 @@
 </div>
 
 {{ end }}
-

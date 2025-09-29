@@ -5,6 +5,8 @@ canonifyURLs = true
 languageCode = 'en-us'
 theme = 'mini'
 summaryLength = 45
+[pagination]
+  pagerSize = 12
 [outputs]
   home = ["HTML", "RSS"]
   section = ["HTML", "RSS"]
