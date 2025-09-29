@@ -25,6 +25,10 @@ showPowerBy = false
     lineNos = false
 
 [[menu.main]]
-  name = "Notes"
-  url = "/notes/"
+  name = "Sketchbook"
+  url = "/sketchbook/"
   weight = 2
+
+[permalinks]
+  # Render pages from the `notes` section under /sketchbook/:slug/
+  notes = "/sketchbook/:slug/"

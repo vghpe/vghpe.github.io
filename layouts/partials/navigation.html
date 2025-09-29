@@ -1,0 +1,20 @@
+<nav class="navigation">
+  <!-- Home / Feature Posts -->
+  <a href="{{ "/" | relURL }}">Feature Posts</a>
+
+  <!-- Sketchbook Section (was Notes) -->
+  <a href="{{ "/sketchbook/" | relURL }}">Sketchbook</a>
+
+  <!-- About -->
+  <a href="{{ "/about/" | relURL }}">About</a>
+
+  <!-- RSS (only if enabled and available) -->
+  {{ if .Site.Params.enableRSS }}
+    {{ with .Site.Home.OutputFormats.Get "RSS" }}
+      <a href="{{ .RelPermalink }}">
+        {{ with $.Site.Params.subscribe }}{{ . }}{{ else }}{{ i18n "subscribe" }}{{ end }}
+      </a>
+    {{ end }}
+  {{ end }}
+</nav>
+

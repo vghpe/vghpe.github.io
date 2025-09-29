@@ -5,10 +5,8 @@
 <div id="notes-page">
   <div id="list-page">
 
-  {{/* 1) Grab pages in the notes section */}}
+  {{/* Aggregate pages from the notes section and present as Sketchbook */}}
   {{ $notePages := where .Site.RegularPages "Section" "notes" }}
-  
-  {{/* 2) Paginate the results */}}
   {{ $paginator := .Paginate $notePages }}
   {{ range $paginator.Pages }}
   
@@ -65,7 +63,6 @@
   <hr class="post-divider" />
   {{ end }}
 
-  {{/* 3) Pagination controls */}}
   {{ if or ($paginator.HasPrev) ($paginator.HasNext) }}
     <div class="pagination">
       {{ if $paginator.HasPrev }}
@@ -85,3 +82,4 @@
 </div>
 
 {{ end }}
+
