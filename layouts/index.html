@@ -8,9 +8,9 @@
     <!-- 2) Create an empty slice for pages we want to keep. -->
     {{ $nonNotesPages := slice }}
 
-    <!-- 3) Loop over all pages, only keep those NOT in the notes section. -->
+    <!-- 3) Loop over all pages, only keep those NOT in the notes or unlisted sections. -->
     {{ range $allPages }}
-      {{ if ne .Section "notes" }}
+      {{ if and (ne .Section "notes") (ne .Section "unlisted") }}
         {{ $nonNotesPages = $nonNotesPages | append . }}
       {{ end }}
     {{ end }}
