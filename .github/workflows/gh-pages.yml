@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - blog-url-removal
   workflow_dispatch:
 
 permissions:
