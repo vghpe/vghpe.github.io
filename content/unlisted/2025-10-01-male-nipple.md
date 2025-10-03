@@ -18,6 +18,7 @@ description: Game Pitch for Friends
 
 HTSMN is an relationship/intimacy sim disguised as an auto-runner puzzle platformer.  Through basic platforming you manipulate parameters inside a selected hottie's 'box', each with their own quirks. The goal is to reach "peak arousal".
 
+
 ---
 
 **Gameplay:** 
