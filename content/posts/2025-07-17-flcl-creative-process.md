@@ -5,6 +5,7 @@ draft: false
 slug: flcl-creative-process
 aliases:
   - /posts/2025-07-17-flcl-creative-process/
+  - /blog/posts/2025-07-17-flcl-creative-process/
 tags:
   - article
   - research

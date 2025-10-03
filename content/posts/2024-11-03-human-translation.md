@@ -5,6 +5,7 @@ draft: false
 slug: human-translation
 aliases:
   - /posts/human-translation/
+  - /blog/posts/human-translation/
 tags:
   - research
   - AI
@@ -12,7 +13,7 @@ image: images/kojima-drawing-inverted.jpg
 ---
 I was able source a translation of Kojima's diary that was done commissioned by the youtube channel *Did You Know Gaming?* After I completed my own AI translation and began working on an article, it arrived in my inbox. How does it compare to the AI version? <!--more-->
 
-[Go here](https://vghpe.github.io/blog/posts/ai-translation/) to read the previous entry 
+[Go here](/posts/ai-translation/) to read the previous entry
 
 I wanted to see just how accurate the chatbots had been—and, more importantly, to gain greater confidence in my understanding and takeaways. On initial examination, I noticed some differences in language and tone, as well as a few concerning inconsistencies.
 

@@ -30,7 +30,7 @@ Micropub posts can syndicate to Bluesky through the `@indiekit/syndicator-bluesk
 | Variable           | Description                                                        |
 | ------------------ | ------------------------------------------------------------------ |
 | `MONGODB_URL`      | MongoDB connection string (e.g. `mongodb+srv://…`). Required when using Indiekit's queue or token storage features.
-| `PUBLICATION_ME`   | Canonical site URL (e.g. `https://vghpe.github.io/blog/`).
+| `PUBLICATION_ME`   | Canonical site URL (e.g. `https://vghpe.github.io/`).
 | `BLUESKY_HANDLE`   | Bluesky handle (e.g. `vghpe.bsky.social`).
 | `BLUESKY_PASSWORD` | Bluesky app password for the Micropub syndicator.
 | `GITHUB_USER`      | GitHub username for the GitHub store plugin.
@@ -52,7 +52,7 @@ application:
   mongodbUrl: "mongodb://127.0.0.1:27017/indiekit"
 
 publication:
-  me: "https://vghpe.github.io/blog/"
+  me: "https://vghpe.github.io/"
 
 plugins:
   - '@indiekit/store-file-system'

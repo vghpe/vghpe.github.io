@@ -3,7 +3,9 @@ title: "9 Platforms - Narrative Outline v1"
 date: 2025-08-13T13:17:00
 draft: false
 slug: nine-platforms-rev1
-aliases: 
+aliases:
+  - /posts/nine-platforms-rev1/
+  - /blog/posts/nine-platforms-rev1/
 tags:
   - narrative
 image: images/nine-platfoms-town_1.gif

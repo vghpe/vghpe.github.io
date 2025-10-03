@@ -1,6 +1,6 @@
 # IndieKit + Hugo + GitHub Pages (+ Bluesky)
 
-A reproducible runbook for the stack that powers [vghpe.github.io/blog](https://vghpe.github.io/blog).
+A reproducible runbook for the stack that powers [vghpe.github.io](https://vghpe.github.io).
 
 ---
 
@@ -31,7 +31,7 @@ A reproducible runbook for the stack that powers [vghpe.github.io/blog](https://
 | Key                   | Description / Example                      |
 | --------------------- | ------------------------------------------ |
 | `MONGODB_URL`         | `mongodb+srv://user:pass@cluster0...`      |
-| `PUBLICATION_ME`      | `https://vghpe.github.io/blog/`            |
+| `PUBLICATION_ME`      | `https://vghpe.github.io/`            |
 | `GITHUB_USER`         | `vghpe`                                    |
 | `GITHUB_REPO`         | `blog`                                     |
 | `GITHUB_BRANCH`       | `main` (default)                           |

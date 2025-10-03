@@ -5,6 +5,7 @@ draft: false
 slug: saving-your-references
 aliases:
   - /posts/saving-your-references/
+  - /blog/posts/saving-your-references/
 tags:
   - tool
 ---

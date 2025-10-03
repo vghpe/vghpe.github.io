@@ -5,6 +5,7 @@ draft: true
 slug: making-this-blog
 aliases:
   - /posts/makingthisblog/
+  - /blog/posts/makingthisblog/
 image: /images/IMG_2590.jpg
 tags: []
 ---

@@ -5,6 +5,7 @@ draft: true
 slug: outrage-content
 aliases:
   - /posts/outrage-content/
+  - /blog/posts/outrage-content/
 tags: []
 image: images/IMG_2639-2.jpeg
 ---

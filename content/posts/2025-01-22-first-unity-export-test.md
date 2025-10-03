@@ -6,6 +6,7 @@ tags:
 slug: first-unity-export-test
 aliases:
   - /posts/first_unity_export_test/
+  - /blog/posts/first_unity_export_test/
 ---
 
 <div style="display:flex; justify-content:center; margin-bottom:20px; overflow:hidden;">
