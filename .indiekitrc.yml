@@ -5,7 +5,7 @@ application:
 
 # Publication configuration
 publication:
-  me: "https://vghpe.github.io/"
+  me: "https://vghpe.github.io/blog/"
   # base URL of your Hugo site, used for building post URLs
   # plugins list below
 # Core plugins for file-based Micropub → Hugo notes
