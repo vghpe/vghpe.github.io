@@ -2,7 +2,7 @@
 title = "About"
 description = "Some information about me!"
 date = "2019-02-28"
-aliases = ["about-us", "contact"]
+aliases = ["about-us", "contact", "/blog/about/"]
 author = "Hugo Authors"
 enableComments = false
 +++
