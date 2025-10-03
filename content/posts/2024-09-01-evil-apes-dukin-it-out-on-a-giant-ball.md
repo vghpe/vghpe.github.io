@@ -5,7 +5,6 @@ draft: false
 slug: evil-apes-dukin-it-out-on-a-giant-ball
 aliases:
   - /posts/evil-apes-dukin-it-out-on-a-giant-ball/
-  - /blog/posts/evil-apes-dukin-it-out-on-a-giant-ball/
 tags:
   - narrative
 image: images/IMG_2718.jpeg

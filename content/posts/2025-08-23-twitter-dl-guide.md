@@ -4,8 +4,6 @@ date: 2025-08-25T13:17:00
 draft: false
 slug: twitter-dl-guide
 aliases:
-  - /posts/twitter-dl-guide/
-  - /blog/posts/twitter-dl-guide/
 tags:
   - documentation
   - tool

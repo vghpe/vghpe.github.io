@@ -4,7 +4,6 @@ date: 2024-12-15T12:00:00Z
 slug: traditionalist
 aliases:
   - /posts/traditionalist/
-  - /blog/posts/traditionalist/
 draft: false
 tags:
   - research

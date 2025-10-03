@@ -8,7 +8,6 @@ image: images/arranger-short-title.png
 slug: compare-dilalogue
 aliases:
   - /posts/compare_dilalogue/
-  - /blog/posts/compare_dilalogue/
 draft: false
 ---
 

@@ -5,7 +5,6 @@ draft: false
 slug: image-stitch
 aliases:
   - /posts/image_stitch/
-  - /blog/posts/image_stitch/
 tags:
   - tool
 image: images/stitch.png

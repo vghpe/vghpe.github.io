@@ -4,7 +4,6 @@ date: 2024-11-04
 slug: kojima-diary-study
 aliases:
   - /posts/kojimadiarystudy/
-  - /blog/posts/kojimadiarystudy/
 draft: false
 tags:
   - article

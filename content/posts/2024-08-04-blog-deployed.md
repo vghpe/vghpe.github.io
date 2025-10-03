@@ -5,7 +5,6 @@ draft: true
 slug: blog-deployed
 aliases:
   - /posts/blog-deployed/
-  - /blog/posts/blog-deployed/
 image: images/IMG_2592.jpeg
 ---
 

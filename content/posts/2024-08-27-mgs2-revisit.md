@@ -5,7 +5,6 @@ draft: false
 slug: mgs2-revisit
 aliases:
   - /posts/mgs2-revisit-/
-  - /blog/posts/mgs2-revisit-/
 tags:
   - journal
 image: images/IMG_2703.jpeg

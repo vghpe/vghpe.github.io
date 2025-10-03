@@ -1,6 +1,6 @@
 # blog
 
-[Visit the blog](https://vghpe.github.io/)
+[Visit the blog](https://vghpe.github.io/blog/)
 
 This repository contains the source for my personal site built with Hugo and IndieKit.
 
