@@ -1,4 +1,4 @@
-baseURL = "https://vghpe.github.io/blog/"
+baseURL = "https://vghpe.github.io/"
 title = "vghpe"
 relativeURLs = false
 canonifyURLs = true

@@ -1,0 +1,5 @@
+---
+title: "vghpe"
+aliases:
+  - "/blog/"
+---
