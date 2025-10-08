@@ -40,3 +40,40 @@ A JavaScript build (written in TypeScript) playable at HowToStimulateMaleNipple.
 
 **Why it will be a hit**: The cheeky playfulness, “dating sim” character hotties, and the gauntlet of arousing the hardest character are designed to attract streamers, letting them prove to their audience that they are, in fact, a “pro arouser” with unmatched “touch prowess.”
 
+---
+
+**Prototype: Jamble**
+
+Try a tiny prototype of the core mechanic below. Controls: Space to jump; Left/Right arrows to move; the runner auto-moves when the ground line is touched.
+
+<div class="jamble-embed" style="margin: 1rem 0;">
+  <div id="jamble-game"></div>
+  <!-- Pass a hidden debug container to avoid overlay UI on the page -->
+  <div id="jamble-debug" style="display:none;"></div>
+</div>
+
+<script src="/blog/games/jamble/jamble.js"></script>
+<script>
+  (function () {
+    function initJamble() {
+      var gameRoot = document.getElementById('jamble-game');
+      var debugRoot = document.getElementById('jamble-debug');
+      if (!gameRoot || !(window.Jamble && Jamble.Game)) return;
+      try {
+        var game = new Jamble.Game(gameRoot, debugRoot);
+        // Start in run state to keep the UI minimal
+        if (game.stateManager && typeof game.stateManager.forceRunState === 'function') {
+          game.stateManager.forceRunState();
+        }
+        game.start();
+      } catch (e) {
+        console.error('Failed to start Jamble', e);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initJamble, { once: true });
+    } else {
+      initJamble();
+    }
+  })();
+  </script>
