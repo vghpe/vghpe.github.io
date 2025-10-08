@@ -44,7 +44,7 @@ A JavaScript build (written in TypeScript) playable at HowToStimulateMaleNipple.
 
 **Prototype: Jamble**
 
-Try a tiny prototype of the core mechanic below. Controls: Space to jump; Left/Right arrows to move; the runner auto-moves when the ground line is touched.
+Try a tiny prototype of the basic auto running below. Controls: Space to jump; Left/Right arrows to move; the runner auto-moves when the ground line is touched.
 
 <div class="jamble-embed" style="margin: 1rem 0;">
   <div id="jamble-game"></div>
