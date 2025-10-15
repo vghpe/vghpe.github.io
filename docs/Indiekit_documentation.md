@@ -1,6 +1,6 @@
 # IndieKit + Hugo + GitHub Pages (+ Bluesky)
 
-A reproducible runbook for the stack that powers [vghpe.github.io/blog](https://vghpe.github.io/blog).
+A reproducible runbook for the stack that powers [vghpe.github.io](https://vghpe.github.io).
 
 ---
 
@@ -8,7 +8,7 @@ A reproducible runbook for the stack that powers [vghpe.github.io/blog](https://
 
 - **Client (Phone / Desktop):** Micropub + image uploads
 - **IndieKit (Node.js) on Railway (serverless):**
-  - GitHub store commits Markdown & media to `vghpe/blog` (`content/notes`)
+  - GitHub store commits Markdown & media to `vghpe/vghpe.github.io` (`content/notes`)
   - MongoDB Atlas caches posts & tokens
   - Bluesky syndicator uploads note/photo via the Syndicate endpoint or GitHub Action
 
@@ -31,9 +31,9 @@ A reproducible runbook for the stack that powers [vghpe.github.io/blog](https://
 | Key                   | Description / Example                      |
 | --------------------- | ------------------------------------------ |
 | `MONGODB_URL`         | `mongodb+srv://user:pass@cluster0...`      |
-| `PUBLICATION_ME`      | `https://vghpe.github.io/blog/`            |
+| `PUBLICATION_ME`      | `https://vghpe.github.io/`                 |
 | `GITHUB_USER`         | `vghpe`                                    |
-| `GITHUB_REPO`         | `blog`                                     |
+| `GITHUB_REPO`         | `vghpe.github.io`                          |
 | `GITHUB_BRANCH`       | `main` (default)                           |
 | `GITHUB_PATH`         | `content/notes`                            |
 | `GITHUB_TOKEN`        | (PAT with `public_repo` scope)             |

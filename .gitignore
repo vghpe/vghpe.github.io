@@ -11,3 +11,5 @@ indiekit.log
 # Ignore Obsidian config files
 **/.obsidian/
 content/images
+content/docs/todo.md
+content/drafts

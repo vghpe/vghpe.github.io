@@ -12,7 +12,7 @@ module.exports = {
 
   /* Your public blog URL */
   publication: {
-    me: process.env.PUBLICATION_ME          // https://vghpe.github.io/blog/
+    me: process.env.PUBLICATION_ME          // https://vghpe.github.io/
   },
 
   /* GitHub‑backed storage */
@@ -29,7 +29,7 @@ module.exports = {
 
   '@indiekit/store-github': {
     user:  process.env.GITHUB_USER,         // vghpe
-    repo:  process.env.GITHUB_REPO,         // blog
+    repo:  process.env.GITHUB_REPO,         // vghpe.github.io
     branch: process.env.GITHUB_BRANCH || 'main',
     path:   process.env.GITHUB_PATH   || 'content/notes',
     token:  process.env.GITHUB_TOKEN        // PAT with “public_repo” or “repo” scope
