@@ -1,5 +1,5 @@
 ---
-title: Pitch - How to stimulate the male nipple
+title: "Prototype: How to stimulate the male nipple (Working Title)"
 date: 2025-10-01T13:17:00
 draft: false
 slug: earthly-pigs-garter
@@ -22,11 +22,11 @@ HTSMN is an relationship/intimacy sim disguised as an auto-runner puzzle platfor
 ---
 
 **Gameplay:** 
-The playable jumper will ping-pong inside a rectangular canvas with a center-stage knob (nipple). The knob can be run over or jumped on—but be careful! It’s particular, and the wrong type of engagement will cause it to shy away.
+The playable jumper will ping-pong inside a rectangular canvas featuring a center-stage knob (nipple). The knob can be run over or jumped on. Furthermore, entities can be placed in the level to create automated stimuli—but be careful! Each nipple is particular, and the wrong type of engagement can cause it to shy away.
 
-System depth is added through in-canvas elements that evolve or grow with each cycle we pass through or over them. Additional outside canvas elements, like the profile portrait, need to be observed for state changes or monitored to see how they respond to our collisions.
+System depth is added through in-canvas elements that evolve or grow with each cycle you pass through or over them. Additional outside-canvas elements, such as the profile portrait, need to be observed for state changes or monitored to see how they respond to various stimuli.
 
-Like any good dating sim, there are many character parameters—some visible, others hidden. The path to arousal isn’t a simple linear temperature gauge.
+Like any good dating sim, there are many character parameters—some visible, others hidden. The path to peak arousal isn’t always straightforward.
 
 **Art**:
 The art is non-explicit, but highly suggestive in its springy physicality, shapes, and juicy animation. The roster should be filled with hotties.
@@ -42,8 +42,12 @@ A JavaScript build (written in TypeScript) playable at HowToStimulateMaleNipple.
 
 ---
 
-**Prototype: Jamble**
+**Play The Prototype: **
 
-Try a tiny prototype of the basic auto running below. Controls: Space to jump; Left/Right arrows to move; the runner auto-moves when the ground line is touched.
+**Goal**: Reach PEAK AROUSAL
 
-{{< jamble start="run" >}}
+The arousal bar will fill as the sensation meter get's higher. So much sensation will cause the nipple to shy away.  
+ 
+**Controls**: Space to jump; Left/Right arrows to move; the runner auto-moves when the ground line is touched.
+
+{{< jamble2 autorun="false" >}}
