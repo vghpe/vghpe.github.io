@@ -2943,7 +2943,7 @@ var Jamble;
           position: relative;
           display: grid;
           grid-template-columns: repeat(4, 50px);
-          grid-template-rows: repeat(4, 50px);
+          grid-template-rows: repeat(2, 50px);
           gap: 12px;
           width: max-content;
           margin: 16px auto 0;
@@ -3722,7 +3722,6 @@ var Jamble;
                 else if (optionsOrContainer) {
                     options = optionsOrContainer;
                 }
-                this.autoRunOnGround = options.autoRunOnGround !== undefined ? options.autoRunOnGround : false;
                 this.rootElement = gameElement;
                 this.rootElement.innerHTML = '';
                 this.gameShell = document.createElement('div');
@@ -3953,7 +3952,7 @@ var Jamble;
             const groundSensor = new Jamble.Sensor('ground-sensor', undefined, this.gameWidth / 2, this.gameHeight - 5);
             groundSensor.setTriggerSize(this.gameWidth, 5);
             groundSensor.onTriggerEnter = (other) => {
-                if (other.id === 'player' && this.autoRunOnGround) {
+                if (other.id === 'player') {
                     this.stateManager.forceRunState();
                 }
             };

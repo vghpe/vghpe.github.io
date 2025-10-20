@@ -10,14 +10,13 @@ image: images/knob-design-2.jpg
 caption: An design page, with a wider gender ranger
 description: Game Pitch for Friends
 ---
-**Title:** How to stimulate the male nipple 
-
 **Genre**: Platforming Auto-Runner, Dating Sim, Puzzle
 
 **Artist statement**: The male nipple is so enigmatic! How does one touch it? Does it do anything? Do you know? Prove it!
 
 HTSMN is an relationship/intimacy sim disguised as an auto-runner puzzle platformer.  Through basic platforming you manipulate parameters inside a selected hottie's 'box', each with their own quirks. The goal is to reach "peak arousal".
 
+[Jump to prototype](#play-the-prototype)
 
 ---
 
@@ -42,12 +41,9 @@ A JavaScript build (written in TypeScript) playable at HowToStimulateMaleNipple.
 
 ---
 
-**Play The Prototype: **
+### Play The Prototype
 
-**Goal**: Reach PEAK AROUSAL
-
-The arousal bar will fill as the sensation meter get's higher. So much sensation will cause the nipple to shy away.  
+**Goal**: Reach peak arousal. The arousal bar will fill as the sensation readings get's higher. Too much sensation will cause the nipple to shy away.  
  
-**Controls**: Space to jump; Left/Right arrows to move; the runner auto-moves when the ground line is touched.
-
 {{< jamble2 autorun="false" >}}
+**Controls**: Space to jump; Left/Right arrows to move; the runner auto-moves when the ground line is touched.
