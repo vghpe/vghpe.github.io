@@ -516,9 +516,11 @@ var Jamble;
             if (player && collisionType === 'side') {
                 const softness = player.getSoftness();
                 if (softness < 0.5) {
-                    const t = softness / 0.5;
-                    const maxHardImpulse = 0.45;
-                    adjustedIntensity = intensity * this.arousalConfig.sensitivity * (maxHardImpulse + t * (1.0 - maxHardImpulse));
+                    const hardnessFactor = (0.5 - softness) / 0.5;
+                    const baseImpulse = intensity * this.arousalConfig.sensitivity;
+                    const topCollisionTarget = 0.5 * this.arousalConfig.sensitivity;
+                    const targetImpulse = Math.max(baseImpulse, topCollisionTarget);
+                    adjustedIntensity = baseImpulse + hardnessFactor * (targetImpulse - baseImpulse);
                 }
                 else {
                     const t = (softness - 0.5) / 0.5;
@@ -3847,7 +3849,7 @@ var Jamble;
             this.gameWidth = 500;
             this.gameHeight = 100;
             try {
-                console.log('🎮 Jamble Game Initializing - Build: v2.0.331');
+                console.log('🎮 Jamble Game Initializing - Build: v2.0.333');
                 let options = {};
                 if (optionsOrContainer instanceof HTMLElement) {
                     options = { debug: true, container: optionsOrContainer };
@@ -4668,6 +4670,6 @@ var Jamble;
             return this.showSlots;
         }
     }
-    DebugSystem.BUILD_VERSION = "v2.0.331";
+    DebugSystem.BUILD_VERSION = "v2.0.333";
     Jamble.DebugSystem = DebugSystem;
 })(Jamble || (Jamble = {}));
