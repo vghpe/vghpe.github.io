@@ -471,11 +471,14 @@ var Jamble;
             this.crescendoThresholdReached = false;
             this.crescendoEnabled = true;
             this.inPainZone = false;
+            this.painExpressionLocked = false;
+            this.winExpressionLocked = false;
             this.arousalChangeListeners = [];
             this.arousalImpulseListeners = [];
             this.crescendoChangeListeners = [];
             this.crescendoThresholdListeners = [];
             this.painThresholdListeners = [];
+            this.expressionChangeListeners = [];
             this.arousalMomentum = 0;
             this.momentumSpreadDuration = 0.3;
             this.name = name;
@@ -497,7 +500,8 @@ var Jamble;
                 maxValue: 1.0
             };
             this.arousalValue = this.arousalConfig.baselineValue;
-            this.crescendoValue = 0;
+            this.crescendoValue = 0.1;
+            this.expressionDescriptor = this.resolveExpression();
         }
         getName() {
             return this.name;
@@ -553,20 +557,11 @@ var Jamble;
         getPainThreshold() {
             return this.arousalConfig.painThreshold;
         }
-        getBaselineArousalValue() {
-            return this.arousalConfig.baselineValue;
-        }
         getArousalRange() {
             return {
                 min: this.arousalConfig.minValue,
                 max: this.arousalConfig.maxValue
             };
-        }
-        getTargetArousalValue() {
-            return this.crescendoConfig.targetArousalValue;
-        }
-        getArousalTolerance() {
-            return this.crescendoConfig.arousalTolerance;
         }
         getArousalState() {
             if (this.arousalValue < 0.5)
@@ -636,6 +631,7 @@ var Jamble;
                     console.error(`Error in arousal listener for ${this.name}:`, error);
                 }
             }
+            this.evaluateExpression();
         }
         notifyArousalImpulseListeners(impulse) {
             for (const listener of this.arousalImpulseListeners) {
@@ -652,6 +648,10 @@ var Jamble;
             const isInPain = this.arousalValue > this.arousalConfig.painThreshold;
             if (isInPain && !wasInPain) {
                 this.inPainZone = true;
+                if (!this.winExpressionLocked) {
+                    this.painExpressionLocked = true;
+                    this.evaluateExpression(true);
+                }
                 this.notifyPainThresholdListeners();
             }
             else if (!isInPain && wasInPain) {
@@ -679,6 +679,83 @@ var Jamble;
                     console.error(`Error in pain threshold listener for ${this.name}:`, error);
                 }
             }
+        }
+        getExpressionDescriptor() {
+            return this.expressionDescriptor;
+        }
+        onExpressionChange(callback) {
+            this.expressionChangeListeners.push(callback);
+        }
+        removeExpressionChangeListener(callback) {
+            const index = this.expressionChangeListeners.indexOf(callback);
+            if (index !== -1) {
+                this.expressionChangeListeners.splice(index, 1);
+            }
+        }
+        resolveExpression() {
+            if (this.winExpressionLocked) {
+                return { id: 'win' };
+            }
+            if (this.painExpressionLocked) {
+                return { id: 'pain' };
+            }
+            return { id: 'default' };
+        }
+        evaluateExpression(force = false) {
+            const nextDescriptor = this.resolveExpression();
+            if (!nextDescriptor) {
+                return;
+            }
+            if (force || !this.areExpressionsEqual(this.expressionDescriptor, nextDescriptor)) {
+                this.expressionDescriptor = nextDescriptor;
+                this.notifyExpressionChangeListeners();
+            }
+        }
+        areExpressionsEqual(a, b) {
+            if (!a || !b) {
+                return false;
+            }
+            if (a.id !== b.id) {
+                return false;
+            }
+            if (a.emoji !== b.emoji) {
+                return false;
+            }
+            if (!a.sprite && !b.sprite) {
+                return true;
+            }
+            if (!a.sprite || !b.sprite) {
+                return false;
+            }
+            return a.sprite.atlasId === b.sprite.atlasId && a.sprite.frame === b.sprite.frame;
+        }
+        notifyExpressionChangeListeners() {
+            for (const listener of this.expressionChangeListeners) {
+                try {
+                    listener(this.expressionDescriptor, this);
+                }
+                catch (error) {
+                    console.error(`Error in expression listener for ${this.name}:`, error);
+                }
+            }
+        }
+        resetPainExpression() {
+            if (this.painExpressionLocked) {
+                this.painExpressionLocked = false;
+                this.evaluateExpression(true);
+            }
+        }
+        resetWinExpression() {
+            if (this.winExpressionLocked) {
+                this.winExpressionLocked = false;
+                this.evaluateExpression(true);
+            }
+        }
+        isPainExpressionActive() {
+            return this.painExpressionLocked;
+        }
+        isWinExpressionActive() {
+            return this.winExpressionLocked;
         }
         getCrescendoValue() {
             return this.crescendoValue;
@@ -709,10 +786,12 @@ var Jamble;
                 rate = -this.crescendoConfig.decayRate;
             }
             const change = rate * deltaTime;
-            this.crescendoValue = Math.max(0, Math.min(this.crescendoConfig.maxValue, this.crescendoValue + change));
+            this.crescendoValue = Math.max(0.1, Math.min(this.crescendoConfig.maxValue, this.crescendoValue + change));
             if (!this.crescendoThresholdReached && this.crescendoValue >= this.crescendoConfig.threshold) {
                 this.crescendoThresholdReached = true;
                 this.crescendoValue = this.crescendoConfig.threshold;
+                this.winExpressionLocked = true;
+                this.evaluateExpression(true);
                 this.notifyCrescendoThresholdListeners();
             }
             if (oldValue !== this.crescendoValue) {
@@ -755,6 +834,7 @@ var Jamble;
                     console.error(`Error in crescendo listener for ${this.name}:`, error);
                 }
             }
+            this.evaluateExpression();
         }
         notifyCrescendoThresholdListeners() {
             for (const listener of this.crescendoThresholdListeners) {
@@ -2064,15 +2144,7 @@ var Jamble;
 (function (Jamble) {
     class PortraitPanel {
         constructor(parent, size) {
-            this.currentState = 'default';
-            this.emojis = {
-                default: '😒',
-                enjoy: '😌',
-                aroused: '☺️',
-                edge: '😳',
-                pain: '😖',
-                win: '🫠'
-            };
+            this.currentExpression = null;
             this.size = size;
             this.canvas = document.createElement('canvas');
             this.canvas.width = size;
@@ -2090,18 +2162,23 @@ var Jamble;
             this.ctx.scale(dpr, dpr);
             parent.appendChild(this.canvas);
         }
-        setState(state) {
-            this.currentState = state;
+        setExpression(expression) {
+            this.currentExpression = expression;
         }
         showPainFeedback() {
-            this.setState('pain');
         }
         update(deltaTime) {
         }
         render() {
             const size = this.canvas.width / (window.devicePixelRatio || 1);
             this.ctx.clearRect(0, 0, size, size);
-            const emoji = this.emojis[this.currentState] || this.emojis.default;
+            if (!this.currentExpression) {
+                return;
+            }
+            const emoji = this.currentExpression.emoji;
+            if (!emoji) {
+                return;
+            }
             this.ctx.font = `${size * 0.6}px Arial`;
             this.ctx.textAlign = 'center';
             this.ctx.textBaseline = 'middle';
@@ -2303,7 +2380,7 @@ var Jamble;
             this.peakLightness = 52.1;
             this.highLightness = 12.0;
             this.npc = null;
-            this.debugMode = false;
+            this.debugMode = true;
             this.currentValue = (_c = options.initialValue) !== null && _c !== void 0 ? _c : 0.2;
             this.zoneColors = this.buildZoneColors();
         }
@@ -2331,7 +2408,7 @@ var Jamble;
         }
         render() {
             super.render();
-            if (this.npc) {
+            if (this.debugMode && this.npc) {
                 this.renderDebugOverlay();
             }
         }
@@ -2353,6 +2430,7 @@ var Jamble;
             this.ctx.lineTo(canvasWidth, y);
             this.ctx.stroke();
             this.ctx.restore();
+            this.drawPainThresholdLabel(y);
         }
         mapArousalToNormalized(arousalValue, range) {
             const clamped = Math.max(range.min, Math.min(range.max, arousalValue));
@@ -2363,6 +2441,19 @@ var Jamble;
             const padding = canvasHeight * 0.1;
             const usableHeight = canvasHeight - padding * 2;
             return canvasHeight - (value * usableHeight + padding);
+        }
+        drawPainThresholdLabel(y) {
+            const labelColor = '#ff6b35';
+            const label = 'Pain Threshold';
+            const offsetX = 6;
+            const offsetY = 6;
+            this.ctx.save();
+            this.ctx.fillStyle = labelColor;
+            this.ctx.font = '8px monospace';
+            this.ctx.textAlign = 'left';
+            this.ctx.textBaseline = 'alphabetic';
+            this.ctx.fillText(label, offsetX, y - offsetY);
+            this.ctx.restore();
         }
         buildZoneColors() {
             const colors = [];
@@ -2505,7 +2596,7 @@ var Jamble;
 (function (Jamble) {
     class CrescendoPanel {
         constructor(parent, width, height) {
-            this.currentValue = 0.0;
+            this.currentValue = 0.1;
             this.width = width;
             this.height = height;
             this.container = document.createElement('div');
@@ -2544,7 +2635,8 @@ var Jamble;
             return this.currentValue;
         }
         updateDisplay() {
-            const heightPercent = (this.currentValue * 100).toFixed(2);
+            const displayValue = Math.max(0.1, this.currentValue);
+            const heightPercent = (displayValue * 100).toFixed(2);
             this.fillBar.style.height = `${heightPercent}%`;
             if (this.currentValue >= 1.0) {
                 this.fillBar.style.background = `linear-gradient(to top, 
@@ -3261,8 +3353,8 @@ var Jamble;
         pushActivityData(value) {
             this.monitorPanel.pushData(value);
         }
-        setPortraitState(state) {
-            this.portraitPanel.setState(state);
+        setPortraitExpression(expression) {
+            this.portraitPanel.setExpression(expression);
         }
         getPortraitSize() {
             return this.portraitSize;
@@ -3659,6 +3751,13 @@ var Jamble;
                 sensitivity: 3.0,
                 painThreshold: 5.0
             });
+            this.expressionEmojis = {
+                default: '😒',
+                enjoy: '😌',
+                aroused: '😳',
+                pain: '😖',
+                win: '🫠'
+            };
             this.crescendoConfig = {
                 targetArousalValue: 4.3,
                 arousalTolerance: 0.7,
@@ -3667,6 +3766,7 @@ var Jamble;
                 threshold: 1.0,
                 maxValue: 1.0
             };
+            this.evaluateExpression(true);
         }
         initialize() {
             console.log(`${this.name} initialized - baseline arousal: ${this.arousalValue}`);
@@ -3698,6 +3798,37 @@ var Jamble;
             const state = this.getArousalState();
             return state === 'default' || state === 'minimum';
         }
+        resolveExpression() {
+            var _a, _b, _c, _d, _e;
+            if (this.isPainExpressionActive()) {
+                return {
+                    id: 'pain',
+                    emoji: (_a = this.expressionEmojis) === null || _a === void 0 ? void 0 : _a.pain
+                };
+            }
+            if (this.isWinExpressionActive()) {
+                return {
+                    id: 'win',
+                    emoji: (_b = this.expressionEmojis) === null || _b === void 0 ? void 0 : _b.win
+                };
+            }
+            if (this.isInCrescendoZone()) {
+                return {
+                    id: 'aroused',
+                    emoji: (_c = this.expressionEmojis) === null || _c === void 0 ? void 0 : _c.aroused
+                };
+            }
+            if (this.arousalValue <= 0.2) {
+                return {
+                    id: 'default',
+                    emoji: (_d = this.expressionEmojis) === null || _d === void 0 ? void 0 : _d.default
+                };
+            }
+            return {
+                id: 'enjoy',
+                emoji: (_e = this.expressionEmojis) === null || _e === void 0 ? void 0 : _e.enjoy
+            };
+        }
     }
     Jamble.Soma = Soma;
 })(Jamble || (Jamble = {}));
@@ -3714,7 +3845,7 @@ var Jamble;
             this.gameWidth = 500;
             this.gameHeight = 100;
             try {
-                console.log('🎮 Jamble Game Initializing - Build: v2.0.322');
+                console.log('🎮 Jamble Game Initializing - Build: v2.0.328');
                 let options = {};
                 if (optionsOrContainer instanceof HTMLElement) {
                     options = { debug: true, container: optionsOrContainer };
@@ -3741,8 +3872,6 @@ var Jamble;
                 this.collisionManager = new Jamble.CollisionManager(this.gameWidth, this.gameHeight);
                 this.hudManager = new Jamble.HUDManager(this.gameShell, this.gameWidth, this.gameHeight);
                 this.hudManager.setStateManager(this.stateManager);
-                // Ensure control panel visibility matches initial state immediately
-                this.hudManager.updateControlPanel();
                 this.treePlacementOverlay = new Jamble.TreePlacementOverlay(this.canvasHost, this.slotManager, this.gameWidth, this.gameHeight);
                 const debugContainer = options.container;
                 const debugRequested = (_a = options.debug) !== null && _a !== void 0 ? _a : Boolean(debugContainer);
@@ -3780,6 +3909,9 @@ var Jamble;
                 this.activeNPC.onCrescendoChange((value, npc) => {
                     this.hudManager.setCrescendoValue(npc.getCrescendoNormalized());
                 });
+                this.activeNPC.onExpressionChange((expression) => {
+                    this.hudManager.setPortraitExpression(expression);
+                });
                 this.activeNPC.onPainThreshold(() => {
                     console.log('Pain threshold hit - retracting all knobs');
                     this.knobs.forEach(knob => knob.retract());
@@ -3789,6 +3921,7 @@ var Jamble;
                 });
                 this.hudManager.setSensationValue(this.activeNPC.getSensationNormalized());
                 this.hudManager.setCrescendoValue(this.activeNPC.getCrescendoNormalized());
+                this.hudManager.setPortraitExpression(this.activeNPC.getExpressionDescriptor());
                 if (this.debugSystem) {
                     this.debugSystem.setPlayer(this.player);
                     this.debugSystem.setStateManager(this.stateManager);
@@ -3814,6 +3947,7 @@ var Jamble;
             });
             if (respawnedCount > 0) {
                 this.activeNPC.enableCrescendo();
+                this.activeNPC.resetPainExpression();
                 this.hudManager.getControlPanel().disableHeart();
             }
             console.log(`Respawned ${respawnedCount} knob(s)`);
@@ -4532,6 +4666,6 @@ var Jamble;
             return this.showSlots;
         }
     }
-    DebugSystem.BUILD_VERSION = "v2.0.322";
+    DebugSystem.BUILD_VERSION = "v2.0.328";
     Jamble.DebugSystem = DebugSystem;
 })(Jamble || (Jamble = {}));
