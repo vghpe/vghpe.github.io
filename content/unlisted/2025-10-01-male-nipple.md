@@ -1,7 +1,7 @@
 ---
 title: "Prototype: How to stimulate the male nipple (Working Title)"
 date: 2025-10-21T13:17:00
-draft: true
+draft: false
 slug: earthly-pigs-garter
 aliases:
 tags:
