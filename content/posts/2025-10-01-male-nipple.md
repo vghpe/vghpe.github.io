@@ -1,7 +1,7 @@
 ---
 title: "Prototype: How to stimulate the male nipple (Working Title)"
-date: 2025-10-01T13:17:00
-draft: false
+date: 2025-10-21T13:17:00
+draft: true
 slug: earthly-pigs-garter
 aliases:
 tags:
@@ -15,7 +15,7 @@ description: Game Pitch for Friends
 **Artist statement**: The male nipple is so enigmatic! How does one touch it? Does it do anything? Do you know? Prove it!
 
 HTSMN is an relationship/intimacy sim disguised as an auto-runner puzzle platformer.  Through basic platforming you manipulate parameters inside a selected hottie's 'box', each with their own quirks. The goal is to reach "peak arousal".
-
+ <!--more-->
 [Jump to prototype](#play-the-prototype)
 
 ---
