@@ -45,5 +45,5 @@ A JavaScript build (written in TypeScript) playable at HowToStimulateMaleNipple.
 
 **Goal**: Reach peak arousal. The arousal bar will fill as the sensation readings get's higher. Too much sensation will cause the nipple to shy away.  
  
-{{< jamble2 autorun="false" >}}
+{{< jamble >}}
 **Controls**: Space to jump; Left/Right arrows to move; the runner auto-moves when the ground line is touched.
