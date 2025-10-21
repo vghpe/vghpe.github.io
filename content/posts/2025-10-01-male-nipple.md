@@ -23,9 +23,13 @@ HTSMN is an relationship/intimacy sim disguised as an auto-runner puzzle platfor
 **Gameplay:** 
 The playable jumper will ping-pong inside a rectangular canvas featuring a center-stage knob (nipple). The knob can be run over or jumped on. Furthermore, entities can be placed in the level to create automated stimuli—but be careful! Each nipple is particular, and the wrong type of engagement can cause it to shy away.
 
+![Each characters box is like an ecosystem, with different needs](/images/knob-design-3.jpg)
+
 System depth is added through in-canvas elements that evolve or grow with each cycle you pass through or over them. Additional outside-canvas elements, such as the profile portrait, need to be observed for state changes or monitored to see how they respond to various stimuli.
 
 Like any good dating sim, there are many character parameters—some visible, others hidden. The path to peak arousal isn’t always straightforward.
+
+![Your clients, some are rare, some are very difficult](/images/knob-design-4.jpg)
 
 **Art**:
 The art is non-explicit, but highly suggestive in its springy physicality, shapes, and juicy animation. The roster should be filled with hotties.
