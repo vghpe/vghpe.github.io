@@ -212,7 +212,7 @@ var Jamble;
         startAutoRun() {
             if (!this.isAutoRunning) {
                 this.isAutoRunning = true;
-                this.autoRunDirection = this.lastDirection;
+                this.autoRunDirection = 'right';
             }
             this.velocityX = this.autoRunDirection === 'left' ? -this.moveSpeed : this.moveSpeed;
         }
@@ -1423,6 +1423,7 @@ var Jamble;
         constructor() {
             this.id = 'move';
             this.name = 'Move';
+            this.enabled = true;
         }
         execute(player) {
         }
@@ -1432,9 +1433,12 @@ var Jamble;
         constructor() {
             this.id = 'jump';
             this.name = 'Jump';
+            this.enabled = true;
         }
         execute(player) {
-            player.jump();
+            if (this.enabled) {
+                player.jump();
+            }
         }
     }
     Jamble.JumpSkill = JumpSkill;
@@ -1452,8 +1456,14 @@ var Jamble;
         }
         useSkill(id, player) {
             const skill = this.equippedSkills.get(id);
-            if (skill) {
+            if (skill && skill.enabled !== false) {
                 skill.execute(player);
+            }
+        }
+        setSkillEnabled(id, enabled) {
+            const skill = this.equippedSkills.get(id);
+            if (skill) {
+                skill.enabled = enabled;
             }
         }
         getEquippedSkills() {
@@ -1503,8 +1513,6 @@ var Jamble;
             const pixelRatio = window.devicePixelRatio || 1;
             this.canvas.width = this.gameWidth * pixelRatio;
             this.canvas.height = this.gameHeight * pixelRatio;
-            this.canvas.style.width = this.gameWidth + 'px';
-            this.canvas.style.height = this.gameHeight + 'px';
             this.scaleX = pixelRatio;
             this.scaleY = pixelRatio;
             this.ctx.setTransform(this.scaleX, 0, 0, this.scaleY, 0, 0);
@@ -1799,6 +1807,8 @@ var Jamble;
                 for (const other of triggers) {
                     if (!other.collisionBox || other.collisionBox.enabled === false)
                         continue;
+                    if (other.id.includes('sensor') && other.isEnabled && !other.isEnabled())
+                        continue;
                     if (dyn === other)
                         continue;
                     if (this.aabbIntersects(dyn, other)) {
@@ -1989,11 +1999,10 @@ var Jamble;
 (function (Jamble) {
     class StateManager {
         constructor() {
-            this.currentState = 'idle';
+            this.currentState = 'transition';
             this.editorMode = 'none';
             this.stateStartTime = 0;
-            this.countdownDuration = 3000;
-            this.currentState = 'idle';
+            this.currentState = 'transition';
             this.stateStartTime = Date.now();
         }
         getCurrentState() {
@@ -2002,39 +2011,30 @@ var Jamble;
         getStateTime() {
             return Date.now() - this.stateStartTime;
         }
-        getCountdownTimeRemaining() {
-            if (this.currentState !== 'countdown')
-                return 0;
-            return Math.max(0, this.countdownDuration - this.getStateTime());
-        }
-        getCountdownSeconds() {
-            return Math.ceil(this.getCountdownTimeRemaining() / 1000);
+        isTransition() {
+            return this.currentState === 'transition';
         }
         isIdle() {
             return this.currentState === 'idle';
         }
-        isCountdown() {
-            return this.currentState === 'countdown';
-        }
         isRunning() {
             return this.currentState === 'run';
         }
-        startCountdown() {
-            if (this.currentState === 'idle') {
-                this.setState('countdown');
-                return true;
-            }
-            return false;
+        enterTransition() {
+            this.setState('transition');
+        }
+        enterIdle() {
+            this.setState('idle');
         }
         startRun() {
-            if (this.currentState === 'countdown') {
+            if (this.currentState === 'idle') {
                 this.setState('run');
                 return true;
             }
             return false;
         }
         returnToIdle() {
-            this.setState('idle');
+            this.enterTransition();
         }
         forceRunState() {
             this.setState('run');
@@ -2746,10 +2746,13 @@ var Jamble;
             return element;
         }
         setupInteraction() {
-            this.button.addEventListener('mousedown', () => this.handlePress());
-            this.button.addEventListener('mouseup', () => this.handleRelease());
-            this.button.addEventListener('mouseleave', () => this.handleRelease());
-            this.button.addEventListener('click', () => this.handleClick());
+            this.button.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                this.handlePress();
+                this.handleClick();
+            });
+            this.button.addEventListener('pointerup', () => this.handleRelease());
+            this.button.addEventListener('pointerleave', () => this.handleRelease());
         }
         handlePress() {
             if (this.usesRemaining > 0) {
@@ -2818,10 +2821,13 @@ var Jamble;
             return element;
         }
         setupInteraction() {
-            this.button.addEventListener('mousedown', () => this.handlePress());
-            this.button.addEventListener('mouseup', () => this.handleRelease());
-            this.button.addEventListener('mouseleave', () => this.handleRelease());
-            this.button.addEventListener('click', () => this.handleClick());
+            this.button.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                this.handlePress();
+                this.handleClick();
+            });
+            this.button.addEventListener('pointerup', () => this.handleRelease());
+            this.button.addEventListener('pointerleave', () => this.handleRelease());
         }
         handlePress() {
             if (this.usesRemaining > 0) {
@@ -2862,9 +2868,6 @@ var Jamble;
             return mode === 'tree-placement';
         }
         setEditMode(active) {
-            this.button.style.borderColor = active ? '#ff0000' : '';
-            this.button.style.borderWidth = active ? '2px' : '';
-            this.button.style.borderStyle = active ? 'solid' : '';
         }
     }
     TreeModule.MAX_USES = 2;
@@ -3026,15 +3029,16 @@ var Jamble;
             if (this.isVisible)
                 return;
             this.isVisible = true;
-            this.container.style.display = 'grid';
-            this.mountNode.appendChild(this.container);
+            if (!this.container.parentNode) {
+                this.mountNode.appendChild(this.container);
+            }
         }
         setupStyles() {
             const style = document.createElement('style');
             style.textContent = `
         .control-panel {
           position: relative;
-          display: grid;
+          display: none;
           grid-template-columns: repeat(4, 50px);
           grid-template-rows: repeat(2, 50px);
           gap: 12px;
@@ -3045,19 +3049,18 @@ var Jamble;
           box-sizing: border-box;
           justify-self: center;
           opacity: 0;
-          visibility: hidden;
-          transition: opacity 0.2s ease, visibility 0.2s ease;
+          transition: opacity 0.2s ease;
         }
 
         .control-panel.visible {
+          display: grid;
           opacity: 1;
-          visibility: visible;
         }
 
         /* Base module styles */
         .control-module {
           background: #fff;
-          border: 1px solid #ccc;
+          border: 2px dashed #2196f3;
           position: relative;
           display: flex;
           flex-direction: column;
@@ -3117,6 +3120,11 @@ var Jamble;
           transform: none;
         }
 
+        /* Fade module border when button is depleted */
+        .control-module:has(.module-button.depleted) {
+          opacity: 0.3;
+        }
+
         .module-uses {
           position: absolute;
           bottom: 4px;
@@ -3125,7 +3133,7 @@ var Jamble;
           font-weight: bold;
           color: #333;
           background: rgba(255, 255, 255, 0.9);
-          border: 1px solid #ccc;
+          border: 1px dashed #2196f3;
           padding: 2px 4px;
           min-width: 12px;
           text-align: center;
@@ -3135,6 +3143,7 @@ var Jamble;
         .module-slider {
           padding: 8px;
           gap: 4px;
+          border: 1px solid #ccc; /* Override blue dotted border with old border */
         }
 
         .module-label {
@@ -3158,7 +3167,7 @@ var Jamble;
           height: 4px;
           -webkit-appearance: none;
           appearance: none;
-          background: #d5d5d5;
+          background: #2196f3;
           outline: none;
           border-radius: 2px;
         }
@@ -3168,7 +3177,7 @@ var Jamble;
           appearance: none;
           width: 12px;
           height: 12px;
-          background: #666;
+          background: #2196f3;
           cursor: pointer;
           border-radius: 50%;
         }
@@ -3176,7 +3185,7 @@ var Jamble;
         .module-slider-input::-moz-range-thumb {
           width: 12px;
           height: 12px;
-          background: #666;
+          background: #2196f3;
           cursor: pointer;
           border-radius: 50%;
           border: none;
@@ -3220,7 +3229,9 @@ var Jamble;
             this.modules.forEach(module => module.update(deltaTime));
         }
         showPanel() {
-            this.container.classList.add('visible');
+            requestAnimationFrame(() => {
+                this.container.classList.add('visible');
+            });
         }
         hidePanel() {
             this.container.classList.remove('visible');
@@ -3275,6 +3286,105 @@ var Jamble;
 })(Jamble || (Jamble = {}));
 var Jamble;
 (function (Jamble) {
+    class JumpInstructionPanel extends Jamble.UIComponent {
+        constructor(parentContainer) {
+            super(parentContainer, { mountNode: parentContainer, autoReposition: false });
+            this.onJumpCallback = null;
+            this.setupStyles();
+            this.setupClickHandler();
+            this.mountNode.appendChild(this.container);
+        }
+        setupClickHandler() {
+            this.container.addEventListener('pointerdown', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (this.onJumpCallback && this.isVisible) {
+                    this.onJumpCallback();
+                }
+            });
+        }
+        setOnJump(callback) {
+            this.onJumpCallback = callback;
+        }
+        createContainer() {
+            const container = document.createElement('div');
+            container.id = 'jump-instruction-panel';
+            container.className = 'jump-instruction-panel';
+            container.style.position = 'relative';
+            container.textContent = 'TAP OR SPACE TO JUMP';
+            return container;
+        }
+        calculatePosition(_gameRect) {
+            return { left: 0, top: 0 };
+        }
+        show() {
+            if (this.isVisible)
+                return;
+            this.isVisible = true;
+            requestAnimationFrame(() => {
+                this.container.classList.add('visible');
+            });
+        }
+        hide() {
+            if (!this.isVisible)
+                return;
+            this.isVisible = false;
+            this.container.classList.remove('visible');
+        }
+        setupStyles() {
+            const style = document.createElement('style');
+            style.textContent = `
+        .jump-instruction-panel {
+          position: relative;
+          display: none;
+          align-items: center;
+          justify-content: center;
+          width: 252px;
+          height: 128px;
+          margin: 16px auto 0;
+          padding: 8px;
+          background: #fff;
+          border: 2px dashed #2196f3;
+          box-sizing: border-box;
+          font-size: 16px;
+          font-weight: bold;
+          color: #2196f3;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          opacity: 0;
+          transition: opacity 0.2s ease;
+          cursor: pointer;
+          user-select: none;
+        }
+
+        .jump-instruction-panel.visible {
+          display: flex;
+          opacity: 1;
+        }
+      `;
+            document.head.appendChild(style);
+        }
+        setStateManager(stateManager) {
+            this.stateManager = stateManager;
+        }
+        updateVisibility() {
+            if (!this.stateManager)
+                return;
+            const shouldBeVisible = this.stateManager.isRunning();
+            if (shouldBeVisible && !this.isVisible) {
+                this.show();
+            }
+            else if (!shouldBeVisible && this.isVisible) {
+                this.hide();
+            }
+        }
+        render() {
+        }
+    }
+    Jamble.JumpInstructionPanel = JumpInstructionPanel;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
     class HUDManager extends Jamble.UIComponent {
         constructor(gameElement, gameWidth, gameHeight) {
             const shell = gameElement.classList.contains('game-shell')
@@ -3285,7 +3395,9 @@ var Jamble;
             this.gameWidth = gameWidth;
             this.gameHeight = gameHeight;
             this.createHUDComponents();
+            this.createPanelWrapper();
             this.createControlPanel();
+            this.createJumpInstructionPanel();
             this.setupEditorModeListener();
             this.show();
         }
@@ -3322,14 +3434,42 @@ var Jamble;
         createHUDComponents() {
             const crescendoPanelWidth = Math.floor(this.portraitSize / 5);
             const portraitTotalWidth = this.portraitSize + 2;
-            const monitorWidth = this.gameWidth - portraitTotalWidth - crescendoPanelWidth;
+            const portraitGroupWidth = portraitTotalWidth + crescendoPanelWidth;
+            const monitorWidth = this.gameWidth - portraitGroupWidth;
             this.monitorPanel = new Jamble.MonitorPanel(this.container, monitorWidth, this.portraitSize);
-            this.crescendoPanel = new Jamble.CrescendoPanel(this.container, crescendoPanelWidth, this.portraitSize);
-            this.portraitPanel = new Jamble.PortraitPanel(this.container, this.portraitSize);
+            const portraitGroup = document.createElement('div');
+            portraitGroup.className = 'portrait-group';
+            portraitGroup.style.cssText = `
+        width: ${portraitGroupWidth}px;
+        height: ${this.portraitSize}px;
+        display: flex;
+        flex-direction: row;
+        align-items: stretch;
+        gap: 0;
+        flex-shrink: 0;
+        pointer-events: none;
+      `;
+            this.container.appendChild(portraitGroup);
+            this.crescendoPanel = new Jamble.CrescendoPanel(portraitGroup, crescendoPanelWidth, this.portraitSize);
+            this.portraitPanel = new Jamble.PortraitPanel(portraitGroup, this.portraitSize);
+        }
+        createPanelWrapper() {
+            const root = this.gameElement.parentElement || this.gameElement;
+            this.panelWrapper = document.createElement('div');
+            this.panelWrapper.style.cssText = `
+        position: relative;
+        width: 100%;
+        height: 144px;
+        margin: 0;
+        padding: 0;
+      `;
+            root.appendChild(this.panelWrapper);
         }
         createControlPanel() {
-            const root = this.gameElement.parentElement || this.gameElement;
-            this.controlPanel = new Jamble.ControlPanel(root);
+            this.controlPanel = new Jamble.ControlPanel(this.panelWrapper);
+        }
+        createJumpInstructionPanel() {
+            this.jumpInstructionPanel = new Jamble.JumpInstructionPanel(this.panelWrapper);
         }
         setupEditorModeListener() {
             window.addEventListener('jamble:editor-mode-change', ((e) => {
@@ -3338,6 +3478,12 @@ var Jamble;
                 this.monitorPanel.setDimmed(dimmed);
                 this.crescendoPanel.setDimmed(dimmed);
             }));
+        }
+        setScale(scale) {
+            this.container.style.transform = `scale(${scale})`;
+            this.container.style.transformOrigin = 'top left';
+            const scaledHeight = this.portraitSize * scale;
+            this.container.style.marginBottom = `${scaledHeight - this.portraitSize}px`;
         }
         update(deltaTime) {
             super.update(deltaTime);
@@ -3425,6 +3571,9 @@ var Jamble;
         }
         getControlPanel() {
             return this.controlPanel;
+        }
+        getJumpInstructionPanel() {
+            return this.jumpInstructionPanel;
         }
         recreateHUD() {
             if (this.container) {
@@ -3530,7 +3679,7 @@ var Jamble;
             this.collisionBox = {
                 x: 0,
                 y: 0,
-                width: 50,
+                width: 60,
                 height: 20,
                 anchor: { x: 0.5, y: 1 },
                 category: 'environment'
@@ -3548,6 +3697,7 @@ var Jamble;
             const initX = target ? target.transform.x + offsetX : offsetX;
             const initY = target ? target.transform.y + offsetY : offsetY;
             super(id, initX, initY);
+            this.enabled = true;
             this.target = target;
             this.offsetX = offsetX;
             this.offsetY = offsetY;
@@ -3572,6 +3722,12 @@ var Jamble;
                 this.collisionBox.width = width;
                 this.collisionBox.height = height;
             }
+        }
+        setEnabled(enabled) {
+            this.enabled = enabled;
+        }
+        isEnabled() {
+            return this.enabled;
         }
     }
     Jamble.Sensor = Sensor;
@@ -3639,7 +3795,7 @@ var Jamble;
     class TreePlacementOverlay {
         constructor(parent, slotManager, gameWidth, gameHeight) {
             this.isVisible = false;
-            this.circleRadius = 22;
+            this.circleRadius = 33;
             this.availableColor = '#4CAF50';
             this.occupiedColor = '#FF9800';
             this.strokeColor = '#ff0000';
@@ -3649,20 +3805,22 @@ var Jamble;
             this.gameWidth = gameWidth;
             this.gameHeight = gameHeight;
             this.canvas = document.createElement('canvas');
-            this.canvas.width = gameWidth;
-            this.canvas.height = gameHeight;
+            const dpr = window.devicePixelRatio || 1;
+            this.canvas.width = gameWidth * dpr;
+            this.canvas.height = gameHeight * dpr;
             this.canvas.style.cssText = `
         position: absolute;
         top: 0;
         left: 0;
-        width: ${gameWidth}px;
-        height: ${gameHeight}px;
+        width: 100%;
+        height: 100%;
         pointer-events: auto;
         cursor: pointer;
         display: none;
         z-index: 5;
       `;
             this.ctx = this.canvas.getContext('2d');
+            this.ctx.scale(dpr, dpr);
             parent.appendChild(this.canvas);
             this.canvas.addEventListener('click', (e) => this.handleClick(e));
         }
@@ -3699,24 +3857,24 @@ var Jamble;
         }
         drawHalfCircle(x, y, color) {
             this.ctx.save();
-            this.ctx.fillStyle = color;
-            this.ctx.globalAlpha = 0.6;
-            this.ctx.beginPath();
-            this.ctx.arc(x, y, this.circleRadius, Math.PI, 0, false);
-            this.ctx.closePath();
-            this.ctx.fill();
-            this.ctx.globalAlpha = 1.0;
-            this.ctx.strokeStyle = this.strokeColor;
-            this.ctx.lineWidth = this.strokeWidth;
+            const strokeColor = color === this.occupiedColor ? '#FF9800' : '#2196f3';
+            this.ctx.strokeStyle = strokeColor;
+            this.ctx.lineWidth = 2;
+            this.ctx.setLineDash([4, 4]);
             this.ctx.beginPath();
             this.ctx.arc(x, y, this.circleRadius, Math.PI, 0, false);
             this.ctx.stroke();
+            this.ctx.setLineDash([]);
             this.ctx.restore();
         }
         handleClick(event) {
             const rect = this.canvas.getBoundingClientRect();
-            const clickX = event.clientX - rect.left;
-            const clickY = event.clientY - rect.top;
+            const clickXScaled = event.clientX - rect.left;
+            const clickYScaled = event.clientY - rect.top;
+            const scaleX = this.gameWidth / rect.width;
+            const scaleY = this.gameHeight / rect.height;
+            const clickX = clickXScaled * scaleX;
+            const clickY = clickYScaled * scaleY;
             const groundSlots = this.slotManager.getSlotsByType('ground');
             for (const slot of groundSlots) {
                 const dx = clickX - slot.x;
@@ -3742,6 +3900,98 @@ var Jamble;
         }
     }
     Jamble.TreePlacementOverlay = TreePlacementOverlay;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
+    class TapIndicator {
+        constructor(canvasHost, gameWidth, gameHeight) {
+            this.circleRadius = 33;
+            this.visible = false;
+            this.playerX = 0;
+            this.playerY = 0;
+            this.gameWidth = gameWidth;
+            this.gameHeight = gameHeight;
+            this.canvas = document.createElement('canvas');
+            this.canvas.width = gameWidth;
+            this.canvas.height = gameHeight;
+            this.canvas.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: auto;
+        z-index: 5;
+      `;
+            const ctx = this.canvas.getContext('2d');
+            if (!ctx)
+                throw new Error('Could not get 2D context for tap indicator');
+            this.ctx = ctx;
+            canvasHost.appendChild(this.canvas);
+            this.canvas.addEventListener('click', this.handleClick.bind(this));
+        }
+        show(playerX, playerY) {
+            this.visible = true;
+            this.playerX = playerX;
+            this.playerY = playerY;
+            this.canvas.style.display = 'block';
+            this.render();
+        }
+        hide() {
+            this.visible = false;
+            this.canvas.style.display = 'none';
+            this.clear();
+        }
+        updatePosition(playerX, playerY) {
+            if (!this.visible)
+                return;
+            this.playerX = playerX;
+            this.playerY = playerY;
+        }
+        setOnTap(callback) {
+            this.onTapCallback = callback;
+        }
+        render() {
+            if (!this.visible)
+                return;
+            this.clear();
+            this.ctx.strokeStyle = '#2196f3';
+            this.ctx.lineWidth = 2;
+            this.ctx.setLineDash([4, 4]);
+            this.ctx.beginPath();
+            this.ctx.arc(this.playerX, this.playerY, this.circleRadius, 0, Math.PI * 2);
+            this.ctx.stroke();
+            this.ctx.setLineDash([]);
+        }
+        clear() {
+            this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+        }
+        handleClick(event) {
+            if (!this.visible || !this.onTapCallback)
+                return;
+            const rect = this.canvas.getBoundingClientRect();
+            const scaleX = this.gameWidth / rect.width;
+            const scaleY = this.gameHeight / rect.height;
+            const clickX = (event.clientX - rect.left) * scaleX;
+            const clickY = (event.clientY - rect.top) * scaleY;
+            const dx = clickX - this.playerX;
+            const dy = clickY - this.playerY;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance <= this.circleRadius) {
+                this.onTapCallback();
+            }
+        }
+        isVisible() {
+            return this.visible;
+        }
+        destroy() {
+            this.canvas.removeEventListener('click', this.handleClick.bind(this));
+            if (this.canvas.parentNode) {
+                this.canvas.parentNode.removeChild(this.canvas);
+            }
+        }
+    }
+    Jamble.TapIndicator = TapIndicator;
 })(Jamble || (Jamble = {}));
 var Jamble;
 (function (Jamble) {
@@ -3849,7 +4099,7 @@ var Jamble;
             this.gameWidth = 500;
             this.gameHeight = 100;
             try {
-                console.log('🎮 Jamble Game Initializing - Build: v2.0.333');
+                console.log('🎮 Jamble Game Initializing - Build: v2.0.400');
                 let options = {};
                 if (optionsOrContainer instanceof HTMLElement) {
                     options = { debug: true, container: optionsOrContainer };
@@ -3877,6 +4127,21 @@ var Jamble;
                 this.hudManager = new Jamble.HUDManager(this.gameShell, this.gameWidth, this.gameHeight);
                 this.hudManager.setStateManager(this.stateManager);
                 this.treePlacementOverlay = new Jamble.TreePlacementOverlay(this.canvasHost, this.slotManager, this.gameWidth, this.gameHeight);
+                this.tapIndicator = new Jamble.TapIndicator(this.canvasHost, this.gameWidth, this.gameHeight);
+                this.tapIndicator.setOnTap(() => {
+                    if (this.stateManager.isIdle()) {
+                        this.stateManager.startRun();
+                        this.tapIndicator.hide();
+                        this.skillManager.setSkillEnabled('jump', true);
+                    }
+                });
+                this.jumpInstructionPanel = this.hudManager.getJumpInstructionPanel();
+                this.jumpInstructionPanel.setStateManager(this.stateManager);
+                this.jumpInstructionPanel.setOnJump(() => {
+                    if (this.stateManager.isRunning() && this.skillManager.hasSkill('jump')) {
+                        this.skillManager.useSkill('jump', this.player);
+                    }
+                });
                 const debugContainer = options.container;
                 const debugRequested = (_a = options.debug) !== null && _a !== void 0 ? _a : Boolean(debugContainer);
                 if (debugRequested) {
@@ -3986,11 +4251,6 @@ var Jamble;
                 const { slotId } = e.detail;
                 this.removeTree(slotId);
             }));
-            this.inputManager.onKeyDown('KeyW', () => this.exitTreeEditModeOnPlayerInput());
-            this.inputManager.onKeyDown('KeyA', () => this.exitTreeEditModeOnPlayerInput());
-            this.inputManager.onKeyDown('KeyS', () => this.exitTreeEditModeOnPlayerInput());
-            this.inputManager.onKeyDown('KeyD', () => this.exitTreeEditModeOnPlayerInput());
-            this.inputManager.onKeyDown('Space', () => this.exitTreeEditModeOnPlayerInput());
         }
         enterTreeEditMode() {
             this.stateManager.enterTreePlacementMode();
@@ -4003,11 +4263,6 @@ var Jamble;
             this.treePlacementOverlay.hide();
             const treeModule = this.hudManager.getControlPanel().getModule('tree');
             treeModule.setEditMode(false);
-        }
-        exitTreeEditModeOnPlayerInput() {
-            if (this.stateManager.isInEditorMode()) {
-                this.exitTreeEditMode();
-            }
         }
         placeTree(slotId, x, y) {
             const treeModule = this.hudManager.getControlPanel().getModule('tree');
@@ -4038,7 +4293,8 @@ var Jamble;
         }
         setupGameElement() {
             this.gameShell.style.cssText = `
-        width: ${this.gameWidth}px;
+        width: 100%;
+        max-width: ${this.gameWidth}px;
         display: flex;
         flex-direction: column;
         gap: 8px;
@@ -4047,10 +4303,27 @@ var Jamble;
             this.canvasHost.style.cssText = `
         position: relative;
         width: 100%;
-        height: ${this.gameHeight}px;
+        aspect-ratio: ${this.gameWidth} / ${this.gameHeight};
         background: #e8f5e9;
         overflow: hidden;
       `;
+            this.setupResizeListener();
+            this.updateHUDScale();
+        }
+        calculateCanvasScale() {
+            const canvasRect = this.canvasHost.getBoundingClientRect();
+            const actualWidth = canvasRect.width;
+            const scaleX = actualWidth / this.gameWidth;
+            return scaleX;
+        }
+        updateHUDScale() {
+            const scale = this.calculateCanvasScale();
+            this.hudManager.setScale(scale);
+        }
+        setupResizeListener() {
+            window.addEventListener('resize', () => {
+                this.updateHUDScale();
+            });
         }
         createPlayer() {
             this.player = new Jamble.Player(50, 0);
@@ -4061,17 +4334,26 @@ var Jamble;
             const lowAirSlots = this.slotManager.getAvailableSlots('air_low');
             if (groundSlots.length > 0) {
                 const homeSlot = groundSlots[0];
-                const home = new Jamble.Home('home', homeSlot.x, homeSlot.y);
-                this.gameObjects.push(home);
-                this.slotManager.occupySlot(homeSlot.id, home.id);
-                const homeSensor = new Jamble.Sensor('home-sensor', home, 0, -20);
-                homeSensor.setTriggerSize(70, 10);
-                homeSensor.onTriggerEnter = (other) => {
+                this.home = new Jamble.Home('home', homeSlot.x, homeSlot.y);
+                this.gameObjects.push(this.home);
+                this.slotManager.occupySlot(homeSlot.id, this.home.id);
+                this.homeSensor = new Jamble.Sensor('home-sensor', this.home, 0, -20);
+                this.homeSensor.setTriggerSize(30, 10);
+                this.homeSensor.onTriggerEnter = (other) => {
                     if (other.id === 'player') {
-                        this.stateManager.returnToIdle();
+                        if (this.stateManager.isTransition() && this.player.velocityX === 0) {
+                            this.stateManager.enterIdle();
+                            this.homeSensor.setEnabled(false);
+                            this.skillManager.setSkillEnabled('jump', false);
+                        }
+                        else if (!this.stateManager.isTransition() && !this.stateManager.isIdle()) {
+                            this.stateManager.enterTransition();
+                            this.homeSensor.setEnabled(false);
+                            this.skillManager.setSkillEnabled('jump', false);
+                        }
                     }
                 };
-                this.gameObjects.push(homeSensor);
+                this.gameObjects.push(this.homeSensor);
             }
             const availableGroundSlots = this.slotManager.getAvailableSlots('ground');
             if (availableGroundSlots.length > 3) {
@@ -4087,14 +4369,14 @@ var Jamble;
                 this.gameObjects.push(platform);
                 this.slotManager.occupySlot(platformSlot.id, platform.id);
             }
-            const groundSensor = new Jamble.Sensor('ground-sensor', undefined, this.gameWidth / 2, this.gameHeight - 5);
-            groundSensor.setTriggerSize(this.gameWidth, 5);
-            groundSensor.onTriggerEnter = (other) => {
-                if (other.id === 'player') {
-                    this.stateManager.forceRunState();
+            this.groundSensor = new Jamble.Sensor('ground-sensor', undefined, this.gameWidth / 2, this.gameHeight - 5);
+            this.groundSensor.setTriggerSize(this.gameWidth, 5);
+            this.groundSensor.onTriggerEnter = (other) => {
+                if (other.id === 'player' && this.stateManager.isRunning()) {
+                    this.homeSensor.setEnabled(true);
                 }
             };
-            this.gameObjects.push(groundSensor);
+            this.gameObjects.push(this.groundSensor);
         }
         setupInput() {
             this.inputManager.onKeyDown('Space', () => {
@@ -4102,24 +4384,37 @@ var Jamble;
                     this.skillManager.useSkill('jump', this.player);
                 }
             });
+            this.canvasHost.addEventListener('pointerdown', (e) => {
+                if (this.stateManager.isRunning() && this.skillManager.hasSkill('jump')) {
+                    e.preventDefault();
+                    this.skillManager.useSkill('jump', this.player);
+                }
+            });
         }
         handleInput() {
             if (!this.skillManager.hasSkill('move'))
                 return;
-            if (this.stateManager.isRunning()) {
+            if (this.stateManager.isTransition()) {
+                this.handleTransitionState();
+            }
+            else if (this.stateManager.isRunning()) {
                 this.player.startAutoRun();
             }
             else if (this.stateManager.isIdle()) {
                 this.player.stopAutoRun();
-                if (this.inputManager.isMovingLeft()) {
-                    this.player.moveLeft();
-                }
-                else if (this.inputManager.isMovingRight()) {
-                    this.player.moveRight();
-                }
-                else {
-                    this.player.stopMoving();
-                }
+                this.player.stopMoving();
+            }
+        }
+        handleTransitionState() {
+            if (!this.home || !this.player)
+                return;
+            const homeX = this.home.transform.x;
+            const playerX = this.player.transform.x;
+            const threshold = 2;
+            if (Math.abs(playerX - homeX) < threshold) {
+                this.player.stopMoving();
+                this.stateManager.enterIdle();
+                return;
             }
         }
         update(deltaTime) {
@@ -4131,12 +4426,30 @@ var Jamble;
                 this.debugSystem.update();
             }
             this.hudManager.updateControlPanel();
+            this.jumpInstructionPanel.updateVisibility();
             this.hudManager.update(deltaTime);
+            if (this.stateManager.isIdle() && !this.stateManager.isInEditorMode()) {
+                const playerCenterY = this.player.transform.y - 10;
+                if (!this.tapIndicator.isVisible()) {
+                    this.tapIndicator.show(this.player.transform.x, playerCenterY);
+                }
+                else {
+                    this.tapIndicator.updatePosition(this.player.transform.x, playerCenterY);
+                }
+            }
+            else {
+                if (this.tapIndicator.isVisible()) {
+                    this.tapIndicator.hide();
+                }
+            }
         }
         render() {
             this.renderer.render(this.gameObjects);
             this.debugRenderer.render(this.gameObjects, this.debugSystem ? this.debugSystem.getShowColliders() : false, this.debugSystem ? this.debugSystem.getShowOrigins() : false, this.debugSystem ? this.debugSystem.getShowSlots() : false, this.slotManager.getAllSlots());
             this.hudManager.render();
+            if (this.tapIndicator.isVisible()) {
+                this.tapIndicator.render();
+            }
         }
         start() {
             const gameLoop = (currentTime) => {
@@ -4670,6 +4983,6 @@ var Jamble;
             return this.showSlots;
         }
     }
-    DebugSystem.BUILD_VERSION = "v2.0.333";
+    DebugSystem.BUILD_VERSION = "v2.0.400";
     Jamble.DebugSystem = DebugSystem;
 })(Jamble || (Jamble = {}));

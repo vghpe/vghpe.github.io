@@ -1,13 +1,25 @@
 <div class="jamble-embed" style="margin: 1rem 0;">
-  <div id="jamble-game"></div>
+  <div class="jamble-game-wrapper">
+    <div id="jamble-game"></div>
+  </div>
 </div>
 
 <script src="{{ "games/jamble/jamble.js" | relURL }}" defer></script>
-<script>
+<script defer>
 (function () {
   function initJamble() {
     var el = document.getElementById('jamble-game');
-    if (!el || !(window.Jamble && Jamble.Game)) return;
+    if (!el) {
+      console.warn('Jamble container not found');
+      return;
+    }
+    
+    if (!(window.Jamble && Jamble.Game)) {
+      console.warn('Jamble not loaded yet, retrying...');
+      setTimeout(initJamble, 50);
+      return;
+    }
+    
     try {
       var game = new Jamble.Game(el);
       game.start();
@@ -15,6 +27,7 @@
       console.error('Failed to start Jamble', e);
     }
   }
+  
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initJamble, { once: true });
   } else {
