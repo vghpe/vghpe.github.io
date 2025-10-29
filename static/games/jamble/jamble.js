@@ -1477,6 +1477,7 @@ var Jamble;
     class CanvasRenderer {
         constructor(gameElement, gameWidth, gameHeight) {
             this.backgroundColor = '#e8f5e9';
+            this.backgroundAlpha = 1.0;
             this.scaleX = 1;
             this.scaleY = 1;
             this.gameWidth = gameWidth;
@@ -1497,12 +1498,12 @@ var Jamble;
         image-rendering: pixelated;
         image-rendering: -moz-crisp-edges;
         image-rendering: crisp-edges;
-        z-index: 1;
+        z-index: 3;
       `;
             gameElement.appendChild(this.canvas);
         }
         setupContext() {
-            const ctx = this.canvas.getContext('2d', { alpha: false });
+            const ctx = this.canvas.getContext('2d', { alpha: true });
             if (!ctx) {
                 throw new Error('Could not get 2D canvas context');
             }
@@ -1518,13 +1519,23 @@ var Jamble;
             this.ctx.setTransform(this.scaleX, 0, 0, this.scaleY, 0, 0);
             this.ctx.imageSmoothingEnabled = false;
         }
+        setBackgroundAlpha(alpha) {
+            this.backgroundAlpha = Math.max(0, Math.min(1, alpha));
+        }
         render(gameObjects) {
+            this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+            this.ctx.save();
+            this.ctx.globalAlpha = this.backgroundAlpha;
             this.ctx.fillStyle = this.backgroundColor;
             this.ctx.fillRect(0, 0, this.gameWidth, this.gameHeight);
+            this.ctx.restore();
             gameObjects.forEach(obj => {
                 if (!obj.render.visible)
                     return;
                 this.ctx.save();
+                if (obj.render.opacity !== undefined) {
+                    this.ctx.globalAlpha = obj.render.opacity;
+                }
                 this.applyTransform(obj);
                 this.renderCanvasObject(obj);
                 this.ctx.restore();
@@ -1532,8 +1543,8 @@ var Jamble;
         }
         applyTransform(obj) {
             var _a, _b, _c, _d;
-            const x = Math.round(obj.transform.x);
-            const y = Math.round(obj.transform.y);
+            const x = obj.transform.x;
+            const y = obj.transform.y;
             const width = obj.render.canvas.width || 20;
             const height = obj.render.canvas.height || 20;
             const anchorX = ((_b = (_a = obj.render.anchor) === null || _a === void 0 ? void 0 : _a.x) !== null && _b !== void 0 ? _b : 0.5) * width;
@@ -2147,6 +2158,7 @@ var Jamble;
     class PortraitPanel {
         constructor(parent, size) {
             this.currentExpression = null;
+            this.npc = null;
             this.size = size;
             this.canvas = document.createElement('canvas');
             this.canvas.width = size;
@@ -2167,6 +2179,9 @@ var Jamble;
         setExpression(expression) {
             this.currentExpression = expression;
         }
+        setNPC(npc) {
+            this.npc = npc;
+        }
         showPainFeedback() {
         }
         update(deltaTime) {
@@ -2185,6 +2200,16 @@ var Jamble;
             this.ctx.textAlign = 'center';
             this.ctx.textBaseline = 'middle';
             this.ctx.fillText(emoji, size / 2, size / 2);
+            if (this.npc) {
+                const fontSize = 8;
+                const padding = 8;
+                this.ctx.font = `${fontSize}px monospace`;
+                this.ctx.fillStyle = '#666';
+                this.ctx.textBaseline = 'top';
+                const clientName = this.npc.getName();
+                this.ctx.textAlign = 'center';
+                this.ctx.fillText(`Client ID: ${clientName}`, size / 2, size - padding);
+            }
         }
         setDimmed(dimmed) {
             this.canvas.style.opacity = dimmed ? '0.5' : '1';
@@ -2599,6 +2624,11 @@ var Jamble;
     class CrescendoPanel {
         constructor(parent, width, height) {
             this.currentValue = 0.1;
+            this.pulsePhase = 0;
+            this.wavePhase = 0;
+            this.waveSpeed = 15;
+            this.waveFrequency = 0.9;
+            this.waveAmplitude = 0.5;
             this.width = width;
             this.height = height;
             this.container = document.createElement('div');
@@ -2610,23 +2640,44 @@ var Jamble;
         border-right: none;
         box-sizing: border-box;
         position: relative;
-        overflow: hidden;
+        overflow: visible;
       `;
-            this.fillBar = document.createElement('div');
-            this.fillBar.style.cssText = `
+            const heartSize = Math.round(width * 1.5);
+            this.heartCanvas = document.createElement('canvas');
+            this.heartCanvas.width = heartSize;
+            this.heartCanvas.height = heartSize;
+            this.heartCanvas.style.cssText = `
+        position: absolute;
+        top: -${heartSize * 1.1}px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: ${heartSize}px;
+        height: ${heartSize}px;
+        pointer-events: none;
+      `;
+            const dpr = window.devicePixelRatio || 1;
+            this.heartCanvas.width = heartSize * dpr;
+            this.heartCanvas.height = heartSize * dpr;
+            this.heartCtx = this.heartCanvas.getContext('2d');
+            this.heartCtx.scale(dpr, dpr);
+            this.fillCanvas = document.createElement('canvas');
+            this.fillCanvas.width = width;
+            this.fillCanvas.height = height;
+            this.fillCanvas.style.cssText = `
         position: absolute;
         bottom: 0;
         left: 0;
-        width: 100%;
-        height: ${(this.currentValue * 100).toFixed(2)}%;
-        background: linear-gradient(to top, 
-          hsl(350, 80%, 50%) 0%,
-          hsl(350, 80%, 60%) 50%,
-          hsl(350, 80%, 70%) 100%
-        );
-        transition: height 0.1s ease-out;
+        width: ${width}px;
+        height: ${height}px;
+        pointer-events: none;
       `;
-            this.container.appendChild(this.fillBar);
+            const fillDpr = window.devicePixelRatio || 1;
+            this.fillCanvas.width = width * fillDpr;
+            this.fillCanvas.height = height * fillDpr;
+            this.fillCtx = this.fillCanvas.getContext('2d');
+            this.fillCtx.scale(fillDpr, fillDpr);
+            this.container.appendChild(this.fillCanvas);
+            this.container.appendChild(this.heartCanvas);
             parent.appendChild(this.container);
         }
         setValue(value) {
@@ -2636,24 +2687,78 @@ var Jamble;
         getValue() {
             return this.currentValue;
         }
-        updateDisplay() {
-            const displayValue = Math.max(0.1, this.currentValue);
-            const heightPercent = (displayValue * 100).toFixed(2);
-            this.fillBar.style.height = `${heightPercent}%`;
-            if (this.currentValue >= 1.0) {
-                this.fillBar.style.background = `linear-gradient(to top, 
-          hsl(350, 90%, 55%) 0%,
-          hsl(350, 90%, 65%) 50%,
-          hsl(350, 90%, 75%) 100%
-        )`;
+        update(deltaTime) {
+            this.wavePhase += deltaTime * this.waveSpeed;
+            const wavelength = this.width / this.waveFrequency;
+            if (this.wavePhase > wavelength) {
+                this.wavePhase -= wavelength;
             }
+        }
+        render() {
+            const fillWidth = this.fillCanvas.width / (window.devicePixelRatio || 1);
+            const fillHeight = this.fillCanvas.height / (window.devicePixelRatio || 1);
+            this.fillCtx.clearRect(0, 0, fillWidth, fillHeight);
+            if (this.currentValue <= 0)
+                return;
+            const displayValue = Math.max(0.1, this.currentValue);
+            const targetHeight = fillHeight * displayValue;
+            const gradient = this.fillCtx.createLinearGradient(0, fillHeight, 0, fillHeight - targetHeight);
+            if (this.currentValue >= 1.0) {
+                gradient.addColorStop(0, 'hsl(350, 90%, 55%)');
+                gradient.addColorStop(0.5, 'hsl(350, 90%, 65%)');
+                gradient.addColorStop(1, 'hsl(350, 90%, 75%)');
+            }
+            else {
+                gradient.addColorStop(0, 'hsl(350, 80%, 50%)');
+                gradient.addColorStop(0.5, 'hsl(350, 80%, 60%)');
+                gradient.addColorStop(1, 'hsl(350, 80%, 70%)');
+            }
+            this.fillCtx.save();
+            this.fillCtx.beginPath();
+            this.fillCtx.moveTo(0, fillHeight);
+            this.fillCtx.lineTo(0, fillHeight - targetHeight + this.waveAmplitude);
+            const wavePoints = Math.ceil(fillWidth) + 1;
+            for (let x = 0; x <= wavePoints; x++) {
+                const xPos = x;
+                const phase = ((x + this.wavePhase) / fillWidth) * Math.PI * 2 * this.waveFrequency;
+                const yOffset = Math.sin(phase) * this.waveAmplitude;
+                const yPos = fillHeight - targetHeight + yOffset;
+                this.fillCtx.lineTo(xPos, yPos);
+            }
+            this.fillCtx.lineTo(fillWidth, fillHeight);
+            this.fillCtx.closePath();
+            this.fillCtx.clip();
+            this.fillCtx.fillStyle = gradient;
+            this.fillCtx.fillRect(0, 0, fillWidth, fillHeight);
+            this.fillCtx.restore();
+        }
+        updateDisplay() {
         }
         resize(width, height) {
             this.width = width;
             this.height = height;
             this.container.style.width = `${width}px`;
             this.container.style.height = `${height}px`;
+            const heartSize = Math.round(width * 1.0);
+            const dpr = window.devicePixelRatio || 1;
+            this.heartCanvas.width = heartSize * dpr;
+            this.heartCanvas.height = heartSize * dpr;
+            this.heartCanvas.style.width = `${heartSize}px`;
+            this.heartCanvas.style.height = `${heartSize}px`;
+            this.heartCanvas.style.top = `-${heartSize * 1.1}px`;
+            this.heartCtx.scale(dpr, dpr);
+            this.fillCanvas.width = width * dpr;
+            this.fillCanvas.height = height * dpr;
+            this.fillCanvas.style.width = `${width}px`;
+            this.fillCanvas.style.height = `${height}px`;
+            this.fillCtx.scale(dpr, dpr);
         }
+        getWaveSpeed() { return this.waveSpeed; }
+        setWaveSpeed(value) { this.waveSpeed = value; }
+        getWaveFrequency() { return this.waveFrequency; }
+        setWaveFrequency(value) { this.waveFrequency = value; }
+        getWaveAmplitude() { return this.waveAmplitude; }
+        setWaveAmplitude(value) { this.waveAmplitude = value; }
         destroy() {
             if (this.container.parentElement) {
                 this.container.parentElement.removeChild(this.container);
@@ -3460,7 +3565,7 @@ var Jamble;
         position: relative;
         width: 100%;
         height: 144px;
-        margin: 0;
+        margin-top: 35px;
         padding: 0;
       `;
             root.appendChild(this.panelWrapper);
@@ -3490,6 +3595,7 @@ var Jamble;
             if (this.isVisible) {
                 this.portraitPanel.update(deltaTime);
                 this.monitorPanel.update(deltaTime);
+                this.crescendoPanel.update(deltaTime);
             }
             this.controlPanel.update(deltaTime);
         }
@@ -3497,6 +3603,7 @@ var Jamble;
             if (this.isVisible) {
                 this.portraitPanel.render();
                 this.monitorPanel.render();
+                this.crescendoPanel.render();
             }
             this.controlPanel.render();
         }
@@ -3505,6 +3612,9 @@ var Jamble;
         }
         setPortraitExpression(expression) {
             this.portraitPanel.setExpression(expression);
+        }
+        setNPC(npc) {
+            this.portraitPanel.setNPC(npc);
         }
         getPortraitSize() {
             return this.portraitSize;
@@ -3590,7 +3700,7 @@ var Jamble;
                 controls: [
                     {
                         type: 'checkbox',
-                        label: 'Show Sensation Thresholds',
+                        label: 'Sensation Thresholds',
                         getValue: () => this.getSensationDebugMode(),
                         setValue: (value) => this.setSensationDebugMode(value)
                     },
@@ -3623,7 +3733,7 @@ var Jamble;
                     },
                     {
                         type: 'slider',
-                        label: 'Wave Frequency',
+                        label: 'Wave Freq',
                         min: 0.05,
                         max: 5,
                         step: 0.05,
@@ -3632,7 +3742,7 @@ var Jamble;
                     },
                     {
                         type: 'slider',
-                        label: 'Wave Amplitude',
+                        label: 'Wave Amp',
                         min: 0.05,
                         max: 0.45,
                         step: 0.05,
@@ -3647,6 +3757,33 @@ var Jamble;
                         step: 0.05,
                         getValue: () => this.monitorPanel.getSmoothing(),
                         setValue: (value) => this.setActivitySmoothing(value)
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Crescendo Speed',
+                        min: 0,
+                        max: 100,
+                        step: 5,
+                        getValue: () => this.crescendoPanel.getWaveSpeed(),
+                        setValue: (value) => this.crescendoPanel.setWaveSpeed(value)
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Crescendo Freq',
+                        min: 0.1,
+                        max: 2.0,
+                        step: 0.1,
+                        getValue: () => this.crescendoPanel.getWaveFrequency(),
+                        setValue: (value) => this.crescendoPanel.setWaveFrequency(value)
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Crescendo Amp',
+                        min: 0,
+                        max: 10,
+                        step: 0.5,
+                        getValue: () => this.crescendoPanel.getWaveAmplitude(),
+                        setValue: (value) => this.crescendoPanel.setWaveAmplitude(value)
                     }
                 ]
             };
@@ -3794,6 +3931,7 @@ var Jamble;
 (function (Jamble) {
     class TreePlacementOverlay {
         constructor(parent, slotManager, gameWidth, gameHeight) {
+            this.overlayPadding = 40;
             this.isVisible = false;
             this.circleRadius = 33;
             this.availableColor = '#4CAF50';
@@ -3804,16 +3942,32 @@ var Jamble;
             this.slotManager = slotManager;
             this.gameWidth = gameWidth;
             this.gameHeight = gameHeight;
-            this.canvas = document.createElement('canvas');
+            this.backgroundCanvas = document.createElement('canvas');
             const dpr = window.devicePixelRatio || 1;
+            this.backgroundCanvas.width = gameWidth * dpr;
+            this.backgroundCanvas.height = (gameHeight + this.overlayPadding) * dpr;
+            this.backgroundCanvas.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: calc(100% + ${this.overlayPadding}px);
+        pointer-events: none;
+        display: none;
+        z-index: 2;
+      `;
+            this.backgroundCtx = this.backgroundCanvas.getContext('2d');
+            this.backgroundCtx.scale(dpr, dpr);
+            parent.appendChild(this.backgroundCanvas);
+            this.canvas = document.createElement('canvas');
             this.canvas.width = gameWidth * dpr;
-            this.canvas.height = gameHeight * dpr;
+            this.canvas.height = (gameHeight + this.overlayPadding) * dpr;
             this.canvas.style.cssText = `
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
+        height: calc(100% + ${this.overlayPadding}px);
         pointer-events: auto;
         cursor: pointer;
         display: none;
@@ -3827,11 +3981,13 @@ var Jamble;
         show() {
             this.isVisible = true;
             this.canvas.style.display = 'block';
+            this.backgroundCanvas.style.display = 'block';
             this.render();
         }
         hide() {
             this.isVisible = false;
             this.canvas.style.display = 'none';
+            this.backgroundCanvas.style.display = 'none';
         }
         setSlotOccupied(slotId, occupied) {
             if (occupied) {
@@ -3844,25 +4000,57 @@ var Jamble;
                 this.render();
             }
         }
+        drawAllSlotIndicators() {
+            const allSlotTypes = ['ceiling', 'air_high', 'air_mid', 'air_low', 'ground'];
+            const smallCircleRadius = 3;
+            const blueColor = '#2196f3';
+            const grayColor = '#cccccc';
+            this.backgroundCtx.clearRect(0, 0, this.gameWidth, this.gameHeight + this.overlayPadding);
+            allSlotTypes.forEach(slotType => {
+                const slots = this.slotManager.getSlotsByType(slotType);
+                slots.forEach(slot => {
+                    const isOccupiedByTree = this.occupiedSlotIds.has(slot.id);
+                    const isAvailableForTree = slotType === 'ground' && (!slot.occupied || isOccupiedByTree);
+                    if (isAvailableForTree) {
+                        this.ctx.save();
+                        this.ctx.fillStyle = blueColor;
+                        this.ctx.beginPath();
+                        this.ctx.arc(slot.x, slot.y, smallCircleRadius, 0, Math.PI * 2);
+                        this.ctx.fill();
+                        this.ctx.restore();
+                    }
+                    else {
+                        this.backgroundCtx.save();
+                        this.backgroundCtx.fillStyle = grayColor;
+                        this.backgroundCtx.beginPath();
+                        this.backgroundCtx.arc(slot.x, slot.y, smallCircleRadius, 0, Math.PI * 2);
+                        this.backgroundCtx.fill();
+                        this.backgroundCtx.restore();
+                    }
+                });
+            });
+        }
         render() {
-            this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+            this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight + this.overlayPadding);
+            this.drawAllSlotIndicators();
             const groundSlots = this.slotManager.getSlotsByType('ground');
             groundSlots.forEach(slot => {
                 const isOccupiedByTree = this.occupiedSlotIds.has(slot.id);
                 if (!slot.occupied || isOccupiedByTree) {
                     const color = isOccupiedByTree ? this.occupiedColor : this.availableColor;
-                    this.drawHalfCircle(slot.x, slot.y, color);
+                    const offsetY = slot.y - 0;
+                    this.drawFullCircle(slot.x, offsetY, color);
                 }
             });
         }
-        drawHalfCircle(x, y, color) {
+        drawFullCircle(x, y, color) {
             this.ctx.save();
             const strokeColor = color === this.occupiedColor ? '#FF9800' : '#2196f3';
             this.ctx.strokeStyle = strokeColor;
             this.ctx.lineWidth = 2;
             this.ctx.setLineDash([4, 4]);
             this.ctx.beginPath();
-            this.ctx.arc(x, y, this.circleRadius, Math.PI, 0, false);
+            this.ctx.arc(x, y, this.circleRadius, 0, Math.PI * 2, false);
             this.ctx.stroke();
             this.ctx.setLineDash([]);
             this.ctx.restore();
@@ -3872,7 +4060,7 @@ var Jamble;
             const clickXScaled = event.clientX - rect.left;
             const clickYScaled = event.clientY - rect.top;
             const scaleX = this.gameWidth / rect.width;
-            const scaleY = this.gameHeight / rect.height;
+            const scaleY = (this.gameHeight + this.overlayPadding) / rect.height;
             const clickX = clickXScaled * scaleX;
             const clickY = clickYScaled * scaleY;
             const groundSlots = this.slotManager.getSlotsByType('ground');
@@ -3897,6 +4085,9 @@ var Jamble;
             if (this.canvas.parentElement) {
                 this.canvas.parentElement.removeChild(this.canvas);
             }
+            if (this.backgroundCanvas.parentElement) {
+                this.backgroundCanvas.parentElement.removeChild(this.backgroundCanvas);
+            }
         }
     }
     Jamble.TreePlacementOverlay = TreePlacementOverlay;
@@ -3905,6 +4096,7 @@ var Jamble;
 (function (Jamble) {
     class TapIndicator {
         constructor(canvasHost, gameWidth, gameHeight) {
+            this.overlayPadding = 40;
             this.circleRadius = 33;
             this.visible = false;
             this.playerX = 0;
@@ -3912,14 +4104,15 @@ var Jamble;
             this.gameWidth = gameWidth;
             this.gameHeight = gameHeight;
             this.canvas = document.createElement('canvas');
-            this.canvas.width = gameWidth;
-            this.canvas.height = gameHeight;
+            const dpr = window.devicePixelRatio || 1;
+            this.canvas.width = gameWidth * dpr;
+            this.canvas.height = (gameHeight + this.overlayPadding) * dpr;
             this.canvas.style.cssText = `
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
-        height: 100%;
+        height: calc(100% + ${this.overlayPadding}px);
         pointer-events: auto;
         z-index: 5;
       `;
@@ -3927,6 +4120,7 @@ var Jamble;
             if (!ctx)
                 throw new Error('Could not get 2D context for tap indicator');
             this.ctx = ctx;
+            this.ctx.scale(dpr, dpr);
             canvasHost.appendChild(this.canvas);
             this.canvas.addEventListener('click', this.handleClick.bind(this));
         }
@@ -3964,14 +4158,14 @@ var Jamble;
             this.ctx.setLineDash([]);
         }
         clear() {
-            this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+            this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight + this.overlayPadding);
         }
         handleClick(event) {
             if (!this.visible || !this.onTapCallback)
                 return;
             const rect = this.canvas.getBoundingClientRect();
             const scaleX = this.gameWidth / rect.width;
-            const scaleY = this.gameHeight / rect.height;
+            const scaleY = (this.gameHeight + this.overlayPadding) / rect.height;
             const clickX = (event.clientX - rect.left) * scaleX;
             const clickY = (event.clientY - rect.top) * scaleY;
             const dx = clickX - this.playerX;
@@ -4099,7 +4293,7 @@ var Jamble;
             this.gameWidth = 500;
             this.gameHeight = 100;
             try {
-                console.log('🎮 Jamble Game Initializing - Build: v2.0.400');
+                console.log('🎮 Jamble Game Initializing - Build: v2.0.461');
                 let options = {};
                 if (optionsOrContainer instanceof HTMLElement) {
                     options = { debug: true, container: optionsOrContainer };
@@ -4112,9 +4306,17 @@ var Jamble;
                 this.gameShell = document.createElement('div');
                 this.gameShell.className = 'game-shell';
                 this.rootElement.appendChild(this.gameShell);
+                const canvasWrapper = document.createElement('div');
+                canvasWrapper.className = 'canvas-wrapper';
+                canvasWrapper.style.cssText = `
+          position: relative;
+          width: 100%;
+          overflow: visible;
+        `;
+                this.gameShell.appendChild(canvasWrapper);
                 this.canvasHost = document.createElement('div');
                 this.canvasHost.className = 'game-canvas';
-                this.gameShell.appendChild(this.canvasHost);
+                canvasWrapper.appendChild(this.canvasHost);
                 this.renderer = new Jamble.CanvasRenderer(this.canvasHost, this.gameWidth, this.gameHeight);
                 this.debugRenderer = new Jamble.DebugRenderer(this.canvasHost);
                 this.stateManager = new Jamble.StateManager();
@@ -4126,6 +4328,7 @@ var Jamble;
                 this.collisionManager = new Jamble.CollisionManager(this.gameWidth, this.gameHeight);
                 this.hudManager = new Jamble.HUDManager(this.gameShell, this.gameWidth, this.gameHeight);
                 this.hudManager.setStateManager(this.stateManager);
+                this.hudManager.setNPC(this.activeNPC);
                 this.treePlacementOverlay = new Jamble.TreePlacementOverlay(this.canvasHost, this.slotManager, this.gameWidth, this.gameHeight);
                 this.tapIndicator = new Jamble.TapIndicator(this.canvasHost, this.gameWidth, this.gameHeight);
                 this.tapIndicator.setOnTap(() => {
@@ -4299,16 +4502,23 @@ var Jamble;
         flex-direction: column;
         gap: 8px;
         margin: 0 auto;
+        overflow: visible;
       `;
             this.canvasHost.style.cssText = `
         position: relative;
         width: 100%;
         aspect-ratio: ${this.gameWidth} / ${this.gameHeight};
-        background: #e8f5e9;
         overflow: hidden;
       `;
             this.setupResizeListener();
             this.updateHUDScale();
+            window.addEventListener('jamble:editor-mode-change', ((e) => {
+                const dimmed = e.detail.mode !== 'none';
+                const alpha = dimmed ? 0.2 : 1.0;
+                console.log('Editor mode changed:', e.detail.mode, 'Setting alpha to:', alpha);
+                this.player.render.opacity = alpha;
+                this.renderer.setBackgroundAlpha(alpha);
+            }));
         }
         calculateCanvasScale() {
             const canvasRect = this.canvasHost.getBoundingClientRect();
@@ -4453,7 +4663,7 @@ var Jamble;
         }
         start() {
             const gameLoop = (currentTime) => {
-                const deltaTime = this.lastTime ? (currentTime - this.lastTime) / 1000 : 0;
+                const deltaTime = this.lastTime ? Math.min((currentTime - this.lastTime) / 1000, 0.1) : 0;
                 this.lastTime = currentTime;
                 this.update(deltaTime);
                 this.render();
@@ -4513,7 +4723,7 @@ var Jamble;
                 const style = document.createElement('style');
                 style.textContent = `
           .debug-container {
-            padding: 16px;
+            padding: 0;
             font-family: system-ui, sans-serif;
             font-size: 14px;
             background-color: #f8f9fa;
@@ -4524,9 +4734,10 @@ var Jamble;
           .debug-header {
             background: #fff;
             padding: 12px 16px;
-            border-radius: 8px;
-            border: 1px solid #dee2e6;
-            margin-bottom: 12px;
+            border-radius: 0;
+            border: none;
+            border-bottom: 1px solid #dee2e6;
+            margin-bottom: 0;
           }
           
     
@@ -4552,15 +4763,16 @@ var Jamble;
           
           .debug-section {
             background: #fff;
-            border: 1px solid #dee2e6;
-            border-radius: 8px;
+            border: none;
+            border-bottom: 1px solid #dee2e6;
+            border-radius: 0;
             overflow: hidden;
-            margin-bottom: 12px;
+            margin-bottom: 0;
           }
           
           .section-header {
             background: #f8f9fa;
-            padding: 12px 16px;
+            padding: 10px 16px;
             font-weight: 600;
             border-bottom: 1px solid #dee2e6;
             color: #212529;
@@ -4568,6 +4780,7 @@ var Jamble;
             user-select: none;
             position: relative;
             transition: background 0.2s;
+            font-size: 13px;
           }
           
           .section-header:hover {
@@ -4587,7 +4800,7 @@ var Jamble;
           }
           
           .section-content {
-            padding: 16px;
+            padding: 12px 16px;
             transition: max-height 0.3s ease-out, padding 0.3s ease-out;
             max-height: 1000px;
             overflow: hidden;
@@ -4597,40 +4810,47 @@ var Jamble;
             max-height: 0;
             padding: 0 16px;
           }
-          }
           
           .form-grid {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
           }
           
           .control-row {
             display: grid;
-            grid-template-columns: 1fr auto;
-            gap: 16px;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 12px;
             align-items: center;
           }
           
           .stat-label {
             color: #495057;
             font-weight: 500;
+            font-size: 13px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
           }
           
           .stat-value {
             font-family: monospace;
             color: #212529;
             background: #f8f9fa;
-            padding: 2px 6px;
+            padding: 2px 8px;
             border-radius: 3px;
             border: 1px solid #dee2e6;
+            min-width: 45px;
+            text-align: right;
+            display: inline-block;
+            font-size: 12px;
           }
           
           .debug-checkbox-label {
             display: flex;
             align-items: center;
             cursor: pointer;
-            font-size: 14px;
+            font-size: 13px;
             color: #212529;
           }
           
@@ -4983,6 +5203,6 @@ var Jamble;
             return this.showSlots;
         }
     }
-    DebugSystem.BUILD_VERSION = "v2.0.400";
+    DebugSystem.BUILD_VERSION = "v2.0.461";
     Jamble.DebugSystem = DebugSystem;
 })(Jamble || (Jamble = {}));
