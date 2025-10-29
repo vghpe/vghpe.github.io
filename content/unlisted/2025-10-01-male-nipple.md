@@ -47,7 +47,19 @@ A JavaScript build (written in TypeScript) playable at HowToStimulateMaleNipple.
 
 ### Play The Prototype
 
-**Goal**: Reach peak arousal. The arousal bar will fill as the sensation readings get's higher. Too much sensation will cause the nipple to shy away.  
+**Goal**: Reach peak arousal by filling up the love bar <img src="/images/crescendo-bar.png" style="display:inline; height:1.3em; vertical-align:middle;">
+
+**Instructions**: 
+- Jump or bump the nipple to increase sensation
+- Return Home 🟨 to tweak values
+- Plant Trees 🌲 to help increase bump-ins 
+- Don't cross your clients pain thresholds
+- Recover the nipple by spending ❤️
+
+
+**Controls**: Tap Blue 🔵 things to interact
+
  
 {{< jamble >}}
-**Controls**: Space to jump; Left/Right arrows to move; the runner auto-moves when the ground line is touched.
+
+
