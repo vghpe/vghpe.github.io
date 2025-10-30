@@ -354,20 +354,83 @@ var Jamble;
 })(Jamble || (Jamble = {}));
 var Jamble;
 (function (Jamble) {
+    class Sensor extends Jamble.GameObject {
+        constructor(id, target, offsetX = 0, offsetY = 0, width = 20, height = 5) {
+            const initX = target ? target.transform.x + offsetX : offsetX;
+            const initY = target ? target.transform.y + offsetY : offsetY;
+            super(id, initX, initY);
+            this.enabled = true;
+            this.target = target;
+            this.offsetX = offsetX;
+            this.offsetY = offsetY;
+            this.render.visible = false;
+            this.collisionBox = {
+                x: 0,
+                y: 0,
+                width: width,
+                height: height,
+                anchor: { x: 0.5, y: 1 },
+                category: 'kinematic'
+            };
+        }
+        update(deltaTime) {
+            if (this.target) {
+                this.transform.x = this.target.transform.x + this.offsetX;
+                this.transform.y = this.target.transform.y + this.offsetY;
+            }
+        }
+        setTriggerSize(width, height) {
+            if (this.collisionBox) {
+                this.collisionBox.width = width;
+                this.collisionBox.height = height;
+            }
+        }
+        setEnabled(enabled) {
+            this.enabled = enabled;
+        }
+        isEnabled() {
+            return this.enabled;
+        }
+    }
+    Jamble.Sensor = Sensor;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
     class Tree extends Jamble.GameObject {
-        constructor(id, x = 0, y = 0, slotId = '') {
+        constructor(id, x, y, slotManager, slotId, debugPanel) {
             super(id, x, y);
-            this.visualOffsetX = 5;
-            this.visualOffsetY = 0;
-            this.slotId = slotId;
+            this.currentSlotId = '';
+            this.trunkWidth = 10;
+            this.trunkHeight = 30;
+            this.trunkColor = '#8d6e63';
+            this.trunkBorderRadius = 2;
+            this.leafColor = '#66bb6a';
+            this.leafAnchors = [];
+            this.baseLeafConfig = {
+                positions: [
+                    { x: 0, y: -24 },
+                    { x: -8, y: -22 },
+                    { x: 8, y: -22 },
+                    { x: -14, y: -19 },
+                    { x: 14, y: -19 }
+                ],
+                radii: [11, 10, 10, 9, 9]
+            };
+            this.sensorRadius = 15;
+            this.sensorOffsetY = -5;
+            this.slotManager = slotManager;
+            this.currentSlotId = slotId;
+            this.debugPanel = debugPanel;
+            this.updateLeafAnchors();
+            this.anim = new Jamble.TreeAnim(this, debugPanel);
             this.render = {
                 type: 'canvas',
                 visible: true,
                 canvas: {
-                    color: '#8d6e63',
+                    color: this.trunkColor,
                     shape: 'custom',
-                    width: 20,
-                    height: 30,
+                    width: 50,
+                    height: 45,
                     customDraw: this.drawTree.bind(this)
                 },
                 anchor: { x: 0.5, y: 1 }
@@ -378,18 +441,45 @@ var Jamble;
                 width: 8,
                 height: 25,
                 anchor: { x: 0.5, y: 1 },
-                category: 'environment'
+                category: 'environment',
+                enabled: true
             };
+            this.leafSensor = new Jamble.Sensor(`${id}-leaf-sensor`, this, 0, this.sensorOffsetY, this.sensorRadius * 2, this.sensorRadius * 2);
+            this.leafSensor.onTriggerEnter = (other) => {
+                if (other.id.startsWith('player')) {
+                    this.anim.triggerWiggle();
+                }
+            };
+            this.anim.triggerWiggle();
+        }
+        update(deltaTime) {
+            this.anim.update(deltaTime);
+        }
+        updateLeafAnchors() {
+            var _a, _b, _c, _d;
+            const arcWidth = (_b = (_a = this.debugPanel) === null || _a === void 0 ? void 0 : _a.arcWidth) !== null && _b !== void 0 ? _b : 0.65;
+            const sizeRandomness = (_d = (_c = this.debugPanel) === null || _c === void 0 ? void 0 : _c.sizeRandomness) !== null && _d !== void 0 ? _d : 0.3;
+            this.leafAnchors = this.baseLeafConfig.positions.map((pos, i) => ({
+                x: pos.x * arcWidth,
+                y: pos.y,
+                radius: Math.max(6, this.baseLeafConfig.radii[i] * (1.0 + (Math.random() * 2 - 1) * sizeRandomness))
+            }));
         }
         drawTree(ctx, x, y) {
-            const drawX = x + this.visualOffsetX;
-            const drawY = y + this.visualOffsetY;
-            ctx.fillStyle = '#8d6e63';
-            this.drawRoundedRect(ctx, drawX, drawY, 10, 30, 2);
-            ctx.fillStyle = '#66bb6a';
-            ctx.beginPath();
-            ctx.arc(drawX + 5, drawY, 10, 0, 2 * Math.PI);
-            ctx.fill();
+            const canvasHeight = this.render.canvas.height || 45;
+            const canvasWidth = this.render.canvas.width || 50;
+            const baseX = canvasWidth * 0.5;
+            const baseY = canvasHeight;
+            ctx.fillStyle = this.trunkColor;
+            this.drawRoundedRect(ctx, baseX - this.trunkWidth * 0.5, baseY - this.trunkHeight, this.trunkWidth, this.trunkHeight, this.trunkBorderRadius);
+            ctx.fillStyle = this.leafColor;
+            for (let i = 0; i < this.leafAnchors.length; i++) {
+                const anchor = this.leafAnchors[i];
+                const offset = this.anim.getLeafOffset(i);
+                ctx.beginPath();
+                ctx.arc(baseX + anchor.x + offset.x, baseY + anchor.y + offset.y, anchor.radius, 0, Math.PI * 2);
+                ctx.fill();
+            }
         }
         drawRoundedRect(ctx, x, y, width, height, radius) {
             ctx.beginPath();
@@ -405,20 +495,22 @@ var Jamble;
             ctx.closePath();
             ctx.fill();
         }
-        update(deltaTime) {
-        }
         getSlotId() {
-            return this.slotId;
+            return this.currentSlotId;
         }
-        onClick() {
-            window.dispatchEvent(new CustomEvent('jamble:tree-clicked', {
-                detail: { treeId: this.id, slotId: this.slotId }
-            }));
+        getSensor() {
+            return this.leafSensor;
         }
         despawn() {
             this.render.visible = false;
             if (this.collisionBox) {
                 this.collisionBox.enabled = false;
+            }
+            this.leafSensor.setEnabled(false);
+        }
+        destroy() {
+            if (this.currentSlotId) {
+                this.slotManager.freeSlot(this.currentSlotId);
             }
         }
     }
@@ -426,1572 +518,126 @@ var Jamble;
 })(Jamble || (Jamble = {}));
 var Jamble;
 (function (Jamble) {
-    class EconomyManager {
-        constructor() {
-            this.currency = 0;
-            this.onCurrencyChangeCallbacks = [];
-        }
-        static getInstance() {
-            if (!EconomyManager.instance) {
-                EconomyManager.instance = new EconomyManager();
+    class TreeAnim {
+        constructor(tree, debugPanel) {
+            this.tree = tree;
+            this.leafStates = [];
+            this.debugPanel = debugPanel;
+            const anchors = tree.leafAnchors;
+            for (let i = 0; i < anchors.length; i++) {
+                const anchor = anchors[i];
+                const distToCenter = Math.sqrt(anchor.x * anchor.x + anchor.y * anchor.y);
+                const dirX = anchor.x / distToCenter;
+                const dirY = anchor.y / distToCenter;
+                const pivotX = anchor.x - dirX * anchor.radius;
+                const pivotY = anchor.y - dirY * anchor.radius;
+                this.leafStates.push({
+                    angle: 0,
+                    angularVelocity: 0,
+                    targetAngle: 0,
+                    pivotX,
+                    pivotY,
+                    radius: anchor.radius,
+                    isAnimating: false,
+                    elapsedTime: 0
+                });
             }
-            return EconomyManager.instance;
         }
-        getCurrency() {
-            return this.currency;
+        getParams() {
+            var _a, _b, _c;
+            if (this.debugPanel) {
+                return {
+                    omega: (_a = this.debugPanel.omega) !== null && _a !== void 0 ? _a : TreeAnim.DEFAULT_OMEGA,
+                    zeta: (_b = this.debugPanel.zeta) !== null && _b !== void 0 ? _b : TreeAnim.DEFAULT_ZETA,
+                    wiggleDuration: (_c = this.debugPanel.wiggleDuration) !== null && _c !== void 0 ? _c : TreeAnim.DEFAULT_DURATION,
+                    settlementThreshold: TreeAnim.SETTLEMENT_THRESHOLD
+                };
+            }
+            return {
+                omega: TreeAnim.DEFAULT_OMEGA,
+                zeta: TreeAnim.DEFAULT_ZETA,
+                wiggleDuration: TreeAnim.DEFAULT_DURATION,
+                settlementThreshold: TreeAnim.SETTLEMENT_THRESHOLD
+            };
         }
-        addCurrency(amount) {
-            this.currency += amount;
-            this.notifyCurrencyChange();
+        update(deltaTime) {
+            const params = this.getParams();
+            const omegaSquared = params.omega * params.omega;
+            const dampingFactor = -2 * params.zeta * params.omega;
+            for (let i = 0; i < this.leafStates.length; i++) {
+                const state = this.leafStates[i];
+                if (!state.isAnimating)
+                    continue;
+                state.elapsedTime += deltaTime;
+                const angularDisplacement = state.angle - state.targetAngle;
+                const angularAcc = dampingFactor * state.angularVelocity - omegaSquared * angularDisplacement;
+                state.angularVelocity += angularAcc * deltaTime;
+                state.angle += state.angularVelocity * deltaTime;
+                if (Math.abs(state.angle - state.targetAngle) < params.settlementThreshold &&
+                    Math.abs(state.angularVelocity) < params.settlementThreshold ||
+                    state.elapsedTime > params.wiggleDuration) {
+                    state.angle = state.targetAngle;
+                    state.angularVelocity = 0;
+                    state.isAnimating = false;
+                }
+            }
         }
-        spendCurrency(amount) {
-            if (this.currency >= amount) {
-                this.currency -= amount;
-                this.notifyCurrencyChange();
-                return true;
+        triggerWiggle() {
+            var _a, _b, _c;
+            for (let i = 0; i < this.leafStates.length; i++) {
+                const state = this.leafStates[i];
+                const magnitude = (_c = (_b = (_a = this.debugPanel) === null || _a === void 0 ? void 0 : _a.getWiggleMagnitude) === null || _b === void 0 ? void 0 : _b.call(_a)) !== null && _c !== void 0 ? _c : (TreeAnim.DEFAULT_WIGGLE_MIN + Math.random() * (TreeAnim.DEFAULT_WIGGLE_MAX - TreeAnim.DEFAULT_WIGGLE_MIN));
+                const direction = Math.random() < 0.5 ? -1 : 1;
+                state.angle = direction * magnitude;
+                state.targetAngle = 0;
+                state.angularVelocity = 0;
+                state.elapsedTime = 0;
+                state.isAnimating = true;
+            }
+        }
+        getLeafOffset(leafIndex) {
+            if (leafIndex < 0 || leafIndex >= this.leafStates.length) {
+                return { x: 0, y: 0 };
+            }
+            const state = this.leafStates[leafIndex];
+            const anchors = this.tree.leafAnchors;
+            const anchor = anchors[leafIndex];
+            const restVecX = anchor.x - state.pivotX;
+            const restVecY = anchor.y - state.pivotY;
+            const cos = Math.cos(state.angle);
+            const sin = Math.sin(state.angle);
+            const rotatedX = restVecX * cos - restVecY * sin;
+            const rotatedY = restVecX * sin + restVecY * cos;
+            return {
+                x: state.pivotX + rotatedX - anchor.x,
+                y: state.pivotY + rotatedY - anchor.y
+            };
+        }
+        isAnimating() {
+            for (let i = 0; i < this.leafStates.length; i++) {
+                if (this.leafStates[i].isAnimating)
+                    return true;
             }
             return false;
         }
-        canAfford(amount) {
-            return this.currency >= amount;
-        }
-        onCurrencyChange(callback) {
-            this.onCurrencyChangeCallbacks.push(callback);
-        }
-        notifyCurrencyChange() {
-            this.onCurrencyChangeCallbacks.forEach(callback => callback(this.currency));
-        }
-    }
-    Jamble.EconomyManager = EconomyManager;
-})(Jamble || (Jamble = {}));
-var Jamble;
-(function (Jamble) {
-    class BaseNPC {
-        constructor(name, config) {
-            this.crescendoThresholdReached = false;
-            this.crescendoEnabled = true;
-            this.inPainZone = false;
-            this.painExpressionLocked = false;
-            this.winExpressionLocked = false;
-            this.arousalChangeListeners = [];
-            this.arousalImpulseListeners = [];
-            this.crescendoChangeListeners = [];
-            this.crescendoThresholdListeners = [];
-            this.painThresholdListeners = [];
-            this.expressionChangeListeners = [];
-            this.arousalMomentum = 0;
-            this.momentumSpreadDuration = 0.3;
-            this.name = name;
-            this.arousalConfig = {
-                baselineValue: 0.2,
-                decayRate: 0.001,
-                maxValue: 6.0,
-                minValue: -1.0,
-                sensitivity: 1.0,
-                painThreshold: 5.0,
-                ...config
-            };
-            this.crescendoConfig = {
-                targetArousalValue: 4.0,
-                arousalTolerance: 0.5,
-                riseRate: 0.2,
-                decayRate: 0.1,
-                threshold: 1.0,
-                maxValue: 1.0
-            };
-            this.arousalValue = this.arousalConfig.baselineValue;
-            this.crescendoValue = 0.1;
-            this.expressionDescriptor = this.resolveExpression();
-        }
-        getName() {
-            return this.name;
-        }
-        getArousalValue() {
-            return this.arousalValue;
-        }
-        applyArousalImpulse(intensity, player, collisionType) {
-            const oldValue = this.arousalValue;
-            let adjustedIntensity = intensity * this.arousalConfig.sensitivity;
-            let momentumAmount = 0;
-            if (player && collisionType === 'side') {
-                const softness = player.getSoftness();
-                if (softness < 0.5) {
-                    const hardnessFactor = (0.5 - softness) / 0.5;
-                    const baseImpulse = intensity * this.arousalConfig.sensitivity;
-                    const topCollisionTarget = 0.5 * this.arousalConfig.sensitivity;
-                    const targetImpulse = Math.max(baseImpulse, topCollisionTarget);
-                    adjustedIntensity = baseImpulse + hardnessFactor * (targetImpulse - baseImpulse);
-                }
-                else {
-                    const t = (softness - 0.5) / 0.5;
-                    const totalScale = 1.0 - t * 0.7;
-                    adjustedIntensity = intensity * this.arousalConfig.sensitivity * totalScale;
-                    const instantRatio = 0.6;
-                    momentumAmount = adjustedIntensity * (1 - instantRatio);
-                    adjustedIntensity *= instantRatio;
-                }
-            }
-            this.arousalValue = Math.max(this.arousalConfig.minValue, Math.min(this.arousalConfig.maxValue, this.arousalValue + adjustedIntensity));
-            if (momentumAmount > 0) {
-                this.arousalMomentum += momentumAmount;
-            }
-            this.checkPainThreshold();
-            const actualIntensity = this.arousalValue - oldValue;
-            if (actualIntensity !== 0) {
-                this.notifyArousalImpulseListeners(actualIntensity);
-                this.notifyArousalListeners();
-            }
-        }
-        setArousalValue(value) {
-            const oldValue = this.arousalValue;
-            this.arousalValue = Math.max(this.arousalConfig.minValue, Math.min(this.arousalConfig.maxValue, value));
-            if (oldValue !== this.arousalValue) {
-                this.notifyArousalListeners();
-            }
-        }
-        getArousalNormalized() {
-            const range = this.arousalConfig.maxValue - this.arousalConfig.minValue;
-            return Math.max(0, Math.min(1, (this.arousalValue - this.arousalConfig.minValue) / range));
-        }
-        getSensationNormalized() {
-            return this.getArousalNormalized();
-        }
-        getPainThreshold() {
-            return this.arousalConfig.painThreshold;
-        }
-        getArousalRange() {
-            return {
-                min: this.arousalConfig.minValue,
-                max: this.arousalConfig.maxValue
-            };
-        }
-        updateArousal(deltaTime, player) {
-            const oldValue = this.arousalValue;
-            if (this.arousalMomentum > 0) {
-                const momentumPerSecond = this.arousalMomentum / this.momentumSpreadDuration;
-                const momentumThisFrame = Math.min(momentumPerSecond * deltaTime, this.arousalMomentum);
-                this.arousalMomentum -= momentumThisFrame;
-                this.arousalValue = Math.max(this.arousalConfig.minValue, Math.min(this.arousalConfig.maxValue, this.arousalValue + momentumThisFrame));
-            }
-            let decay = this.arousalConfig.decayRate;
-            if (player && !this.inPainZone) {
-                const temperature = player.getTemperature();
-                decay *= (0.5 + temperature * 0.5);
-            }
-            if (this.inPainZone) {
-                decay = 2.0;
-            }
-            if (this.arousalValue > this.arousalConfig.baselineValue) {
-                this.arousalValue -= decay * deltaTime;
-                this.arousalValue = Math.max(this.arousalConfig.baselineValue, this.arousalValue);
-            }
-            else if (this.arousalValue < this.arousalConfig.baselineValue) {
-                this.arousalValue += decay * deltaTime;
-                this.arousalValue = Math.min(this.arousalConfig.baselineValue, this.arousalValue);
-            }
-            if (oldValue !== this.arousalValue) {
-                this.notifyArousalListeners();
-            }
-        }
-        onArousalChange(callback) {
-            this.arousalChangeListeners.push(callback);
-        }
-        removeArousalListener(callback) {
-            const index = this.arousalChangeListeners.indexOf(callback);
-            if (index !== -1) {
-                this.arousalChangeListeners.splice(index, 1);
-            }
-        }
-        onArousalImpulse(callback) {
-            this.arousalImpulseListeners.push(callback);
-        }
-        removeArousalImpulseListener(callback) {
-            const index = this.arousalImpulseListeners.indexOf(callback);
-            if (index !== -1) {
-                this.arousalImpulseListeners.splice(index, 1);
-            }
-        }
-        notifyArousalListeners() {
-            for (const listener of this.arousalChangeListeners) {
-                try {
-                    listener(this.arousalValue, this);
-                }
-                catch (error) {
-                    console.error(`Error in arousal listener for ${this.name}:`, error);
-                }
-            }
-            this.evaluateExpression();
-        }
-        notifyArousalImpulseListeners(impulse) {
-            for (const listener of this.arousalImpulseListeners) {
-                try {
-                    listener(impulse, this);
-                }
-                catch (error) {
-                    console.error(`Error in arousal impulse listener for ${this.name}:`, error);
-                }
-            }
-        }
-        checkPainThreshold() {
-            const wasInPain = this.inPainZone;
-            const isInPain = this.arousalValue > this.arousalConfig.painThreshold;
-            if (isInPain && !wasInPain) {
-                this.inPainZone = true;
-                if (!this.winExpressionLocked) {
-                    this.painExpressionLocked = true;
-                    this.evaluateExpression(true);
-                }
-                this.notifyPainThresholdListeners();
-            }
-            else if (!isInPain && wasInPain) {
-                this.inPainZone = false;
-            }
-        }
-        isInPainZone() {
-            return this.inPainZone;
-        }
-        onPainThreshold(callback) {
-            this.painThresholdListeners.push(callback);
-        }
-        removePainThresholdListener(callback) {
-            const index = this.painThresholdListeners.indexOf(callback);
-            if (index !== -1) {
-                this.painThresholdListeners.splice(index, 1);
-            }
-        }
-        notifyPainThresholdListeners() {
-            for (const listener of this.painThresholdListeners) {
-                try {
-                    listener(this);
-                }
-                catch (error) {
-                    console.error(`Error in pain threshold listener for ${this.name}:`, error);
-                }
-            }
-        }
-        getExpressionDescriptor() {
-            return this.expressionDescriptor;
-        }
-        onExpressionChange(callback) {
-            this.expressionChangeListeners.push(callback);
-        }
-        removeExpressionChangeListener(callback) {
-            const index = this.expressionChangeListeners.indexOf(callback);
-            if (index !== -1) {
-                this.expressionChangeListeners.splice(index, 1);
-            }
-        }
-        resolveExpression() {
-            if (this.winExpressionLocked) {
-                return { id: 'win' };
-            }
-            if (this.painExpressionLocked) {
-                return { id: 'pain' };
-            }
-            return { id: 'default' };
-        }
-        evaluateExpression(force = false) {
-            const nextDescriptor = this.resolveExpression();
-            if (!nextDescriptor) {
-                return;
-            }
-            if (force || !this.areExpressionsEqual(this.expressionDescriptor, nextDescriptor)) {
-                this.expressionDescriptor = nextDescriptor;
-                this.notifyExpressionChangeListeners();
-            }
-        }
-        areExpressionsEqual(a, b) {
-            if (!a || !b) {
-                return false;
-            }
-            if (a.id !== b.id) {
-                return false;
-            }
-            if (a.emoji !== b.emoji) {
-                return false;
-            }
-            if (!a.sprite && !b.sprite) {
-                return true;
-            }
-            if (!a.sprite || !b.sprite) {
-                return false;
-            }
-            return a.sprite.atlasId === b.sprite.atlasId && a.sprite.frame === b.sprite.frame;
-        }
-        notifyExpressionChangeListeners() {
-            for (const listener of this.expressionChangeListeners) {
-                try {
-                    listener(this.expressionDescriptor, this);
-                }
-                catch (error) {
-                    console.error(`Error in expression listener for ${this.name}:`, error);
-                }
-            }
-        }
-        resetPainExpression() {
-            if (this.painExpressionLocked) {
-                this.painExpressionLocked = false;
-                this.evaluateExpression(true);
-            }
-        }
-        resetWinExpression() {
-            if (this.winExpressionLocked) {
-                this.winExpressionLocked = false;
-                this.evaluateExpression(true);
-            }
-        }
-        isPainExpressionActive() {
-            return this.painExpressionLocked;
-        }
-        isWinExpressionActive() {
-            return this.winExpressionLocked;
-        }
-        getCrescendoValue() {
-            return this.crescendoValue;
-        }
-        getCrescendoNormalized() {
-            return Math.max(0, Math.min(1, this.crescendoValue / this.crescendoConfig.maxValue));
-        }
-        isInCrescendoZone() {
-            const target = this.crescendoConfig.targetArousalValue;
-            const tolerance = this.crescendoConfig.arousalTolerance;
-            return this.arousalValue >= (target - tolerance) &&
-                this.arousalValue <= (target + tolerance);
-        }
-        hasCrescendoThresholdReached() {
-            return this.crescendoThresholdReached;
-        }
-        updateCrescendo(deltaTime) {
-            if (this.crescendoThresholdReached) {
-                return;
-            }
-            const oldValue = this.crescendoValue;
-            const inZone = this.isInCrescendoZone();
-            let rate;
-            if (inZone && this.crescendoEnabled) {
-                rate = this.crescendoConfig.riseRate;
-            }
-            else {
-                rate = -this.crescendoConfig.decayRate;
-            }
-            const change = rate * deltaTime;
-            this.crescendoValue = Math.max(0.1, Math.min(this.crescendoConfig.maxValue, this.crescendoValue + change));
-            if (!this.crescendoThresholdReached && this.crescendoValue >= this.crescendoConfig.threshold) {
-                this.crescendoThresholdReached = true;
-                this.crescendoValue = this.crescendoConfig.threshold;
-                this.winExpressionLocked = true;
-                this.evaluateExpression(true);
-                this.notifyCrescendoThresholdListeners();
-            }
-            if (oldValue !== this.crescendoValue) {
-                this.notifyCrescendoChangeListeners();
-            }
-        }
-        enableCrescendo() {
-            this.crescendoEnabled = true;
-        }
-        disableCrescendo() {
-            this.crescendoEnabled = false;
-        }
-        isCrescendoEnabled() {
-            return this.crescendoEnabled;
-        }
-        onCrescendoChange(callback) {
-            this.crescendoChangeListeners.push(callback);
-        }
-        removeCrescendoListener(callback) {
-            const index = this.crescendoChangeListeners.indexOf(callback);
-            if (index !== -1) {
-                this.crescendoChangeListeners.splice(index, 1);
-            }
-        }
-        onCrescendoThreshold(callback) {
-            this.crescendoThresholdListeners.push(callback);
-        }
-        removeCrescendoThresholdListener(callback) {
-            const index = this.crescendoThresholdListeners.indexOf(callback);
-            if (index !== -1) {
-                this.crescendoThresholdListeners.splice(index, 1);
-            }
-        }
-        notifyCrescendoChangeListeners() {
-            for (const listener of this.crescendoChangeListeners) {
-                try {
-                    listener(this.crescendoValue, this);
-                }
-                catch (error) {
-                    console.error(`Error in crescendo listener for ${this.name}:`, error);
-                }
-            }
-            this.evaluateExpression();
-        }
-        notifyCrescendoThresholdListeners() {
-            for (const listener of this.crescendoThresholdListeners) {
-                try {
-                    listener(this);
-                }
-                catch (error) {
-                    console.error(`Error in crescendo threshold listener for ${this.name}:`, error);
-                }
-            }
-        }
-        getDebugSection() {
-            return {
-                title: `${this.name} Configuration`,
-                controls: [
-                    {
-                        type: 'display',
-                        label: 'Arousal',
-                        getValue: () => this.arousalValue.toFixed(2)
-                    },
-                    {
-                        type: 'slider',
-                        label: 'Baseline',
-                        min: 0,
-                        max: 5,
-                        step: 0.1,
-                        getValue: () => this.arousalConfig.baselineValue,
-                        setValue: (value) => { this.arousalConfig.baselineValue = value; }
-                    },
-                    {
-                        type: 'slider',
-                        label: 'Decay Rate',
-                        min: 0.1,
-                        max: 2.0,
-                        step: 0.1,
-                        getValue: () => this.arousalConfig.decayRate,
-                        setValue: (value) => { this.arousalConfig.decayRate = value; }
-                    },
-                    {
-                        type: 'slider',
-                        label: 'Sensitivity',
-                        min: 0.5,
-                        max: 5.0,
-                        step: 0.1,
-                        getValue: () => this.arousalConfig.sensitivity,
-                        setValue: (value) => { this.arousalConfig.sensitivity = value; }
-                    },
-                    {
-                        type: 'slider',
-                        label: 'Pain Threshold',
-                        min: 3.0,
-                        max: 8.0,
-                        step: 0.1,
-                        getValue: () => this.arousalConfig.painThreshold,
-                        setValue: (value) => { this.arousalConfig.painThreshold = value; }
-                    },
-                    {
-                        type: 'display',
-                        label: 'Momentum',
-                        getValue: () => this.arousalMomentum.toFixed(3)
-                    },
-                    {
-                        type: 'slider',
-                        label: 'Momentum Spread Sec',
-                        min: 0.1,
-                        max: 1.0,
-                        step: 0.05,
-                        getValue: () => this.momentumSpreadDuration,
-                        setValue: (value) => { this.momentumSpreadDuration = value; }
-                    },
-                    {
-                        type: 'display',
-                        label: 'Crescendo',
-                        getValue: () => this.crescendoValue.toFixed(2)
-                    },
-                    {
-                        type: 'slider',
-                        label: 'Target Arousal',
-                        min: 2.0,
-                        max: 6.0,
-                        step: 0.1,
-                        getValue: () => this.crescendoConfig.targetArousalValue,
-                        setValue: (value) => { this.crescendoConfig.targetArousalValue = value; }
-                    },
-                    {
-                        type: 'slider',
-                        label: 'Tolerance',
-                        min: 0.1,
-                        max: 2.0,
-                        step: 0.1,
-                        getValue: () => this.crescendoConfig.arousalTolerance,
-                        setValue: (value) => { this.crescendoConfig.arousalTolerance = value; }
-                    },
-                    {
-                        type: 'slider',
-                        label: 'Rise Rate',
-                        min: 0.05,
-                        max: 0.5,
-                        step: 0.05,
-                        getValue: () => this.crescendoConfig.riseRate,
-                        setValue: (value) => { this.crescendoConfig.riseRate = value; }
-                    },
-                    {
-                        type: 'slider',
-                        label: 'Decay Rate',
-                        min: 0.05,
-                        max: 0.5,
-                        step: 0.05,
-                        getValue: () => this.crescendoConfig.decayRate,
-                        setValue: (value) => { this.crescendoConfig.decayRate = value; }
-                    }
-                ]
-            };
-        }
-    }
-    Jamble.BaseNPC = BaseNPC;
-})(Jamble || (Jamble = {}));
-var Jamble;
-(function (Jamble) {
-    let KnobState;
-    (function (KnobState) {
-        KnobState[KnobState["ACTIVE"] = 0] = "ACTIVE";
-        KnobState[KnobState["RETRACTING"] = 1] = "RETRACTING";
-        KnobState[KnobState["RETRACTED"] = 2] = "RETRACTED";
-        KnobState[KnobState["SPAWNING"] = 3] = "SPAWNING";
-    })(KnobState = Jamble.KnobState || (Jamble.KnobState = {}));
-    class Knob extends Jamble.GameObject {
-        constructor(id, x = 0, y = 0, slotManager, slotId, activeNPC) {
-            super(id, x, y);
-            this.currencyValue = 1;
-            this.topHitValue = 5;
-            this.config = {
-                length: 10,
-                segments: 6,
-                omega: 18.0,
-                zeta: 0.25,
-                maxAngleDeg: 85,
-                bowFactor: 0.35,
-                lineWidth: 12,
-                knobColor: '#ff968f',
-                baseRadius: 3,
-                showPoints: false,
-                visualOffsetY: 4
-            };
-            this.theta = 0;
-            this.thetaDot = 0;
-            this.thetaTarget = 0;
-            this.basePos = { x: 0, y: 0 };
-            this.springPoints = [];
-            this.state = KnobState.SPAWNING;
-            this.currentSlotId = '';
-            this.economyManager = Jamble.EconomyManager.getInstance();
-            this.activeNPC = activeNPC;
-            this.anim = new Jamble.KnobAnim(this);
-            this.slotManager = slotManager;
-            this.currentSlotId = slotId;
-            this.render = {
-                type: 'canvas',
-                visible: true,
-                canvas: {
-                    color: '#ff6b35',
-                    shape: 'custom',
-                    width: 80,
-                    height: 80,
-                    customDraw: this.drawKnob.bind(this)
-                },
-                anchor: { x: 0.5, y: 1 }
-            };
-            this.collisionBox = {
-                x: 0,
-                y: 0,
-                width: 30,
-                height: 30,
-                anchor: { x: 0.5, y: 0.5 },
-                category: 'kinematic',
-                enabled: false
-            };
-            this.anim.triggerInitialSpawn(() => {
-                this.state = KnobState.ACTIVE;
-                if (this.collisionBox) {
-                    this.collisionBox.enabled = true;
-                }
-            });
-        }
-        update(deltaTime) {
-            this.anim.update(deltaTime);
-            if (this.state === KnobState.ACTIVE || this.state === KnobState.SPAWNING ||
-                this.state === KnobState.RETRACTING) {
-                this.updateSpringPoints();
-            }
-        }
-        updateSpringPoints() {
-            var _a, _b, _c, _d;
-            const width = this.render.canvas.width || 80;
-            const height = this.render.canvas.height || 80;
-            const anchorX = ((_b = (_a = this.render.anchor) === null || _a === void 0 ? void 0 : _a.x) !== null && _b !== void 0 ? _b : 0.5) * width;
-            const anchorY = ((_d = (_c = this.render.anchor) === null || _c === void 0 ? void 0 : _c.y) !== null && _d !== void 0 ? _d : 1.0) * height;
-            this.basePos.x = anchorX;
-            this.basePos.y = anchorY;
-            const tipX = this.basePos.x + this.config.length * Math.sin(this.theta);
-            const tipY = this.basePos.y - this.config.length * Math.cos(this.theta);
-            const normal = { x: Math.cos(this.theta), y: Math.sin(this.theta) };
-            const midX = (this.basePos.x + tipX) / 2;
-            const midY = (this.basePos.y + tipY) / 2;
-            const bowOffset = -this.config.bowFactor * this.config.length * this.theta;
-            const controlX = midX + normal.x * bowOffset;
-            const controlY = midY + normal.y * bowOffset;
-            const segments = Math.max(2, Math.round(this.config.segments));
-            this.springPoints = [];
-            for (let i = 0; i <= segments; i++) {
-                const t = i / segments;
-                const omt = 1 - t;
-                const x = omt * omt * this.basePos.x + 2 * omt * t * controlX + t * t * tipX;
-                const y = omt * omt * this.basePos.y + 2 * omt * t * controlY + t * t * tipY;
-                this.springPoints.push({ x, y });
-            }
-        }
-        drawKnob(ctx, x, y) {
-            if (this.state === KnobState.RETRACTED)
-                return;
-            ctx.save();
-            ctx.lineCap = 'round';
-            ctx.lineJoin = 'round';
-            ctx.strokeStyle = this.config.knobColor;
-            ctx.lineWidth = this.config.lineWidth;
-            ctx.beginPath();
-            if (this.springPoints.length > 0) {
-                const adjustedPoints = this.springPoints.map(p => ({
-                    x: x + p.x,
-                    y: y + p.y
-                }));
-                ctx.moveTo(adjustedPoints[0].x, adjustedPoints[0].y);
-                for (let i = 1; i < adjustedPoints.length - 1; i++) {
-                    const midX = 0.5 * (adjustedPoints[i].x + adjustedPoints[i + 1].x);
-                    const midY = 0.5 * (adjustedPoints[i].y + adjustedPoints[i + 1].y);
-                    ctx.quadraticCurveTo(adjustedPoints[i].x, adjustedPoints[i].y, midX, midY);
-                }
-                if (adjustedPoints.length > 1) {
-                    const last = adjustedPoints[adjustedPoints.length - 1];
-                    ctx.lineTo(last.x, last.y);
-                }
-            }
-            ctx.stroke();
-            ctx.fillStyle = this.config.knobColor;
-            ctx.beginPath();
-            ctx.arc(x + this.basePos.x, y + this.basePos.y, this.config.baseRadius, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.restore();
-        }
-        deflect(direction) {
-            this.anim.triggerDeflect(direction);
-        }
-        onPlayerContact(player) {
-            if (this.state !== KnobState.ACTIVE)
-                return 0;
-            const collisionType = this.detectCollisionType(player);
-            let currencyAmount = this.currencyValue;
-            let arousalImpact;
-            if (collisionType === 'top') {
-                currencyAmount = this.topHitValue;
-                arousalImpact = 0.5;
-                this.anim.triggerSquash();
-            }
-            else {
-                arousalImpact = 0.3;
-                this.anim.triggerDeflect(Math.random() > 0.5 ? 1 : -1);
-            }
-            this.economyManager.addCurrency(currencyAmount);
-            this.activeNPC.applyArousalImpulse(arousalImpact, player, collisionType);
-            return currencyAmount;
-        }
-        detectCollisionType(player) {
-            const playerY = player.transform.y;
-            const knobY = this.transform.y;
-            const isMovingDown = player.velocityY > 0;
-            const isAboveKnob = playerY < knobY - 10;
-            if (isMovingDown && isAboveKnob) {
-                return 'top';
-            }
-            return 'side';
-        }
-        onTriggerEnter(other) {
-            if (this.state !== KnobState.ACTIVE)
-                return;
-            if (other instanceof Jamble.Player) {
-                this.onPlayerContact(other);
-            }
-        }
-        retract() {
-            if (this.state !== KnobState.ACTIVE)
-                return;
-            this.state = KnobState.RETRACTING;
-            if (this.collisionBox) {
-                this.collisionBox.enabled = false;
-            }
-            if (this.anim.isAnimating()) {
-                this.waitForAnimationThenDespawn();
-            }
-            else {
-                this.startDespawn();
-            }
-        }
-        waitForAnimationThenDespawn() {
-            const checkInterval = setInterval(() => {
-                if (!this.anim.isAnimating()) {
-                    clearInterval(checkInterval);
-                    this.startDespawn();
-                }
-            }, 16);
-        }
-        startDespawn() {
-            this.anim.triggerDespawn(() => {
-                this.state = KnobState.RETRACTED;
-                this.render.visible = false;
-                this.anim.reset();
-            });
-        }
-        manualRespawn() {
-            if (this.state !== KnobState.RETRACTED)
-                return;
-            this.state = KnobState.SPAWNING;
-            this.render.visible = true;
-            this.anim.triggerSpawn(() => {
-                this.state = KnobState.ACTIVE;
-                if (this.collisionBox) {
-                    this.collisionBox.enabled = true;
-                }
-            });
-        }
-        getState() {
-            return this.state;
-        }
-        isActive() {
-            return this.state === KnobState.ACTIVE;
-        }
-    }
-    Jamble.Knob = Knob;
-})(Jamble || (Jamble = {}));
-var Jamble;
-(function (Jamble) {
-    class KnobAnim {
-        constructor(knob) {
-            this.knob = knob;
-            this.deflectDuration = 0.2;
-            this.squashHoldTimeS = 0.15;
-            this.squashOmega = 24.6;
-            this.squashZeta = 0.15;
-            this.maxAnimationTime = 1.5;
-            this.squashPercent = 4;
-            this.widthMultiplier = 1.3;
-            this.settlementThreshold = 0.01;
-            this.isDeflecting = false;
-            this.deflectionDirection = 1;
-            this.deflectTimer = 0;
-            this.isSquashing = false;
-            this.squashPhase = 'compress';
-            this.originalLength = 0;
-            this.originalLineWidth = 0;
-            this.squashVelocity = 0;
-            this.squashPhaseTimer = 0;
-            this.squashSpringElapsed = 0;
-            this.isDespawning = false;
-            this.despawnPhaseTimer = 0;
-            this.isSpawning = false;
-            this.spawnSpringElapsed = 0;
-            this.spawnVelocity = 0;
-            this.isInitialSpawnDelaying = false;
-            this.initialSpawnDelayTimer = 0;
-            this.initialSpawnDelay = 0.75;
-            this.originalLength = knob.config.length;
-            this.originalLineWidth = knob.config.lineWidth;
-        }
-        update(deltaTime) {
-            if (this.isInitialSpawnDelaying) {
-                this.updateInitialSpawnDelay(deltaTime);
-                return;
-            }
-            if (this.isDespawning) {
-                this.updateDespawn(deltaTime);
-                return;
-            }
-            if (this.isSpawning) {
-                this.updateSpawn(deltaTime);
-                return;
-            }
-            if (this.isDeflecting) {
-                this.deflectTimer -= deltaTime;
-                if (this.deflectTimer <= 0) {
-                    this.isDeflecting = false;
-                    this.knob.thetaTarget = 0;
-                }
-                else {
-                    const maxAngle = (this.knob.config.maxAngleDeg * Math.PI) / 180;
-                    this.knob.thetaTarget = this.deflectionDirection * maxAngle;
-                }
-            }
-            const angZeta = this.knob.config.zeta;
-            const angOmega = this.knob.config.omega;
-            const angAcc = -2 * angZeta * angOmega * this.knob.thetaDot -
-                (angOmega * angOmega) * (this.knob.theta - this.knob.thetaTarget);
-            this.knob.thetaDot += angAcc * deltaTime;
-            this.knob.theta += this.knob.thetaDot * deltaTime;
-            if (!this.isSquashing)
-                return;
-            if (this.squashPhase === 'compress') {
-                this.squashPhaseTimer -= deltaTime;
-                if (this.squashPhaseTimer <= 0) {
-                    this.squashPhase = 'hold';
-                    this.squashPhaseTimer = this.squashHoldTimeS;
-                }
-                return;
-            }
-            if (this.squashPhase === 'hold') {
-                this.squashPhaseTimer -= deltaTime;
-                if (this.squashPhaseTimer <= 0) {
-                    this.squashPhase = 'spring';
-                    this.squashSpringElapsed = 0;
-                }
-                return;
-            }
-            if (this.squashPhase === 'spring') {
-                this.updateSpringPhysics(this.originalLength, (newLength) => { this.knob.config.length = newLength; }, this.squashVelocity, (newVelocity) => { this.squashVelocity = newVelocity; }, deltaTime);
-                this.squashSpringElapsed += deltaTime;
-                this.updateWidthAnimation(this.knob.config.length, this.originalLength);
-                const isSettled = Math.abs(this.knob.config.length - this.originalLength) < this.settlementThreshold &&
-                    Math.abs(this.squashVelocity) < this.settlementThreshold;
-                if (isSettled || this.squashSpringElapsed > this.maxAnimationTime) {
-                    this.knob.config.length = this.originalLength;
-                    this.knob.config.lineWidth = this.originalLineWidth;
-                    this.isSquashing = false;
-                    this.squashVelocity = 0;
-                }
-            }
-        }
-        updateSpringPhysics(targetLength, setLength, velocity, setVelocity, deltaTime) {
-            const currentLength = this.knob.config.length;
-            const displacement = currentLength - targetLength;
-            const acc = -2 * this.squashZeta * this.squashOmega * velocity -
-                (this.squashOmega * this.squashOmega) * displacement;
-            const newVelocity = velocity + acc * deltaTime;
-            const newLength = currentLength + newVelocity * deltaTime;
-            setVelocity(newVelocity);
-            setLength(newLength);
-        }
-        updateWidthAnimation(currentLength, targetLength) {
-            const displacement = Math.abs(currentLength - targetLength);
-            const lengthProgress = 1 - displacement / Math.abs(targetLength * 0.9);
-            const clampedProgress = Math.max(0, Math.min(1, lengthProgress));
-            this.knob.config.lineWidth = this.originalLineWidth * this.widthMultiplier -
-                (this.originalLineWidth * (this.widthMultiplier - 1.0) * clampedProgress);
-        }
-        triggerDeflect(direction) {
-            this.isDeflecting = true;
-            this.deflectionDirection = direction >= 0 ? 1 : -1;
-            const maxAngle = (this.knob.config.maxAngleDeg * Math.PI) / 180;
-            this.knob.thetaTarget = this.deflectionDirection * maxAngle;
-            this.deflectTimer = this.deflectDuration;
-        }
-        triggerSquash() {
-            this.isSquashing = true;
-            this.squashPhase = 'compress';
-            this.originalLength = this.knob.config.length;
-            this.originalLineWidth = this.knob.config.lineWidth;
-            this.squashVelocity = 0;
-            this.squashSpringElapsed = 0;
-            this.applyCompression();
-            this.squashPhaseTimer = this.squashHoldTimeS;
-        }
-        applyCompression() {
-            this.knob.config.length = this.originalLength * (this.squashPercent / 100);
-            this.knob.config.lineWidth = this.originalLineWidth * this.widthMultiplier;
-        }
-        triggerDespawn(onComplete) {
-            this.stopAllAnimations();
-            this.isDespawning = true;
-            this.onDespawnComplete = onComplete;
-            this.originalLength = this.knob.config.length;
-            this.originalLineWidth = this.knob.config.lineWidth;
-            this.applyCompression();
-            this.despawnPhaseTimer = this.squashHoldTimeS;
-        }
-        triggerSpawn(onComplete) {
-            this.isSpawning = true;
-            this.onSpawnComplete = onComplete;
-            this.spawnSpringElapsed = 0;
-            this.spawnVelocity = 0;
-            this.applyCompression();
-        }
-        triggerInitialSpawn(onComplete) {
-            this.isInitialSpawnDelaying = true;
-            this.initialSpawnDelayTimer = this.initialSpawnDelay;
-            this.onSpawnComplete = onComplete;
-            this.applyCompression();
-        }
-        updateInitialSpawnDelay(deltaTime) {
-            this.initialSpawnDelayTimer -= deltaTime;
-            if (this.initialSpawnDelayTimer <= 0) {
-                this.isInitialSpawnDelaying = false;
-                this.isSpawning = true;
-                this.spawnSpringElapsed = 0;
-                this.spawnVelocity = 0;
-            }
-        }
-        stopAllAnimations() {
-            this.isDeflecting = false;
-            this.isSquashing = false;
-            this.isSpawning = false;
-        }
-        updateDespawn(deltaTime) {
-            this.despawnPhaseTimer -= deltaTime;
-            if (this.despawnPhaseTimer <= 0) {
-                this.isDespawning = false;
-                if (this.onDespawnComplete) {
-                    this.onDespawnComplete();
-                    this.onDespawnComplete = undefined;
-                }
-            }
-        }
-        updateSpawn(deltaTime) {
-            this.updateSpringPhysics(this.originalLength, (newLength) => { this.knob.config.length = newLength; }, this.spawnVelocity, (newVelocity) => { this.spawnVelocity = newVelocity; }, deltaTime);
-            this.spawnSpringElapsed += deltaTime;
-            this.updateWidthAnimation(this.knob.config.length, this.originalLength);
-            const isSettled = Math.abs(this.knob.config.length - this.originalLength) < this.settlementThreshold &&
-                Math.abs(this.spawnVelocity) < this.settlementThreshold;
-            if (isSettled || this.spawnSpringElapsed > this.maxAnimationTime) {
-                this.knob.config.length = this.originalLength;
-                this.knob.config.lineWidth = this.originalLineWidth;
-                this.isSpawning = false;
-                this.spawnVelocity = 0;
-                if (this.onSpawnComplete) {
-                    this.onSpawnComplete();
-                    this.onSpawnComplete = undefined;
-                }
-            }
-        }
-        isAnimating() {
-            return this.isDeflecting || this.isSquashing || this.isDespawning || this.isSpawning || this.isInitialSpawnDelaying;
-        }
         reset() {
-            this.stopAllAnimations();
-            this.isDespawning = false;
-            this.isInitialSpawnDelaying = false;
-            this.squashVelocity = 0;
-            this.spawnVelocity = 0;
-            this.knob.config.length = this.originalLength;
-            this.knob.config.lineWidth = this.originalLineWidth;
-        }
-    }
-    Jamble.KnobAnim = KnobAnim;
-})(Jamble || (Jamble = {}));
-var Jamble;
-(function (Jamble) {
-    class Platform extends Jamble.GameObject {
-        constructor(id, x = 0, y = 0) {
-            super(id, x, y);
-            this.render = {
-                type: 'canvas',
-                visible: true,
-                canvas: {
-                    color: '#9e9e9e',
-                    shape: 'rectangle',
-                    width: 20,
-                    height: 20
-                },
-                anchor: { x: 0.5, y: 1 }
-            };
-            this.collisionBox = {
-                x: 0,
-                y: 0,
-                width: 20,
-                height: 20,
-                anchor: { x: 0.5, y: 1 },
-                category: 'environment'
-            };
-        }
-        update(deltaTime) {
-        }
-    }
-    Jamble.Platform = Platform;
-})(Jamble || (Jamble = {}));
-var Jamble;
-(function (Jamble) {
-    class MoveSkill {
-        constructor() {
-            this.id = 'move';
-            this.name = 'Move';
-            this.enabled = true;
-        }
-        execute(player) {
-        }
-    }
-    Jamble.MoveSkill = MoveSkill;
-    class JumpSkill {
-        constructor() {
-            this.id = 'jump';
-            this.name = 'Jump';
-            this.enabled = true;
-        }
-        execute(player) {
-            if (this.enabled) {
-                player.jump();
+            for (let i = 0; i < this.leafStates.length; i++) {
+                const state = this.leafStates[i];
+                state.angle = 0;
+                state.angularVelocity = 0;
+                state.targetAngle = 0;
+                state.isAnimating = false;
+                state.elapsedTime = 0;
             }
         }
     }
-    Jamble.JumpSkill = JumpSkill;
-    class SkillManager {
-        constructor() {
-            this.equippedSkills = new Map();
-            this.equipSkill(new MoveSkill());
-            this.equipSkill(new JumpSkill());
-        }
-        equipSkill(skill) {
-            this.equippedSkills.set(skill.id, skill);
-        }
-        hasSkill(id) {
-            return this.equippedSkills.has(id);
-        }
-        useSkill(id, player) {
-            const skill = this.equippedSkills.get(id);
-            if (skill && skill.enabled !== false) {
-                skill.execute(player);
-            }
-        }
-        setSkillEnabled(id, enabled) {
-            const skill = this.equippedSkills.get(id);
-            if (skill) {
-                skill.enabled = enabled;
-            }
-        }
-        getEquippedSkills() {
-            return Array.from(this.equippedSkills.values());
-        }
-    }
-    Jamble.SkillManager = SkillManager;
-})(Jamble || (Jamble = {}));
-var Jamble;
-(function (Jamble) {
-    class CanvasRenderer {
-        constructor(gameElement, gameWidth, gameHeight) {
-            this.backgroundColor = '#e8f5e9';
-            this.backgroundAlpha = 1.0;
-            this.scaleX = 1;
-            this.scaleY = 1;
-            this.gameWidth = gameWidth;
-            this.gameHeight = gameHeight;
-            this.canvas = document.createElement('canvas');
-            this.ctx = this.setupContext();
-            this.setupCanvas(gameElement);
-            this.setupHighDPIRendering(gameElement);
-        }
-        setupCanvas(gameElement) {
-            this.canvas.id = 'gameCanvas';
-            this.canvas.style.cssText = `
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        image-rendering: pixelated;
-        image-rendering: -moz-crisp-edges;
-        image-rendering: crisp-edges;
-        z-index: 3;
-      `;
-            gameElement.appendChild(this.canvas);
-        }
-        setupContext() {
-            const ctx = this.canvas.getContext('2d', { alpha: true });
-            if (!ctx) {
-                throw new Error('Could not get 2D canvas context');
-            }
-            ctx.imageSmoothingEnabled = false;
-            return ctx;
-        }
-        setupHighDPIRendering(_gameElement) {
-            const pixelRatio = window.devicePixelRatio || 1;
-            this.canvas.width = this.gameWidth * pixelRatio;
-            this.canvas.height = this.gameHeight * pixelRatio;
-            this.scaleX = pixelRatio;
-            this.scaleY = pixelRatio;
-            this.ctx.setTransform(this.scaleX, 0, 0, this.scaleY, 0, 0);
-            this.ctx.imageSmoothingEnabled = false;
-        }
-        setBackgroundAlpha(alpha) {
-            this.backgroundAlpha = Math.max(0, Math.min(1, alpha));
-        }
-        render(gameObjects) {
-            this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
-            this.ctx.save();
-            this.ctx.globalAlpha = this.backgroundAlpha;
-            this.ctx.fillStyle = this.backgroundColor;
-            this.ctx.fillRect(0, 0, this.gameWidth, this.gameHeight);
-            this.ctx.restore();
-            gameObjects.forEach(obj => {
-                if (!obj.render.visible)
-                    return;
-                this.ctx.save();
-                if (obj.render.opacity !== undefined) {
-                    this.ctx.globalAlpha = obj.render.opacity;
-                }
-                this.applyTransform(obj);
-                this.renderCanvasObject(obj);
-                this.ctx.restore();
-            });
-        }
-        applyTransform(obj) {
-            var _a, _b, _c, _d;
-            const x = obj.transform.x;
-            const y = obj.transform.y;
-            const width = obj.render.canvas.width || 20;
-            const height = obj.render.canvas.height || 20;
-            const anchorX = ((_b = (_a = obj.render.anchor) === null || _a === void 0 ? void 0 : _a.x) !== null && _b !== void 0 ? _b : 0.5) * width;
-            const anchorY = ((_d = (_c = obj.render.anchor) === null || _c === void 0 ? void 0 : _c.y) !== null && _d !== void 0 ? _d : 0.5) * height;
-            this.ctx.translate(x, y);
-            const animation = obj.render.animation;
-            if (animation && (animation.scaleX !== 1 || animation.scaleY !== 1)) {
-                this.ctx.translate(0, 0);
-                this.ctx.scale(animation.scaleX, animation.scaleY);
-            }
-            this.ctx.translate(-anchorX, -anchorY);
-        }
-        renderCanvasObject(obj) {
-            const canvas = obj.render.canvas;
-            const width = canvas.width || 20;
-            const height = canvas.height || 20;
-            if (canvas.shape === 'custom' && canvas.customDraw) {
-                canvas.customDraw(this.ctx, 0, 0);
-            }
-            else {
-                this.ctx.fillStyle = canvas.color;
-                if (canvas.shape === 'rectangle') {
-                    if (canvas.borderRadius && canvas.borderRadius > 0) {
-                        this.drawRoundedRect(0, 0, width, height, canvas.borderRadius);
-                    }
-                    else {
-                        this.ctx.fillRect(0, 0, width, height);
-                    }
-                }
-                else if (canvas.shape === 'circle') {
-                    this.ctx.beginPath();
-                    this.ctx.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI);
-                    this.ctx.fill();
-                }
-            }
-        }
-        drawRoundedRect(x, y, width, height, radius) {
-            this.ctx.beginPath();
-            this.ctx.moveTo(x + radius, y);
-            this.ctx.lineTo(x + width - radius, y);
-            this.ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
-            this.ctx.lineTo(x + width, y + height - radius);
-            this.ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
-            this.ctx.lineTo(x + radius, y + height);
-            this.ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
-            this.ctx.lineTo(x, y + radius);
-            this.ctx.quadraticCurveTo(x, y, x + radius, y);
-            this.ctx.closePath();
-            this.ctx.fill();
-        }
-        clear() {
-            this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
-        }
-    }
-    Jamble.CanvasRenderer = CanvasRenderer;
-})(Jamble || (Jamble = {}));
-var Jamble;
-(function (Jamble) {
-    class DebugRenderer {
-        constructor(gameElement) {
-            this.CATEGORY_COLORS = {
-                player: '#7F00FF',
-                deadly: '#ef4444',
-                kinematic: '#ffcc02',
-                environment: '#60a5fa'
-            };
-            this.gameElement = gameElement;
-            this.canvas = document.createElement('canvas');
-            this.canvas.style.cssText = `
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        z-index: 10;
-      `;
-            const ctx = this.canvas.getContext('2d');
-            if (!ctx)
-                throw new Error('DebugRenderer: 2D context unavailable');
-            this.ctx = ctx;
-            gameElement.appendChild(this.canvas);
-            this.resize();
-            window.addEventListener('resize', () => this.resize());
-        }
-        resize() {
-            const rect = this.gameElement.getBoundingClientRect();
-            const dpr = window.devicePixelRatio || 1;
-            const width = Math.max(1, rect.width || this.gameElement.offsetWidth || 500);
-            const height = Math.max(1, rect.height || this.gameElement.offsetHeight || 100);
-            this.canvas.width = width * dpr;
-            this.canvas.height = height * dpr;
-            this.ctx.setTransform(1, 0, 0, 1, 0, 0);
-            this.ctx.scale(dpr, dpr);
-            this.canvas.style.width = width + 'px';
-            this.canvas.style.height = height + 'px';
-        }
-        render(gameObjects, showColliders, showOrigins = false, showSlots = false, slots) {
-            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-            if (!showColliders && !showOrigins && !showSlots)
-                return;
-            if (showColliders) {
-                gameObjects.forEach(obj => {
-                    if (obj.collisionBox) {
-                        this.drawCollisionForObject(obj);
-                    }
-                });
-                this.drawPlayAreaBoundary();
-            }
-            if (showOrigins) {
-                gameObjects.forEach(obj => {
-                    if (obj.render.visible) {
-                        this.drawOrigin(obj);
-                    }
-                });
-            }
-            if (showSlots && slots) {
-                this.drawSlots(slots);
-            }
-        }
-        drawCollisionForObject(obj) {
-            var _a, _b, _c, _d;
-            const box = obj.collisionBox;
-            const color = this.CATEGORY_COLORS[box.category];
-            const ax = (_b = (_a = box.anchor) === null || _a === void 0 ? void 0 : _a.x) !== null && _b !== void 0 ? _b : 0;
-            const ay = (_d = (_c = box.anchor) === null || _c === void 0 ? void 0 : _c.y) !== null && _d !== void 0 ? _d : 0;
-            const x = obj.transform.x - ax * box.width;
-            const y = obj.transform.y - ay * box.height;
-            this.ctx.fillStyle = color + '30';
-            this.ctx.fillRect(x, y, box.width, box.height);
-            this.ctx.strokeStyle = color;
-            this.ctx.lineWidth = 1;
-            this.ctx.strokeRect(x, y, box.width, box.height);
-        }
-        drawPlayAreaBoundary() {
-            const rect = this.gameElement.getBoundingClientRect();
-            const width = rect.width;
-            const height = rect.height;
-            this.ctx.strokeStyle = '#ff0000';
-            this.ctx.lineWidth = 2;
-            this.ctx.setLineDash([5, 5]);
-            this.ctx.strokeRect(0, 0, width, height);
-            this.ctx.setLineDash([]);
-        }
-        drawOrigin(obj) {
-            const x = obj.transform.x;
-            const y = obj.transform.y;
-            const size = 8;
-            this.ctx.strokeStyle = '#ff6b35';
-            this.ctx.lineWidth = 2;
-            this.ctx.setLineDash([]);
-            this.ctx.beginPath();
-            this.ctx.moveTo(x - size, y);
-            this.ctx.lineTo(x + size, y);
-            this.ctx.stroke();
-            this.ctx.beginPath();
-            this.ctx.moveTo(x, y - size);
-            this.ctx.lineTo(x, y + size);
-            this.ctx.stroke();
-            this.ctx.fillStyle = '#ff6b35';
-            this.ctx.beginPath();
-            this.ctx.arc(x, y, 1, 0, 2 * Math.PI);
-            this.ctx.fill();
-            this.ctx.fillStyle = '#ff6b35';
-            this.ctx.font = '8px monospace';
-            this.ctx.textAlign = 'left';
-            this.ctx.fillText(obj.id, x + 6, y - 6);
-        }
-        drawSlots(slots) {
-            const slotSize = 4;
-            const slotColors = {
-                'ground': '#8b4513',
-                'air_low': '#87ceeb',
-                'air_mid': '#4682b4',
-                'air_high': '#1e90ff',
-                'ceiling': '#696969'
-            };
-            slots.forEach(slot => {
-                const color = slotColors[slot.type];
-                const x = slot.x;
-                const y = slot.y;
-                this.ctx.fillStyle = slot.occupied ? color + '80' : color + '40';
-                this.ctx.strokeStyle = color;
-                this.ctx.lineWidth = 1;
-                this.ctx.beginPath();
-                this.ctx.arc(x, y, slotSize, 0, 2 * Math.PI);
-                this.ctx.fill();
-                this.ctx.stroke();
-                if (slot.occupied) {
-                    this.ctx.fillStyle = '#ff0000';
-                    this.ctx.beginPath();
-                    this.ctx.arc(x, y, 1, 0, 2 * Math.PI);
-                    this.ctx.fill();
-                }
-            });
-        }
-        setVisible(visible) {
-            this.canvas.style.display = visible ? 'block' : 'none';
-        }
-    }
-    Jamble.DebugRenderer = DebugRenderer;
-})(Jamble || (Jamble = {}));
-var Jamble;
-(function (Jamble) {
-    class CollisionManager {
-        constructor(gameWidth, gameHeight) {
-            this.gameWidth = gameWidth;
-            this.gameHeight = gameHeight;
-            this.prevTriggerPairs = new Set();
-        }
-        update(gameObjects) {
-            var _a, _b, _c, _d, _e, _f, _g, _h, _j;
-            const dynamics = [];
-            const solids = [];
-            const triggers = [];
-            const byId = new Map();
-            for (const obj of gameObjects)
-                byId.set(obj.id, obj);
-            for (const obj of gameObjects) {
-                if (!obj.collisionBox || obj.collisionBox.enabled === false)
-                    continue;
-                const cat = obj.collisionBox.category;
-                if (cat === 'player')
-                    dynamics.push(obj);
-                if (cat === 'environment')
-                    solids.push(obj);
-                if (cat === 'kinematic' || cat === 'deadly')
-                    triggers.push(obj);
-            }
-            for (const dyn of dynamics) {
-                if (!dyn.collisionBox || dyn.collisionBox.enabled === false)
-                    continue;
-                const wasGrounded = dyn.grounded === true;
-                const vyBefore = (_a = dyn.velocityY) !== null && _a !== void 0 ? _a : 0;
-                for (const solid of solids) {
-                    if (dyn === solid || !solid.collisionBox || solid.collisionBox.enabled === false)
-                        continue;
-                    this.resolveAABB(dyn, solid);
-                }
-                this.clampToWorld(dyn);
-                const pb = this.getAABB(dyn);
-                const eps = CollisionManager.EPS;
-                let grounded = false;
-                if (pb.y + pb.height >= this.gameHeight - eps) {
-                    grounded = true;
-                }
-                else {
-                    for (const solid of solids) {
-                        if (!solid.collisionBox || solid.collisionBox.enabled === false)
-                            continue;
-                        const ob = this.getAABB(solid);
-                        const horizontalOverlap = pb.x < ob.x + ob.width && pb.x + pb.width > ob.x;
-                        const touchingTop = Math.abs((pb.y + pb.height) - ob.y) <= eps;
-                        if (horizontalOverlap && touchingTop && vyBefore >= 0) {
-                            grounded = true;
-                            break;
-                        }
-                    }
-                }
-                if (dyn.grounded !== undefined) {
-                    dyn.grounded = grounded;
-                    if (!wasGrounded && grounded) {
-                        (_c = (_b = dyn).onLanded) === null || _c === void 0 ? void 0 : _c.call(_b, vyBefore);
-                    }
-                }
-            }
-            const currentPairs = new Set();
-            for (const dyn of dynamics) {
-                if (!dyn.collisionBox || dyn.collisionBox.enabled === false)
-                    continue;
-                for (const other of triggers) {
-                    if (!other.collisionBox || other.collisionBox.enabled === false)
-                        continue;
-                    if (other.id.includes('sensor') && other.isEnabled && !other.isEnabled())
-                        continue;
-                    if (dyn === other)
-                        continue;
-                    if (this.aabbIntersects(dyn, other)) {
-                        const key = `${dyn.id}|${other.id}`;
-                        currentPairs.add(key);
-                        if (!this.prevTriggerPairs.has(key)) {
-                            (_d = other.onTriggerEnter) === null || _d === void 0 ? void 0 : _d.call(other, dyn);
-                            (_e = dyn.onTriggerEnter) === null || _e === void 0 ? void 0 : _e.call(dyn, other);
-                        }
-                        else {
-                            (_f = other.onTriggerStay) === null || _f === void 0 ? void 0 : _f.call(other, dyn);
-                            (_g = dyn.onTriggerStay) === null || _g === void 0 ? void 0 : _g.call(dyn, other);
-                        }
-                    }
-                }
-            }
-            for (const key of this.prevTriggerPairs) {
-                if (!currentPairs.has(key)) {
-                    const [dynId, otherId] = key.split('|');
-                    const dyn = byId.get(dynId);
-                    const other = byId.get(otherId);
-                    if (dyn && other) {
-                        (_h = other.onTriggerExit) === null || _h === void 0 ? void 0 : _h.call(other, dyn);
-                        (_j = dyn.onTriggerExit) === null || _j === void 0 ? void 0 : _j.call(dyn, other);
-                    }
-                }
-            }
-            this.prevTriggerPairs = currentPairs;
-        }
-        aabbIntersects(a, b) {
-            const A = this.getAABB(a);
-            const B = this.getAABB(b);
-            return (A.x < B.x + B.width &&
-                A.x + A.width > B.x &&
-                A.y < B.y + B.height &&
-                A.y + A.height > B.y);
-        }
-        getAABB(obj) {
-            var _a, _b, _c, _d;
-            const cb = obj.collisionBox;
-            const ax = (_b = (_a = cb.anchor) === null || _a === void 0 ? void 0 : _a.x) !== null && _b !== void 0 ? _b : 0;
-            const ay = (_d = (_c = cb.anchor) === null || _c === void 0 ? void 0 : _c.y) !== null && _d !== void 0 ? _d : 0;
-            const x = obj.transform.x - ax * cb.width;
-            const y = obj.transform.y - ay * cb.height;
-            return { x, y, width: cb.width, height: cb.height };
-        }
-        setColliderTopLeft(obj, x, y) {
-            if (!obj.collisionBox || obj.collisionBox.enabled === false)
-                return;
-            obj.collisionBox.x = x;
-            obj.collisionBox.y = y;
-        }
-        resolveAABB(dyn, solid) {
-            const pb = this.getAABB(dyn);
-            const ob = this.getAABB(solid);
-            const intersects = (pb.x < ob.x + ob.width &&
-                pb.x + pb.width > ob.x &&
-                pb.y < ob.y + ob.height &&
-                pb.y + pb.height > ob.y);
-            if (!intersects)
-                return;
-            const pushLeft = (pb.x + pb.width) - ob.x;
-            const pushRight = (ob.x + ob.width) - pb.x;
-            const pushUp = (pb.y + pb.height) - ob.y;
-            const pushDown = (ob.y + ob.height) - pb.y;
-            const minPushX = Math.min(pushLeft, pushRight);
-            const minPushY = Math.min(pushUp, pushDown);
-            if (minPushX < minPushY) {
-                const isLeftSide = pushLeft < pushRight;
-                const dx = isLeftSide ? -pushLeft : pushRight;
-                dyn.transform.x += dx;
-                this.setColliderTopLeft(dyn, pb.x + dx, pb.y);
-                if (dyn.velocityX !== undefined) {
-                    dyn.velocityX = 0;
-                }
-                if (dyn.onHorizontalCollision) {
-                    dyn.onHorizontalCollision(isLeftSide ? 'left' : 'right', solid);
-                }
-            }
-            else {
-                const isTopSide = pushUp < pushDown;
-                const dy = isTopSide ? -pushUp : pushDown;
-                dyn.transform.y += dy;
-                this.setColliderTopLeft(dyn, pb.x, pb.y + dy);
-                if (dyn.velocityY !== undefined) {
-                    dyn.velocityY = 0;
-                }
-                if (dyn.onVerticalCollision) {
-                    dyn.onVerticalCollision(isTopSide ? 'top' : 'bottom', solid);
-                }
-            }
-        }
-        clampToWorld(obj) {
-            if (!obj.collisionBox || obj.collisionBox.enabled === false)
-                return;
-            const pb = this.getAABB(obj);
-            let dx = 0;
-            let wallSide = null;
-            if (pb.x < 0) {
-                dx = -pb.x;
-                wallSide = 'left';
-            }
-            else if (pb.x + pb.width > this.gameWidth) {
-                dx = this.gameWidth - (pb.x + pb.width);
-                wallSide = 'right';
-            }
-            if (dx !== 0) {
-                obj.transform.x += dx;
-                this.setColliderTopLeft(obj, pb.x + dx, pb.y);
-                if (obj.velocityX !== undefined) {
-                    obj.velocityX = 0;
-                }
-                if (wallSide && obj.onHorizontalCollision) {
-                    obj.onHorizontalCollision(wallSide, null);
-                }
-            }
-            const pb2 = this.getAABB(obj);
-            if (pb2.y + pb2.height > this.gameHeight) {
-                const dy = this.gameHeight - (pb2.y + pb2.height);
-                obj.transform.y += dy;
-                this.setColliderTopLeft(obj, pb2.x, pb2.y + dy);
-                if (obj.velocityY !== undefined) {
-                    obj.velocityY = 0;
-                }
-            }
-        }
-    }
-    CollisionManager.EPS = 0.001;
-    Jamble.CollisionManager = CollisionManager;
-})(Jamble || (Jamble = {}));
-var Jamble;
-(function (Jamble) {
-    class InputManager {
-        constructor() {
-            this.keys = new Set();
-            this.keyDownHandlers = new Map();
-            this.keyUpHandlers = new Map();
-            this.setupEventListeners();
-        }
-        setupEventListeners() {
-            document.addEventListener('keydown', (e) => {
-                this.keys.add(e.code);
-                const handler = this.keyDownHandlers.get(e.code);
-                if (handler) {
-                    handler();
-                    e.preventDefault();
-                }
-            });
-            document.addEventListener('keyup', (e) => {
-                this.keys.delete(e.code);
-                const handler = this.keyUpHandlers.get(e.code);
-                if (handler) {
-                    handler();
-                }
-            });
-        }
-        isKeyPressed(keyCode) {
-            return this.keys.has(keyCode);
-        }
-        onKeyDown(keyCode, handler) {
-            this.keyDownHandlers.set(keyCode, handler);
-        }
-        onKeyUp(keyCode, handler) {
-            this.keyUpHandlers.set(keyCode, handler);
-        }
-        removeKeyHandler(keyCode) {
-            this.keyDownHandlers.delete(keyCode);
-            this.keyUpHandlers.delete(keyCode);
-        }
-        isMovingLeft() {
-            return this.isKeyPressed('ArrowLeft') || this.isKeyPressed('KeyA');
-        }
-        isMovingRight() {
-            return this.isKeyPressed('ArrowRight') || this.isKeyPressed('KeyD');
-        }
-        isJumping() {
-            return this.isKeyPressed('Space');
-        }
-        destroy() {
-            this.keyDownHandlers.clear();
-            this.keyUpHandlers.clear();
-            this.keys.clear();
-        }
-    }
-    Jamble.InputManager = InputManager;
+    TreeAnim.DEFAULT_WIGGLE_MIN = 0.1;
+    TreeAnim.DEFAULT_WIGGLE_MAX = 0.15;
+    TreeAnim.DEFAULT_OMEGA = 15.0;
+    TreeAnim.DEFAULT_ZETA = 0.2;
+    TreeAnim.DEFAULT_DURATION = 0.6;
+    TreeAnim.SETTLEMENT_THRESHOLD = 0.05;
+    Jamble.TreeAnim = TreeAnim;
 })(Jamble || (Jamble = {}));
 var Jamble;
 (function (Jamble) {
@@ -2068,6 +714,46 @@ var Jamble;
         }
     }
     Jamble.StateManager = StateManager;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
+    class EconomyManager {
+        constructor() {
+            this.currency = 0;
+            this.onCurrencyChangeCallbacks = [];
+        }
+        static getInstance() {
+            if (!EconomyManager.instance) {
+                EconomyManager.instance = new EconomyManager();
+            }
+            return EconomyManager.instance;
+        }
+        getCurrency() {
+            return this.currency;
+        }
+        addCurrency(amount) {
+            this.currency += amount;
+            this.notifyCurrencyChange();
+        }
+        spendCurrency(amount) {
+            if (this.currency >= amount) {
+                this.currency -= amount;
+                this.notifyCurrencyChange();
+                return true;
+            }
+            return false;
+        }
+        canAfford(amount) {
+            return this.currency >= amount;
+        }
+        onCurrencyChange(callback) {
+            this.onCurrencyChangeCallbacks.push(callback);
+        }
+        notifyCurrencyChange() {
+            this.onCurrencyChangeCallbacks.forEach(callback => callback(this.currency));
+        }
+    }
+    Jamble.EconomyManager = EconomyManager;
 })(Jamble || (Jamble = {}));
 var Jamble;
 (function (Jamble) {
@@ -3863,6 +2549,946 @@ var Jamble;
 })(Jamble || (Jamble = {}));
 var Jamble;
 (function (Jamble) {
+    class BaseNPC {
+        constructor(name, config) {
+            this.crescendoThresholdReached = false;
+            this.crescendoEnabled = true;
+            this.inPainZone = false;
+            this.painExpressionLocked = false;
+            this.winExpressionLocked = false;
+            this.arousalChangeListeners = [];
+            this.arousalImpulseListeners = [];
+            this.crescendoChangeListeners = [];
+            this.crescendoThresholdListeners = [];
+            this.painThresholdListeners = [];
+            this.expressionChangeListeners = [];
+            this.arousalMomentum = 0;
+            this.momentumSpreadDuration = 0.3;
+            this.name = name;
+            this.arousalConfig = {
+                baselineValue: 0.2,
+                decayRate: 0.001,
+                maxValue: 6.0,
+                minValue: -1.0,
+                sensitivity: 1.0,
+                painThreshold: 5.0,
+                ...config
+            };
+            this.crescendoConfig = {
+                targetArousalValue: 4.0,
+                arousalTolerance: 0.5,
+                riseRate: 0.2,
+                decayRate: 0.1,
+                threshold: 1.0,
+                maxValue: 1.0
+            };
+            this.arousalValue = this.arousalConfig.baselineValue;
+            this.crescendoValue = 0.1;
+            this.expressionDescriptor = this.resolveExpression();
+        }
+        getName() {
+            return this.name;
+        }
+        getArousalValue() {
+            return this.arousalValue;
+        }
+        applyArousalImpulse(intensity, player, collisionType) {
+            const oldValue = this.arousalValue;
+            let adjustedIntensity = intensity * this.arousalConfig.sensitivity;
+            let momentumAmount = 0;
+            if (player && collisionType === 'side') {
+                const softness = player.getSoftness();
+                if (softness < 0.5) {
+                    const hardnessFactor = (0.5 - softness) / 0.5;
+                    const baseImpulse = intensity * this.arousalConfig.sensitivity;
+                    const topCollisionTarget = 0.5 * this.arousalConfig.sensitivity;
+                    const targetImpulse = Math.max(baseImpulse, topCollisionTarget);
+                    adjustedIntensity = baseImpulse + hardnessFactor * (targetImpulse - baseImpulse);
+                }
+                else {
+                    const t = (softness - 0.5) / 0.5;
+                    const totalScale = 1.0 - t * 0.7;
+                    adjustedIntensity = intensity * this.arousalConfig.sensitivity * totalScale;
+                    const instantRatio = 0.6;
+                    momentumAmount = adjustedIntensity * (1 - instantRatio);
+                    adjustedIntensity *= instantRatio;
+                }
+            }
+            this.arousalValue = Math.max(this.arousalConfig.minValue, Math.min(this.arousalConfig.maxValue, this.arousalValue + adjustedIntensity));
+            if (momentumAmount > 0) {
+                this.arousalMomentum += momentumAmount;
+            }
+            this.checkPainThreshold();
+            const actualIntensity = this.arousalValue - oldValue;
+            if (actualIntensity !== 0) {
+                this.notifyArousalImpulseListeners(actualIntensity);
+                this.notifyArousalListeners();
+            }
+        }
+        setArousalValue(value) {
+            const oldValue = this.arousalValue;
+            this.arousalValue = Math.max(this.arousalConfig.minValue, Math.min(this.arousalConfig.maxValue, value));
+            if (oldValue !== this.arousalValue) {
+                this.notifyArousalListeners();
+            }
+        }
+        getArousalNormalized() {
+            const range = this.arousalConfig.maxValue - this.arousalConfig.minValue;
+            return Math.max(0, Math.min(1, (this.arousalValue - this.arousalConfig.minValue) / range));
+        }
+        getSensationNormalized() {
+            return this.getArousalNormalized();
+        }
+        getPainThreshold() {
+            return this.arousalConfig.painThreshold;
+        }
+        getArousalRange() {
+            return {
+                min: this.arousalConfig.minValue,
+                max: this.arousalConfig.maxValue
+            };
+        }
+        updateArousal(deltaTime, player) {
+            const oldValue = this.arousalValue;
+            if (this.arousalMomentum > 0) {
+                const momentumPerSecond = this.arousalMomentum / this.momentumSpreadDuration;
+                const momentumThisFrame = Math.min(momentumPerSecond * deltaTime, this.arousalMomentum);
+                this.arousalMomentum -= momentumThisFrame;
+                this.arousalValue = Math.max(this.arousalConfig.minValue, Math.min(this.arousalConfig.maxValue, this.arousalValue + momentumThisFrame));
+            }
+            let decay = this.arousalConfig.decayRate;
+            if (player && !this.inPainZone) {
+                const temperature = player.getTemperature();
+                decay *= (0.5 + temperature * 0.5);
+            }
+            if (this.inPainZone) {
+                decay = 2.0;
+            }
+            if (this.arousalValue > this.arousalConfig.baselineValue) {
+                this.arousalValue -= decay * deltaTime;
+                this.arousalValue = Math.max(this.arousalConfig.baselineValue, this.arousalValue);
+            }
+            else if (this.arousalValue < this.arousalConfig.baselineValue) {
+                this.arousalValue += decay * deltaTime;
+                this.arousalValue = Math.min(this.arousalConfig.baselineValue, this.arousalValue);
+            }
+            if (oldValue !== this.arousalValue) {
+                this.notifyArousalListeners();
+            }
+        }
+        onArousalChange(callback) {
+            this.arousalChangeListeners.push(callback);
+        }
+        removeArousalListener(callback) {
+            const index = this.arousalChangeListeners.indexOf(callback);
+            if (index !== -1) {
+                this.arousalChangeListeners.splice(index, 1);
+            }
+        }
+        onArousalImpulse(callback) {
+            this.arousalImpulseListeners.push(callback);
+        }
+        removeArousalImpulseListener(callback) {
+            const index = this.arousalImpulseListeners.indexOf(callback);
+            if (index !== -1) {
+                this.arousalImpulseListeners.splice(index, 1);
+            }
+        }
+        notifyArousalListeners() {
+            for (const listener of this.arousalChangeListeners) {
+                try {
+                    listener(this.arousalValue, this);
+                }
+                catch (error) {
+                    console.error(`Error in arousal listener for ${this.name}:`, error);
+                }
+            }
+            this.evaluateExpression();
+        }
+        notifyArousalImpulseListeners(impulse) {
+            for (const listener of this.arousalImpulseListeners) {
+                try {
+                    listener(impulse, this);
+                }
+                catch (error) {
+                    console.error(`Error in arousal impulse listener for ${this.name}:`, error);
+                }
+            }
+        }
+        checkPainThreshold() {
+            const wasInPain = this.inPainZone;
+            const isInPain = this.arousalValue > this.arousalConfig.painThreshold;
+            if (isInPain && !wasInPain) {
+                this.inPainZone = true;
+                if (!this.winExpressionLocked) {
+                    this.painExpressionLocked = true;
+                    this.evaluateExpression(true);
+                }
+                this.notifyPainThresholdListeners();
+            }
+            else if (!isInPain && wasInPain) {
+                this.inPainZone = false;
+            }
+        }
+        isInPainZone() {
+            return this.inPainZone;
+        }
+        onPainThreshold(callback) {
+            this.painThresholdListeners.push(callback);
+        }
+        removePainThresholdListener(callback) {
+            const index = this.painThresholdListeners.indexOf(callback);
+            if (index !== -1) {
+                this.painThresholdListeners.splice(index, 1);
+            }
+        }
+        notifyPainThresholdListeners() {
+            for (const listener of this.painThresholdListeners) {
+                try {
+                    listener(this);
+                }
+                catch (error) {
+                    console.error(`Error in pain threshold listener for ${this.name}:`, error);
+                }
+            }
+        }
+        getExpressionDescriptor() {
+            return this.expressionDescriptor;
+        }
+        onExpressionChange(callback) {
+            this.expressionChangeListeners.push(callback);
+        }
+        removeExpressionChangeListener(callback) {
+            const index = this.expressionChangeListeners.indexOf(callback);
+            if (index !== -1) {
+                this.expressionChangeListeners.splice(index, 1);
+            }
+        }
+        resolveExpression() {
+            if (this.winExpressionLocked) {
+                return { id: 'win' };
+            }
+            if (this.painExpressionLocked) {
+                return { id: 'pain' };
+            }
+            return { id: 'default' };
+        }
+        evaluateExpression(force = false) {
+            const nextDescriptor = this.resolveExpression();
+            if (!nextDescriptor) {
+                return;
+            }
+            if (force || !this.areExpressionsEqual(this.expressionDescriptor, nextDescriptor)) {
+                this.expressionDescriptor = nextDescriptor;
+                this.notifyExpressionChangeListeners();
+            }
+        }
+        areExpressionsEqual(a, b) {
+            if (!a || !b) {
+                return false;
+            }
+            if (a.id !== b.id) {
+                return false;
+            }
+            if (a.emoji !== b.emoji) {
+                return false;
+            }
+            if (!a.sprite && !b.sprite) {
+                return true;
+            }
+            if (!a.sprite || !b.sprite) {
+                return false;
+            }
+            return a.sprite.atlasId === b.sprite.atlasId && a.sprite.frame === b.sprite.frame;
+        }
+        notifyExpressionChangeListeners() {
+            for (const listener of this.expressionChangeListeners) {
+                try {
+                    listener(this.expressionDescriptor, this);
+                }
+                catch (error) {
+                    console.error(`Error in expression listener for ${this.name}:`, error);
+                }
+            }
+        }
+        resetPainExpression() {
+            if (this.painExpressionLocked) {
+                this.painExpressionLocked = false;
+                this.evaluateExpression(true);
+            }
+        }
+        resetWinExpression() {
+            if (this.winExpressionLocked) {
+                this.winExpressionLocked = false;
+                this.evaluateExpression(true);
+            }
+        }
+        isPainExpressionActive() {
+            return this.painExpressionLocked;
+        }
+        isWinExpressionActive() {
+            return this.winExpressionLocked;
+        }
+        getCrescendoValue() {
+            return this.crescendoValue;
+        }
+        getCrescendoNormalized() {
+            return Math.max(0, Math.min(1, this.crescendoValue / this.crescendoConfig.maxValue));
+        }
+        isInCrescendoZone() {
+            const target = this.crescendoConfig.targetArousalValue;
+            const tolerance = this.crescendoConfig.arousalTolerance;
+            return this.arousalValue >= (target - tolerance) &&
+                this.arousalValue <= (target + tolerance);
+        }
+        hasCrescendoThresholdReached() {
+            return this.crescendoThresholdReached;
+        }
+        updateCrescendo(deltaTime) {
+            if (this.crescendoThresholdReached) {
+                return;
+            }
+            const oldValue = this.crescendoValue;
+            const inZone = this.isInCrescendoZone();
+            let rate;
+            if (inZone && this.crescendoEnabled) {
+                rate = this.crescendoConfig.riseRate;
+            }
+            else {
+                rate = -this.crescendoConfig.decayRate;
+            }
+            const change = rate * deltaTime;
+            this.crescendoValue = Math.max(0.1, Math.min(this.crescendoConfig.maxValue, this.crescendoValue + change));
+            if (!this.crescendoThresholdReached && this.crescendoValue >= this.crescendoConfig.threshold) {
+                this.crescendoThresholdReached = true;
+                this.crescendoValue = this.crescendoConfig.threshold;
+                this.winExpressionLocked = true;
+                this.evaluateExpression(true);
+                this.notifyCrescendoThresholdListeners();
+            }
+            if (oldValue !== this.crescendoValue) {
+                this.notifyCrescendoChangeListeners();
+            }
+        }
+        enableCrescendo() {
+            this.crescendoEnabled = true;
+        }
+        disableCrescendo() {
+            this.crescendoEnabled = false;
+        }
+        isCrescendoEnabled() {
+            return this.crescendoEnabled;
+        }
+        onCrescendoChange(callback) {
+            this.crescendoChangeListeners.push(callback);
+        }
+        removeCrescendoListener(callback) {
+            const index = this.crescendoChangeListeners.indexOf(callback);
+            if (index !== -1) {
+                this.crescendoChangeListeners.splice(index, 1);
+            }
+        }
+        onCrescendoThreshold(callback) {
+            this.crescendoThresholdListeners.push(callback);
+        }
+        removeCrescendoThresholdListener(callback) {
+            const index = this.crescendoThresholdListeners.indexOf(callback);
+            if (index !== -1) {
+                this.crescendoThresholdListeners.splice(index, 1);
+            }
+        }
+        notifyCrescendoChangeListeners() {
+            for (const listener of this.crescendoChangeListeners) {
+                try {
+                    listener(this.crescendoValue, this);
+                }
+                catch (error) {
+                    console.error(`Error in crescendo listener for ${this.name}:`, error);
+                }
+            }
+            this.evaluateExpression();
+        }
+        notifyCrescendoThresholdListeners() {
+            for (const listener of this.crescendoThresholdListeners) {
+                try {
+                    listener(this);
+                }
+                catch (error) {
+                    console.error(`Error in crescendo threshold listener for ${this.name}:`, error);
+                }
+            }
+        }
+        getDebugSection() {
+            return {
+                title: `${this.name} Configuration`,
+                controls: [
+                    {
+                        type: 'display',
+                        label: 'Arousal',
+                        getValue: () => this.arousalValue.toFixed(2)
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Baseline',
+                        min: 0,
+                        max: 5,
+                        step: 0.1,
+                        getValue: () => this.arousalConfig.baselineValue,
+                        setValue: (value) => { this.arousalConfig.baselineValue = value; }
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Decay Rate',
+                        min: 0.1,
+                        max: 2.0,
+                        step: 0.1,
+                        getValue: () => this.arousalConfig.decayRate,
+                        setValue: (value) => { this.arousalConfig.decayRate = value; }
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Sensitivity',
+                        min: 0.5,
+                        max: 5.0,
+                        step: 0.1,
+                        getValue: () => this.arousalConfig.sensitivity,
+                        setValue: (value) => { this.arousalConfig.sensitivity = value; }
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Pain Threshold',
+                        min: 3.0,
+                        max: 8.0,
+                        step: 0.1,
+                        getValue: () => this.arousalConfig.painThreshold,
+                        setValue: (value) => { this.arousalConfig.painThreshold = value; }
+                    },
+                    {
+                        type: 'display',
+                        label: 'Momentum',
+                        getValue: () => this.arousalMomentum.toFixed(3)
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Momentum Spread Sec',
+                        min: 0.1,
+                        max: 1.0,
+                        step: 0.05,
+                        getValue: () => this.momentumSpreadDuration,
+                        setValue: (value) => { this.momentumSpreadDuration = value; }
+                    },
+                    {
+                        type: 'display',
+                        label: 'Crescendo',
+                        getValue: () => this.crescendoValue.toFixed(2)
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Target Arousal',
+                        min: 2.0,
+                        max: 6.0,
+                        step: 0.1,
+                        getValue: () => this.crescendoConfig.targetArousalValue,
+                        setValue: (value) => { this.crescendoConfig.targetArousalValue = value; }
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Tolerance',
+                        min: 0.1,
+                        max: 2.0,
+                        step: 0.1,
+                        getValue: () => this.crescendoConfig.arousalTolerance,
+                        setValue: (value) => { this.crescendoConfig.arousalTolerance = value; }
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Rise Rate',
+                        min: 0.05,
+                        max: 0.5,
+                        step: 0.05,
+                        getValue: () => this.crescendoConfig.riseRate,
+                        setValue: (value) => { this.crescendoConfig.riseRate = value; }
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Decay Rate',
+                        min: 0.05,
+                        max: 0.5,
+                        step: 0.05,
+                        getValue: () => this.crescendoConfig.decayRate,
+                        setValue: (value) => { this.crescendoConfig.decayRate = value; }
+                    }
+                ]
+            };
+        }
+    }
+    Jamble.BaseNPC = BaseNPC;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
+    class KnobAnim {
+        constructor(knob) {
+            this.knob = knob;
+            this.deflectDuration = 0.2;
+            this.squashHoldTimeS = 0.15;
+            this.squashOmega = 24.6;
+            this.squashZeta = 0.15;
+            this.maxAnimationTime = 1.5;
+            this.squashPercent = 4;
+            this.widthMultiplier = 1.3;
+            this.settlementThreshold = 0.01;
+            this.isDeflecting = false;
+            this.deflectionDirection = 1;
+            this.deflectTimer = 0;
+            this.isSquashing = false;
+            this.squashPhase = 'compress';
+            this.originalLength = 0;
+            this.originalLineWidth = 0;
+            this.squashVelocity = 0;
+            this.squashPhaseTimer = 0;
+            this.squashSpringElapsed = 0;
+            this.isDespawning = false;
+            this.despawnPhaseTimer = 0;
+            this.isSpawning = false;
+            this.spawnSpringElapsed = 0;
+            this.spawnVelocity = 0;
+            this.isInitialSpawnDelaying = false;
+            this.initialSpawnDelayTimer = 0;
+            this.initialSpawnDelay = 0.75;
+            this.originalLength = knob.config.length;
+            this.originalLineWidth = knob.config.lineWidth;
+        }
+        update(deltaTime) {
+            if (this.isInitialSpawnDelaying) {
+                this.updateInitialSpawnDelay(deltaTime);
+                return;
+            }
+            if (this.isDespawning) {
+                this.updateDespawn(deltaTime);
+                return;
+            }
+            if (this.isSpawning) {
+                this.updateSpawn(deltaTime);
+                return;
+            }
+            if (this.isDeflecting) {
+                this.deflectTimer -= deltaTime;
+                if (this.deflectTimer <= 0) {
+                    this.isDeflecting = false;
+                    this.knob.thetaTarget = 0;
+                }
+                else {
+                    const maxAngle = (this.knob.config.maxAngleDeg * Math.PI) / 180;
+                    this.knob.thetaTarget = this.deflectionDirection * maxAngle;
+                }
+            }
+            const angZeta = this.knob.config.zeta;
+            const angOmega = this.knob.config.omega;
+            const angAcc = -2 * angZeta * angOmega * this.knob.thetaDot -
+                (angOmega * angOmega) * (this.knob.theta - this.knob.thetaTarget);
+            this.knob.thetaDot += angAcc * deltaTime;
+            this.knob.theta += this.knob.thetaDot * deltaTime;
+            if (!this.isSquashing)
+                return;
+            if (this.squashPhase === 'compress') {
+                this.squashPhaseTimer -= deltaTime;
+                if (this.squashPhaseTimer <= 0) {
+                    this.squashPhase = 'hold';
+                    this.squashPhaseTimer = this.squashHoldTimeS;
+                }
+                return;
+            }
+            if (this.squashPhase === 'hold') {
+                this.squashPhaseTimer -= deltaTime;
+                if (this.squashPhaseTimer <= 0) {
+                    this.squashPhase = 'spring';
+                    this.squashSpringElapsed = 0;
+                }
+                return;
+            }
+            if (this.squashPhase === 'spring') {
+                this.updateSpringPhysics(this.originalLength, (newLength) => { this.knob.config.length = newLength; }, this.squashVelocity, (newVelocity) => { this.squashVelocity = newVelocity; }, deltaTime);
+                this.squashSpringElapsed += deltaTime;
+                this.updateWidthAnimation(this.knob.config.length, this.originalLength);
+                const isSettled = Math.abs(this.knob.config.length - this.originalLength) < this.settlementThreshold &&
+                    Math.abs(this.squashVelocity) < this.settlementThreshold;
+                if (isSettled || this.squashSpringElapsed > this.maxAnimationTime) {
+                    this.knob.config.length = this.originalLength;
+                    this.knob.config.lineWidth = this.originalLineWidth;
+                    this.isSquashing = false;
+                    this.squashVelocity = 0;
+                }
+            }
+        }
+        updateSpringPhysics(targetLength, setLength, velocity, setVelocity, deltaTime) {
+            const currentLength = this.knob.config.length;
+            const displacement = currentLength - targetLength;
+            const acc = -2 * this.squashZeta * this.squashOmega * velocity -
+                (this.squashOmega * this.squashOmega) * displacement;
+            const newVelocity = velocity + acc * deltaTime;
+            const newLength = currentLength + newVelocity * deltaTime;
+            setVelocity(newVelocity);
+            setLength(newLength);
+        }
+        updateWidthAnimation(currentLength, targetLength) {
+            const displacement = Math.abs(currentLength - targetLength);
+            const lengthProgress = 1 - displacement / Math.abs(targetLength * 0.9);
+            const clampedProgress = Math.max(0, Math.min(1, lengthProgress));
+            this.knob.config.lineWidth = this.originalLineWidth * this.widthMultiplier -
+                (this.originalLineWidth * (this.widthMultiplier - 1.0) * clampedProgress);
+        }
+        triggerDeflect(direction) {
+            this.isDeflecting = true;
+            this.deflectionDirection = direction >= 0 ? 1 : -1;
+            const maxAngle = (this.knob.config.maxAngleDeg * Math.PI) / 180;
+            this.knob.thetaTarget = this.deflectionDirection * maxAngle;
+            this.deflectTimer = this.deflectDuration;
+        }
+        triggerSquash() {
+            this.isSquashing = true;
+            this.squashPhase = 'compress';
+            this.originalLength = this.knob.config.length;
+            this.originalLineWidth = this.knob.config.lineWidth;
+            this.squashVelocity = 0;
+            this.squashSpringElapsed = 0;
+            this.applyCompression();
+            this.squashPhaseTimer = this.squashHoldTimeS;
+        }
+        applyCompression() {
+            this.knob.config.length = this.originalLength * (this.squashPercent / 100);
+            this.knob.config.lineWidth = this.originalLineWidth * this.widthMultiplier;
+        }
+        triggerDespawn(onComplete) {
+            this.stopAllAnimations();
+            this.isDespawning = true;
+            this.onDespawnComplete = onComplete;
+            this.originalLength = this.knob.config.length;
+            this.originalLineWidth = this.knob.config.lineWidth;
+            this.applyCompression();
+            this.despawnPhaseTimer = this.squashHoldTimeS;
+        }
+        triggerSpawn(onComplete) {
+            this.isSpawning = true;
+            this.onSpawnComplete = onComplete;
+            this.spawnSpringElapsed = 0;
+            this.spawnVelocity = 0;
+            this.applyCompression();
+        }
+        triggerInitialSpawn(onComplete) {
+            this.isInitialSpawnDelaying = true;
+            this.initialSpawnDelayTimer = this.initialSpawnDelay;
+            this.onSpawnComplete = onComplete;
+            this.applyCompression();
+        }
+        updateInitialSpawnDelay(deltaTime) {
+            this.initialSpawnDelayTimer -= deltaTime;
+            if (this.initialSpawnDelayTimer <= 0) {
+                this.isInitialSpawnDelaying = false;
+                this.isSpawning = true;
+                this.spawnSpringElapsed = 0;
+                this.spawnVelocity = 0;
+            }
+        }
+        stopAllAnimations() {
+            this.isDeflecting = false;
+            this.isSquashing = false;
+            this.isSpawning = false;
+        }
+        updateDespawn(deltaTime) {
+            this.despawnPhaseTimer -= deltaTime;
+            if (this.despawnPhaseTimer <= 0) {
+                this.isDespawning = false;
+                if (this.onDespawnComplete) {
+                    this.onDespawnComplete();
+                    this.onDespawnComplete = undefined;
+                }
+            }
+        }
+        updateSpawn(deltaTime) {
+            this.updateSpringPhysics(this.originalLength, (newLength) => { this.knob.config.length = newLength; }, this.spawnVelocity, (newVelocity) => { this.spawnVelocity = newVelocity; }, deltaTime);
+            this.spawnSpringElapsed += deltaTime;
+            this.updateWidthAnimation(this.knob.config.length, this.originalLength);
+            const isSettled = Math.abs(this.knob.config.length - this.originalLength) < this.settlementThreshold &&
+                Math.abs(this.spawnVelocity) < this.settlementThreshold;
+            if (isSettled || this.spawnSpringElapsed > this.maxAnimationTime) {
+                this.knob.config.length = this.originalLength;
+                this.knob.config.lineWidth = this.originalLineWidth;
+                this.isSpawning = false;
+                this.spawnVelocity = 0;
+                if (this.onSpawnComplete) {
+                    this.onSpawnComplete();
+                    this.onSpawnComplete = undefined;
+                }
+            }
+        }
+        isAnimating() {
+            return this.isDeflecting || this.isSquashing || this.isDespawning || this.isSpawning || this.isInitialSpawnDelaying;
+        }
+        reset() {
+            this.stopAllAnimations();
+            this.isDespawning = false;
+            this.isInitialSpawnDelaying = false;
+            this.squashVelocity = 0;
+            this.spawnVelocity = 0;
+            this.knob.config.length = this.originalLength;
+            this.knob.config.lineWidth = this.originalLineWidth;
+        }
+    }
+    Jamble.KnobAnim = KnobAnim;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
+    let KnobState;
+    (function (KnobState) {
+        KnobState[KnobState["ACTIVE"] = 0] = "ACTIVE";
+        KnobState[KnobState["RETRACTING"] = 1] = "RETRACTING";
+        KnobState[KnobState["RETRACTED"] = 2] = "RETRACTED";
+        KnobState[KnobState["SPAWNING"] = 3] = "SPAWNING";
+    })(KnobState = Jamble.KnobState || (Jamble.KnobState = {}));
+    class Knob extends Jamble.GameObject {
+        constructor(id, x = 0, y = 0, slotManager, slotId, activeNPC) {
+            super(id, x, y);
+            this.currencyValue = 1;
+            this.topHitValue = 5;
+            this.config = {
+                length: 10,
+                segments: 6,
+                omega: 18.0,
+                zeta: 0.25,
+                maxAngleDeg: 85,
+                bowFactor: 0.35,
+                lineWidth: 12,
+                knobColor: '#ff968f',
+                baseRadius: 3,
+                showPoints: false,
+                visualOffsetY: 4
+            };
+            this.theta = 0;
+            this.thetaDot = 0;
+            this.thetaTarget = 0;
+            this.basePos = { x: 0, y: 0 };
+            this.springPoints = [];
+            this.state = KnobState.SPAWNING;
+            this.currentSlotId = '';
+            this.economyManager = Jamble.EconomyManager.getInstance();
+            this.activeNPC = activeNPC;
+            this.anim = new Jamble.KnobAnim(this);
+            this.slotManager = slotManager;
+            this.currentSlotId = slotId;
+            this.render = {
+                type: 'canvas',
+                visible: true,
+                canvas: {
+                    color: '#ff6b35',
+                    shape: 'custom',
+                    width: 80,
+                    height: 80,
+                    customDraw: this.drawKnob.bind(this)
+                },
+                anchor: { x: 0.5, y: 1 }
+            };
+            this.collisionBox = {
+                x: 0,
+                y: 0,
+                width: 30,
+                height: 30,
+                anchor: { x: 0.5, y: 0.5 },
+                category: 'kinematic',
+                enabled: false
+            };
+            this.anim.triggerInitialSpawn(() => {
+                this.state = KnobState.ACTIVE;
+                if (this.collisionBox) {
+                    this.collisionBox.enabled = true;
+                }
+            });
+        }
+        update(deltaTime) {
+            this.anim.update(deltaTime);
+            if (this.state === KnobState.ACTIVE || this.state === KnobState.SPAWNING ||
+                this.state === KnobState.RETRACTING) {
+                this.updateSpringPoints();
+            }
+        }
+        updateSpringPoints() {
+            var _a, _b, _c, _d;
+            const width = this.render.canvas.width || 80;
+            const height = this.render.canvas.height || 80;
+            const anchorX = ((_b = (_a = this.render.anchor) === null || _a === void 0 ? void 0 : _a.x) !== null && _b !== void 0 ? _b : 0.5) * width;
+            const anchorY = ((_d = (_c = this.render.anchor) === null || _c === void 0 ? void 0 : _c.y) !== null && _d !== void 0 ? _d : 1.0) * height;
+            this.basePos.x = anchorX;
+            this.basePos.y = anchorY;
+            const tipX = this.basePos.x + this.config.length * Math.sin(this.theta);
+            const tipY = this.basePos.y - this.config.length * Math.cos(this.theta);
+            const normal = { x: Math.cos(this.theta), y: Math.sin(this.theta) };
+            const midX = (this.basePos.x + tipX) / 2;
+            const midY = (this.basePos.y + tipY) / 2;
+            const bowOffset = -this.config.bowFactor * this.config.length * this.theta;
+            const controlX = midX + normal.x * bowOffset;
+            const controlY = midY + normal.y * bowOffset;
+            const segments = Math.max(2, Math.round(this.config.segments));
+            this.springPoints = [];
+            for (let i = 0; i <= segments; i++) {
+                const t = i / segments;
+                const omt = 1 - t;
+                const x = omt * omt * this.basePos.x + 2 * omt * t * controlX + t * t * tipX;
+                const y = omt * omt * this.basePos.y + 2 * omt * t * controlY + t * t * tipY;
+                this.springPoints.push({ x, y });
+            }
+        }
+        drawKnob(ctx, x, y) {
+            if (this.state === KnobState.RETRACTED)
+                return;
+            ctx.save();
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            ctx.strokeStyle = this.config.knobColor;
+            ctx.lineWidth = this.config.lineWidth;
+            ctx.beginPath();
+            if (this.springPoints.length > 0) {
+                const adjustedPoints = this.springPoints.map(p => ({
+                    x: x + p.x,
+                    y: y + p.y
+                }));
+                ctx.moveTo(adjustedPoints[0].x, adjustedPoints[0].y);
+                for (let i = 1; i < adjustedPoints.length - 1; i++) {
+                    const midX = 0.5 * (adjustedPoints[i].x + adjustedPoints[i + 1].x);
+                    const midY = 0.5 * (adjustedPoints[i].y + adjustedPoints[i + 1].y);
+                    ctx.quadraticCurveTo(adjustedPoints[i].x, adjustedPoints[i].y, midX, midY);
+                }
+                if (adjustedPoints.length > 1) {
+                    const last = adjustedPoints[adjustedPoints.length - 1];
+                    ctx.lineTo(last.x, last.y);
+                }
+            }
+            ctx.stroke();
+            ctx.fillStyle = this.config.knobColor;
+            ctx.beginPath();
+            ctx.arc(x + this.basePos.x, y + this.basePos.y, this.config.baseRadius, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.restore();
+        }
+        deflect(direction) {
+            this.anim.triggerDeflect(direction);
+        }
+        onPlayerContact(player) {
+            if (this.state !== KnobState.ACTIVE)
+                return 0;
+            const collisionType = this.detectCollisionType(player);
+            let currencyAmount = this.currencyValue;
+            let arousalImpact;
+            if (collisionType === 'top') {
+                currencyAmount = this.topHitValue;
+                arousalImpact = 0.5;
+                this.anim.triggerSquash();
+            }
+            else {
+                arousalImpact = 0.3;
+                this.anim.triggerDeflect(Math.random() > 0.5 ? 1 : -1);
+            }
+            this.economyManager.addCurrency(currencyAmount);
+            this.activeNPC.applyArousalImpulse(arousalImpact, player, collisionType);
+            return currencyAmount;
+        }
+        detectCollisionType(player) {
+            const playerY = player.transform.y;
+            const knobY = this.transform.y;
+            const isMovingDown = player.velocityY > 0;
+            const isAboveKnob = playerY < knobY - 10;
+            if (isMovingDown && isAboveKnob) {
+                return 'top';
+            }
+            return 'side';
+        }
+        onTriggerEnter(other) {
+            if (this.state !== KnobState.ACTIVE)
+                return;
+            if (other instanceof Jamble.Player) {
+                this.onPlayerContact(other);
+            }
+        }
+        retract() {
+            if (this.state !== KnobState.ACTIVE)
+                return;
+            this.state = KnobState.RETRACTING;
+            if (this.collisionBox) {
+                this.collisionBox.enabled = false;
+            }
+            if (this.anim.isAnimating()) {
+                this.waitForAnimationThenDespawn();
+            }
+            else {
+                this.startDespawn();
+            }
+        }
+        waitForAnimationThenDespawn() {
+            const checkInterval = setInterval(() => {
+                if (!this.anim.isAnimating()) {
+                    clearInterval(checkInterval);
+                    this.startDespawn();
+                }
+            }, 16);
+        }
+        startDespawn() {
+            this.anim.triggerDespawn(() => {
+                this.state = KnobState.RETRACTED;
+                this.render.visible = false;
+                this.anim.reset();
+            });
+        }
+        manualRespawn() {
+            if (this.state !== KnobState.RETRACTED)
+                return;
+            this.state = KnobState.SPAWNING;
+            this.render.visible = true;
+            this.anim.triggerSpawn(() => {
+                this.state = KnobState.ACTIVE;
+                if (this.collisionBox) {
+                    this.collisionBox.enabled = true;
+                }
+            });
+        }
+        getState() {
+            return this.state;
+        }
+        isActive() {
+            return this.state === KnobState.ACTIVE;
+        }
+    }
+    Jamble.Knob = Knob;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
+    class Platform extends Jamble.GameObject {
+        constructor(id, x = 0, y = 0) {
+            super(id, x, y);
+            this.render = {
+                type: 'canvas',
+                visible: true,
+                canvas: {
+                    color: '#9e9e9e',
+                    shape: 'rectangle',
+                    width: 20,
+                    height: 20
+                },
+                anchor: { x: 0.5, y: 1 }
+            };
+            this.collisionBox = {
+                x: 0,
+                y: 0,
+                width: 20,
+                height: 20,
+                anchor: { x: 0.5, y: 1 },
+                category: 'environment'
+            };
+        }
+        update(deltaTime) {
+        }
+    }
+    Jamble.Platform = Platform;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
     class Home extends Jamble.GameObject {
         constructor(id, x = 0, y = 0) {
             super(id, x, y);
@@ -3893,45 +3519,334 @@ var Jamble;
 })(Jamble || (Jamble = {}));
 var Jamble;
 (function (Jamble) {
-    class Sensor extends Jamble.GameObject {
-        constructor(id, target, offsetX = 0, offsetY = 0) {
-            const initX = target ? target.transform.x + offsetX : offsetX;
-            const initY = target ? target.transform.y + offsetY : offsetY;
-            super(id, initX, initY);
-            this.enabled = true;
-            this.target = target;
-            this.offsetX = offsetX;
-            this.offsetY = offsetY;
-            this.render.visible = false;
-            this.collisionBox = {
-                x: 0,
-                y: 0,
-                width: 20,
-                height: 5,
-                anchor: { x: 0.5, y: 1 },
-                category: 'kinematic'
-            };
+    class CanvasRenderer {
+        constructor(gameElement, gameWidth, gameHeight) {
+            this.backgroundColor = '#e8f5e9';
+            this.backgroundAlpha = 1.0;
+            this.scaleX = 1;
+            this.scaleY = 1;
+            this.gameWidth = gameWidth;
+            this.gameHeight = gameHeight;
+            this.canvas = document.createElement('canvas');
+            this.ctx = this.setupContext();
+            this.setupCanvas(gameElement);
+            this.setupHighDPIRendering(gameElement);
         }
-        update(deltaTime) {
-            if (this.target) {
-                this.transform.x = this.target.transform.x + this.offsetX;
-                this.transform.y = this.target.transform.y + this.offsetY;
+        setupCanvas(gameElement) {
+            this.canvas.id = 'gameCanvas';
+            this.canvas.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+        z-index: 3;
+      `;
+            gameElement.appendChild(this.canvas);
+        }
+        setupContext() {
+            const ctx = this.canvas.getContext('2d', { alpha: true });
+            if (!ctx) {
+                throw new Error('Could not get 2D canvas context');
+            }
+            ctx.imageSmoothingEnabled = false;
+            return ctx;
+        }
+        setupHighDPIRendering(_gameElement) {
+            const pixelRatio = window.devicePixelRatio || 1;
+            this.canvas.width = this.gameWidth * pixelRatio;
+            this.canvas.height = this.gameHeight * pixelRatio;
+            this.scaleX = pixelRatio;
+            this.scaleY = pixelRatio;
+            this.ctx.setTransform(this.scaleX, 0, 0, this.scaleY, 0, 0);
+            this.ctx.imageSmoothingEnabled = false;
+        }
+        setBackgroundAlpha(alpha) {
+            this.backgroundAlpha = Math.max(0, Math.min(1, alpha));
+        }
+        render(gameObjects) {
+            this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
+            this.ctx.save();
+            this.ctx.globalAlpha = this.backgroundAlpha;
+            this.ctx.fillStyle = this.backgroundColor;
+            this.ctx.fillRect(0, 0, this.gameWidth, this.gameHeight);
+            this.ctx.restore();
+            gameObjects.forEach(obj => {
+                if (!obj.render.visible)
+                    return;
+                this.ctx.save();
+                if (obj.render.opacity !== undefined) {
+                    this.ctx.globalAlpha = obj.render.opacity;
+                }
+                this.applyTransform(obj);
+                this.renderCanvasObject(obj);
+                this.ctx.restore();
+            });
+        }
+        applyTransform(obj) {
+            var _a, _b, _c, _d;
+            const x = obj.transform.x;
+            const y = obj.transform.y;
+            const width = obj.render.canvas.width || 20;
+            const height = obj.render.canvas.height || 20;
+            const anchorX = ((_b = (_a = obj.render.anchor) === null || _a === void 0 ? void 0 : _a.x) !== null && _b !== void 0 ? _b : 0.5) * width;
+            const anchorY = ((_d = (_c = obj.render.anchor) === null || _c === void 0 ? void 0 : _c.y) !== null && _d !== void 0 ? _d : 0.5) * height;
+            this.ctx.translate(x, y);
+            const animation = obj.render.animation;
+            if (animation && (animation.scaleX !== 1 || animation.scaleY !== 1)) {
+                this.ctx.translate(0, 0);
+                this.ctx.scale(animation.scaleX, animation.scaleY);
+            }
+            this.ctx.translate(-anchorX, -anchorY);
+        }
+        renderCanvasObject(obj) {
+            const canvas = obj.render.canvas;
+            const width = canvas.width || 20;
+            const height = canvas.height || 20;
+            if (canvas.shape === 'custom' && canvas.customDraw) {
+                canvas.customDraw(this.ctx, 0, 0);
+            }
+            else {
+                this.ctx.fillStyle = canvas.color;
+                if (canvas.shape === 'rectangle') {
+                    if (canvas.borderRadius && canvas.borderRadius > 0) {
+                        this.drawRoundedRect(0, 0, width, height, canvas.borderRadius);
+                    }
+                    else {
+                        this.ctx.fillRect(0, 0, width, height);
+                    }
+                }
+                else if (canvas.shape === 'circle') {
+                    this.ctx.beginPath();
+                    this.ctx.arc(width / 2, height / 2, Math.min(width, height) / 2, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                }
             }
         }
-        setTriggerSize(width, height) {
-            if (this.collisionBox) {
-                this.collisionBox.width = width;
-                this.collisionBox.height = height;
-            }
+        drawRoundedRect(x, y, width, height, radius) {
+            this.ctx.beginPath();
+            this.ctx.moveTo(x + radius, y);
+            this.ctx.lineTo(x + width - radius, y);
+            this.ctx.quadraticCurveTo(x + width, y, x + width, y + radius);
+            this.ctx.lineTo(x + width, y + height - radius);
+            this.ctx.quadraticCurveTo(x + width, y + height, x + width - radius, y + height);
+            this.ctx.lineTo(x + radius, y + height);
+            this.ctx.quadraticCurveTo(x, y + height, x, y + height - radius);
+            this.ctx.lineTo(x, y + radius);
+            this.ctx.quadraticCurveTo(x, y, x + radius, y);
+            this.ctx.closePath();
+            this.ctx.fill();
         }
-        setEnabled(enabled) {
-            this.enabled = enabled;
-        }
-        isEnabled() {
-            return this.enabled;
+        clear() {
+            this.ctx.clearRect(0, 0, this.gameWidth, this.gameHeight);
         }
     }
-    Jamble.Sensor = Sensor;
+    Jamble.CanvasRenderer = CanvasRenderer;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
+    class DebugRenderer {
+        constructor(gameElement) {
+            this.CATEGORY_COLORS = {
+                player: '#7F00FF',
+                deadly: '#ef4444',
+                kinematic: '#ffcc02',
+                environment: '#60a5fa'
+            };
+            this.gameElement = gameElement;
+            this.canvas = document.createElement('canvas');
+            this.canvas.style.cssText = `
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        pointer-events: none;
+        z-index: 10;
+      `;
+            const ctx = this.canvas.getContext('2d');
+            if (!ctx)
+                throw new Error('DebugRenderer: 2D context unavailable');
+            this.ctx = ctx;
+            gameElement.appendChild(this.canvas);
+            this.resize();
+            window.addEventListener('resize', () => this.resize());
+        }
+        resize() {
+            const rect = this.gameElement.getBoundingClientRect();
+            const dpr = window.devicePixelRatio || 1;
+            const width = Math.max(1, rect.width || this.gameElement.offsetWidth || 500);
+            const height = Math.max(1, rect.height || this.gameElement.offsetHeight || 100);
+            this.canvas.width = width * dpr;
+            this.canvas.height = height * dpr;
+            this.ctx.setTransform(1, 0, 0, 1, 0, 0);
+            this.ctx.scale(dpr, dpr);
+            this.canvas.style.width = width + 'px';
+            this.canvas.style.height = height + 'px';
+        }
+        render(gameObjects, showColliders, showOrigins = false, showSlots = false, slots) {
+            this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+            if (!showColliders && !showOrigins && !showSlots)
+                return;
+            if (showColliders) {
+                gameObjects.forEach(obj => {
+                    if (obj.collisionBox) {
+                        this.drawCollisionForObject(obj);
+                    }
+                });
+                this.drawPlayAreaBoundary();
+            }
+            if (showOrigins) {
+                gameObjects.forEach(obj => {
+                    if (obj.render.visible) {
+                        this.drawOrigin(obj);
+                    }
+                });
+            }
+            if (showSlots && slots) {
+                this.drawSlots(slots);
+            }
+        }
+        drawCollisionForObject(obj) {
+            var _a, _b, _c, _d;
+            const box = obj.collisionBox;
+            const color = this.CATEGORY_COLORS[box.category];
+            const ax = (_b = (_a = box.anchor) === null || _a === void 0 ? void 0 : _a.x) !== null && _b !== void 0 ? _b : 0;
+            const ay = (_d = (_c = box.anchor) === null || _c === void 0 ? void 0 : _c.y) !== null && _d !== void 0 ? _d : 0;
+            const x = obj.transform.x - ax * box.width;
+            const y = obj.transform.y - ay * box.height;
+            this.ctx.fillStyle = color + '30';
+            this.ctx.fillRect(x, y, box.width, box.height);
+            this.ctx.strokeStyle = color;
+            this.ctx.lineWidth = 1;
+            this.ctx.strokeRect(x, y, box.width, box.height);
+        }
+        drawPlayAreaBoundary() {
+            const rect = this.gameElement.getBoundingClientRect();
+            const width = rect.width;
+            const height = rect.height;
+            this.ctx.strokeStyle = '#ff0000';
+            this.ctx.lineWidth = 2;
+            this.ctx.setLineDash([5, 5]);
+            this.ctx.strokeRect(0, 0, width, height);
+            this.ctx.setLineDash([]);
+        }
+        drawOrigin(obj) {
+            const x = obj.transform.x;
+            const y = obj.transform.y;
+            const size = 8;
+            this.ctx.strokeStyle = '#ff6b35';
+            this.ctx.lineWidth = 2;
+            this.ctx.setLineDash([]);
+            this.ctx.beginPath();
+            this.ctx.moveTo(x - size, y);
+            this.ctx.lineTo(x + size, y);
+            this.ctx.stroke();
+            this.ctx.beginPath();
+            this.ctx.moveTo(x, y - size);
+            this.ctx.lineTo(x, y + size);
+            this.ctx.stroke();
+            this.ctx.fillStyle = '#ff6b35';
+            this.ctx.beginPath();
+            this.ctx.arc(x, y, 1, 0, 2 * Math.PI);
+            this.ctx.fill();
+            this.ctx.fillStyle = '#ff6b35';
+            this.ctx.font = '8px monospace';
+            this.ctx.textAlign = 'left';
+            this.ctx.fillText(obj.id, x + 6, y - 6);
+        }
+        drawSlots(slots) {
+            const slotSize = 4;
+            const slotColors = {
+                'ground': '#8b4513',
+                'air_low': '#87ceeb',
+                'air_mid': '#4682b4',
+                'air_high': '#1e90ff',
+                'ceiling': '#696969'
+            };
+            slots.forEach(slot => {
+                const color = slotColors[slot.type];
+                const x = slot.x;
+                const y = slot.y;
+                this.ctx.fillStyle = slot.occupied ? color + '80' : color + '40';
+                this.ctx.strokeStyle = color;
+                this.ctx.lineWidth = 1;
+                this.ctx.beginPath();
+                this.ctx.arc(x, y, slotSize, 0, 2 * Math.PI);
+                this.ctx.fill();
+                this.ctx.stroke();
+                if (slot.occupied) {
+                    this.ctx.fillStyle = '#ff0000';
+                    this.ctx.beginPath();
+                    this.ctx.arc(x, y, 1, 0, 2 * Math.PI);
+                    this.ctx.fill();
+                }
+            });
+        }
+        setVisible(visible) {
+            this.canvas.style.display = visible ? 'block' : 'none';
+        }
+    }
+    Jamble.DebugRenderer = DebugRenderer;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
+    class InputManager {
+        constructor() {
+            this.keys = new Set();
+            this.keyDownHandlers = new Map();
+            this.keyUpHandlers = new Map();
+            this.setupEventListeners();
+        }
+        setupEventListeners() {
+            document.addEventListener('keydown', (e) => {
+                this.keys.add(e.code);
+                const handler = this.keyDownHandlers.get(e.code);
+                if (handler) {
+                    handler();
+                    e.preventDefault();
+                }
+            });
+            document.addEventListener('keyup', (e) => {
+                this.keys.delete(e.code);
+                const handler = this.keyUpHandlers.get(e.code);
+                if (handler) {
+                    handler();
+                }
+            });
+        }
+        isKeyPressed(keyCode) {
+            return this.keys.has(keyCode);
+        }
+        onKeyDown(keyCode, handler) {
+            this.keyDownHandlers.set(keyCode, handler);
+        }
+        onKeyUp(keyCode, handler) {
+            this.keyUpHandlers.set(keyCode, handler);
+        }
+        removeKeyHandler(keyCode) {
+            this.keyDownHandlers.delete(keyCode);
+            this.keyUpHandlers.delete(keyCode);
+        }
+        isMovingLeft() {
+            return this.isKeyPressed('ArrowLeft') || this.isKeyPressed('KeyA');
+        }
+        isMovingRight() {
+            return this.isKeyPressed('ArrowRight') || this.isKeyPressed('KeyD');
+        }
+        isJumping() {
+            return this.isKeyPressed('Space');
+        }
+        destroy() {
+            this.keyDownHandlers.clear();
+            this.keyUpHandlers.clear();
+            this.keys.clear();
+        }
+    }
+    Jamble.InputManager = InputManager;
 })(Jamble || (Jamble = {}));
 var Jamble;
 (function (Jamble) {
@@ -3990,6 +3905,264 @@ var Jamble;
         }
     }
     Jamble.LevelManager = LevelManager;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
+    class MoveSkill {
+        constructor() {
+            this.id = 'move';
+            this.name = 'Move';
+            this.enabled = true;
+        }
+        execute(player) {
+        }
+    }
+    Jamble.MoveSkill = MoveSkill;
+    class JumpSkill {
+        constructor() {
+            this.id = 'jump';
+            this.name = 'Jump';
+            this.enabled = true;
+        }
+        execute(player) {
+            if (this.enabled) {
+                player.jump();
+            }
+        }
+    }
+    Jamble.JumpSkill = JumpSkill;
+    class SkillManager {
+        constructor() {
+            this.equippedSkills = new Map();
+            this.equipSkill(new MoveSkill());
+            this.equipSkill(new JumpSkill());
+        }
+        equipSkill(skill) {
+            this.equippedSkills.set(skill.id, skill);
+        }
+        hasSkill(id) {
+            return this.equippedSkills.has(id);
+        }
+        useSkill(id, player) {
+            const skill = this.equippedSkills.get(id);
+            if (skill && skill.enabled !== false) {
+                skill.execute(player);
+            }
+        }
+        setSkillEnabled(id, enabled) {
+            const skill = this.equippedSkills.get(id);
+            if (skill) {
+                skill.enabled = enabled;
+            }
+        }
+        getEquippedSkills() {
+            return Array.from(this.equippedSkills.values());
+        }
+    }
+    Jamble.SkillManager = SkillManager;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
+    class CollisionManager {
+        constructor(gameWidth, gameHeight) {
+            this.gameWidth = gameWidth;
+            this.gameHeight = gameHeight;
+            this.prevTriggerPairs = new Set();
+        }
+        update(gameObjects) {
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+            const dynamics = [];
+            const solids = [];
+            const triggers = [];
+            const byId = new Map();
+            for (const obj of gameObjects)
+                byId.set(obj.id, obj);
+            for (const obj of gameObjects) {
+                if (!obj.collisionBox || obj.collisionBox.enabled === false)
+                    continue;
+                const cat = obj.collisionBox.category;
+                if (cat === 'player')
+                    dynamics.push(obj);
+                if (cat === 'environment')
+                    solids.push(obj);
+                if (cat === 'kinematic' || cat === 'deadly')
+                    triggers.push(obj);
+            }
+            for (const dyn of dynamics) {
+                if (!dyn.collisionBox || dyn.collisionBox.enabled === false)
+                    continue;
+                const wasGrounded = dyn.grounded === true;
+                const vyBefore = (_a = dyn.velocityY) !== null && _a !== void 0 ? _a : 0;
+                for (const solid of solids) {
+                    if (dyn === solid || !solid.collisionBox || solid.collisionBox.enabled === false)
+                        continue;
+                    this.resolveAABB(dyn, solid);
+                }
+                this.clampToWorld(dyn);
+                const pb = this.getAABB(dyn);
+                const eps = CollisionManager.EPS;
+                let grounded = false;
+                if (pb.y + pb.height >= this.gameHeight - eps) {
+                    grounded = true;
+                }
+                else {
+                    for (const solid of solids) {
+                        if (!solid.collisionBox || solid.collisionBox.enabled === false)
+                            continue;
+                        const ob = this.getAABB(solid);
+                        const horizontalOverlap = pb.x < ob.x + ob.width && pb.x + pb.width > ob.x;
+                        const touchingTop = Math.abs((pb.y + pb.height) - ob.y) <= eps;
+                        if (horizontalOverlap && touchingTop && vyBefore >= 0) {
+                            grounded = true;
+                            break;
+                        }
+                    }
+                }
+                if (dyn.grounded !== undefined) {
+                    dyn.grounded = grounded;
+                    if (!wasGrounded && grounded) {
+                        (_c = (_b = dyn).onLanded) === null || _c === void 0 ? void 0 : _c.call(_b, vyBefore);
+                    }
+                }
+            }
+            const currentPairs = new Set();
+            for (const dyn of dynamics) {
+                if (!dyn.collisionBox || dyn.collisionBox.enabled === false)
+                    continue;
+                for (const other of triggers) {
+                    if (!other.collisionBox || other.collisionBox.enabled === false)
+                        continue;
+                    if (other.id.includes('sensor') && other.isEnabled && !other.isEnabled())
+                        continue;
+                    if (dyn === other)
+                        continue;
+                    if (this.aabbIntersects(dyn, other)) {
+                        const key = `${dyn.id}|${other.id}`;
+                        currentPairs.add(key);
+                        if (!this.prevTriggerPairs.has(key)) {
+                            (_d = other.onTriggerEnter) === null || _d === void 0 ? void 0 : _d.call(other, dyn);
+                            (_e = dyn.onTriggerEnter) === null || _e === void 0 ? void 0 : _e.call(dyn, other);
+                        }
+                        else {
+                            (_f = other.onTriggerStay) === null || _f === void 0 ? void 0 : _f.call(other, dyn);
+                            (_g = dyn.onTriggerStay) === null || _g === void 0 ? void 0 : _g.call(dyn, other);
+                        }
+                    }
+                }
+            }
+            for (const key of this.prevTriggerPairs) {
+                if (!currentPairs.has(key)) {
+                    const [dynId, otherId] = key.split('|');
+                    const dyn = byId.get(dynId);
+                    const other = byId.get(otherId);
+                    if (dyn && other) {
+                        (_h = other.onTriggerExit) === null || _h === void 0 ? void 0 : _h.call(other, dyn);
+                        (_j = dyn.onTriggerExit) === null || _j === void 0 ? void 0 : _j.call(dyn, other);
+                    }
+                }
+            }
+            this.prevTriggerPairs = currentPairs;
+        }
+        aabbIntersects(a, b) {
+            const A = this.getAABB(a);
+            const B = this.getAABB(b);
+            return (A.x < B.x + B.width &&
+                A.x + A.width > B.x &&
+                A.y < B.y + B.height &&
+                A.y + A.height > B.y);
+        }
+        getAABB(obj) {
+            var _a, _b, _c, _d;
+            const cb = obj.collisionBox;
+            const ax = (_b = (_a = cb.anchor) === null || _a === void 0 ? void 0 : _a.x) !== null && _b !== void 0 ? _b : 0;
+            const ay = (_d = (_c = cb.anchor) === null || _c === void 0 ? void 0 : _c.y) !== null && _d !== void 0 ? _d : 0;
+            const x = obj.transform.x - ax * cb.width;
+            const y = obj.transform.y - ay * cb.height;
+            return { x, y, width: cb.width, height: cb.height };
+        }
+        setColliderTopLeft(obj, x, y) {
+            if (!obj.collisionBox || obj.collisionBox.enabled === false)
+                return;
+            obj.collisionBox.x = x;
+            obj.collisionBox.y = y;
+        }
+        resolveAABB(dyn, solid) {
+            const pb = this.getAABB(dyn);
+            const ob = this.getAABB(solid);
+            const intersects = (pb.x < ob.x + ob.width &&
+                pb.x + pb.width > ob.x &&
+                pb.y < ob.y + ob.height &&
+                pb.y + pb.height > ob.y);
+            if (!intersects)
+                return;
+            const pushLeft = (pb.x + pb.width) - ob.x;
+            const pushRight = (ob.x + ob.width) - pb.x;
+            const pushUp = (pb.y + pb.height) - ob.y;
+            const pushDown = (ob.y + ob.height) - pb.y;
+            const minPushX = Math.min(pushLeft, pushRight);
+            const minPushY = Math.min(pushUp, pushDown);
+            if (minPushX < minPushY) {
+                const isLeftSide = pushLeft < pushRight;
+                const dx = isLeftSide ? -pushLeft : pushRight;
+                dyn.transform.x += dx;
+                this.setColliderTopLeft(dyn, pb.x + dx, pb.y);
+                if (dyn.velocityX !== undefined) {
+                    dyn.velocityX = 0;
+                }
+                if (dyn.onHorizontalCollision) {
+                    dyn.onHorizontalCollision(isLeftSide ? 'left' : 'right', solid);
+                }
+            }
+            else {
+                const isTopSide = pushUp < pushDown;
+                const dy = isTopSide ? -pushUp : pushDown;
+                dyn.transform.y += dy;
+                this.setColliderTopLeft(dyn, pb.x, pb.y + dy);
+                if (dyn.velocityY !== undefined) {
+                    dyn.velocityY = 0;
+                }
+                if (dyn.onVerticalCollision) {
+                    dyn.onVerticalCollision(isTopSide ? 'top' : 'bottom', solid);
+                }
+            }
+        }
+        clampToWorld(obj) {
+            if (!obj.collisionBox || obj.collisionBox.enabled === false)
+                return;
+            const pb = this.getAABB(obj);
+            let dx = 0;
+            let wallSide = null;
+            if (pb.x < 0) {
+                dx = -pb.x;
+                wallSide = 'left';
+            }
+            else if (pb.x + pb.width > this.gameWidth) {
+                dx = this.gameWidth - (pb.x + pb.width);
+                wallSide = 'right';
+            }
+            if (dx !== 0) {
+                obj.transform.x += dx;
+                this.setColliderTopLeft(obj, pb.x + dx, pb.y);
+                if (obj.velocityX !== undefined) {
+                    obj.velocityX = 0;
+                }
+                if (wallSide && obj.onHorizontalCollision) {
+                    obj.onHorizontalCollision(wallSide, null);
+                }
+            }
+            const pb2 = this.getAABB(obj);
+            if (pb2.y + pb2.height > this.gameHeight) {
+                const dy = this.gameHeight - (pb2.y + pb2.height);
+                obj.transform.y += dy;
+                this.setColliderTopLeft(obj, pb2.x, pb2.y + dy);
+                if (obj.velocityY !== undefined) {
+                    obj.velocityY = 0;
+                }
+            }
+        }
+    }
+    CollisionManager.EPS = 0.001;
+    Jamble.CollisionManager = CollisionManager;
 })(Jamble || (Jamble = {}));
 var Jamble;
 (function (Jamble) {
@@ -4353,11 +4526,12 @@ var Jamble;
             this.knobs = [];
             this.trees = new Map();
             this.treeIdCounter = 0;
+            this.treeAnimDebugPanel = null;
             this.lastTime = 0;
             this.gameWidth = 500;
             this.gameHeight = 100;
             try {
-                console.log('🎮 Jamble Game Initializing - Build: v2.0.476');
+                console.log('🎮 Jamble Game Initializing - Build: v2.0.512');
                 let options = {};
                 if (optionsOrContainer instanceof HTMLElement) {
                     options = { debug: true, container: optionsOrContainer };
@@ -4414,6 +4588,7 @@ var Jamble;
                 if (debugRequested) {
                     if (debugContainer) {
                         this.debugSystem = new Jamble.DebugSystem(debugContainer);
+                        this.treeAnimDebugPanel = new Jamble.TreeAnimDebugPanel(this.debugSystem);
                     }
                     else {
                         console.warn('Debug requested but no container provided. Debug UI disabled.');
@@ -4537,8 +4712,9 @@ var Jamble;
                 return;
             }
             const treeId = `tree_${this.treeIdCounter++}`;
-            const tree = new Jamble.Tree(treeId, x, y, slotId);
+            const tree = new Jamble.Tree(treeId, x, y, this.slotManager, slotId, this.treeAnimDebugPanel);
             this.gameObjects.push(tree);
+            this.gameObjects.push(tree.getSensor());
             this.trees.set(slotId, tree);
             this.slotManager.occupySlot(slotId, treeId);
             this.treePlacementOverlay.setSlotOccupied(slotId, true);
@@ -4548,9 +4724,14 @@ var Jamble;
             if (!tree)
                 return;
             tree.despawn();
-            const index = this.gameObjects.indexOf(tree);
-            if (index > -1) {
-                this.gameObjects.splice(index, 1);
+            const treeIndex = this.gameObjects.indexOf(tree);
+            if (treeIndex > -1) {
+                this.gameObjects.splice(treeIndex, 1);
+            }
+            const sensor = tree.getSensor();
+            const sensorIndex = this.gameObjects.indexOf(sensor);
+            if (sensorIndex > -1) {
+                this.gameObjects.splice(sensorIndex, 1);
             }
             this.trees.delete(slotId);
             this.slotManager.freeSlot(slotId);
@@ -5267,6 +5448,106 @@ var Jamble;
             return this.showSlots;
         }
     }
-    DebugSystem.BUILD_VERSION = "v2.0.476";
+    DebugSystem.BUILD_VERSION = "v2.0.512";
     Jamble.DebugSystem = DebugSystem;
+})(Jamble || (Jamble = {}));
+var Jamble;
+(function (Jamble) {
+    class TreeAnimDebugPanel {
+        constructor(debugSystem) {
+            this.wiggleMagnitudeMin = 0.1;
+            this.wiggleMagnitudeMax = 0.15;
+            this.omega = 15.0;
+            this.zeta = 0.2;
+            this.wiggleDuration = 0.6;
+            this.arcWidth = 0.65;
+            this.sizeRandomness = 0.3;
+            this.debugSystem = debugSystem;
+            this.registerDebugSection();
+        }
+        registerDebugSection() {
+            const section = {
+                title: 'Tree Animation',
+                controls: [
+                    {
+                        type: 'slider',
+                        label: 'Wiggle Min rad',
+                        min: 0,
+                        max: 1.0,
+                        step: 0.05,
+                        getValue: () => this.wiggleMagnitudeMin,
+                        setValue: (value) => { this.wiggleMagnitudeMin = value; }
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Wiggle Max rad',
+                        min: 0,
+                        max: 1.5,
+                        step: 0.05,
+                        getValue: () => this.wiggleMagnitudeMax,
+                        setValue: (value) => { this.wiggleMagnitudeMax = value; }
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Spring Frequency',
+                        min: 5,
+                        max: 30,
+                        step: 0.5,
+                        getValue: () => this.omega,
+                        setValue: (value) => { this.omega = value; }
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Damping',
+                        min: 0.1,
+                        max: 1.0,
+                        step: 0.05,
+                        getValue: () => this.zeta,
+                        setValue: (value) => { this.zeta = value; }
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Duration sec',
+                        min: 0.2,
+                        max: 2.0,
+                        step: 0.1,
+                        getValue: () => this.wiggleDuration,
+                        setValue: (value) => { this.wiggleDuration = value; }
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Arc Width',
+                        min: 0.3,
+                        max: 2.0,
+                        step: 0.05,
+                        getValue: () => this.arcWidth,
+                        setValue: (value) => { this.arcWidth = value; }
+                    },
+                    {
+                        type: 'slider',
+                        label: 'Size Randomness',
+                        min: 0,
+                        max: 0.5,
+                        step: 0.05,
+                        getValue: () => this.sizeRandomness,
+                        setValue: (value) => { this.sizeRandomness = value; }
+                    },
+                    {
+                        type: 'display',
+                        label: 'Info',
+                        getValue: () => 'Higher freq = faster, higher damp = less bounce'
+                    }
+                ]
+            };
+            this.debugSystem.registerSection('tree-animation', section);
+        }
+        getWiggleMagnitude() {
+            return this.wiggleMagnitudeMin +
+                Math.random() * (this.wiggleMagnitudeMax - this.wiggleMagnitudeMin);
+        }
+        destroy() {
+            this.debugSystem.unregisterSection('tree-animation');
+        }
+    }
+    Jamble.TreeAnimDebugPanel = TreeAnimDebugPanel;
 })(Jamble || (Jamble = {}));
