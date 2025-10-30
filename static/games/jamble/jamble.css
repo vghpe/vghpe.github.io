@@ -32,7 +32,7 @@ body {
 .jamble-game-wrapper {
   /* Center the game and prevent overflow */
   width: 100%;
-  max-width: 100%;
+  max-width: 100%; /* Prevent wrapper from exceeding viewport on mobile */
   margin: 0 auto;
   box-sizing: border-box;
 }
@@ -40,7 +40,14 @@ body {
 #jamble-game {
   width: 100%;
   max-width: 100%;
-  min-width: 0; /* Allow shrinking below intrinsic size */
+  min-width: 0; /* Allow shrinking below intrinsic size in flex containers */
+}
+
+/* On desktop, cap the game at 500px */
+@media (min-width: 501px) {
+  .jamble-game-wrapper {
+    max-width: 500px;
+  }
 }
 
 /* Scale down proportionally on mobile devices */

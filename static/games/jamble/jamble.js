@@ -565,19 +565,6 @@ var Jamble;
                 max: this.arousalConfig.maxValue
             };
         }
-        getArousalState() {
-            if (this.arousalValue < 0.5)
-                return 'default';
-            if (this.arousalValue < 1.5)
-                return 'minimum';
-            if (this.arousalValue < 2.5)
-                return 'medium';
-            if (this.arousalValue < 3.5)
-                return 'high';
-            if (this.arousalValue < 4.5)
-                return 'very-high';
-            return 'pain';
-        }
         updateArousal(deltaTime, player) {
             const oldValue = this.arousalValue;
             if (this.arousalMomentum > 0) {
@@ -2408,6 +2395,7 @@ var Jamble;
             this.highLightness = 12.0;
             this.npc = null;
             this.debugMode = true;
+            this.showSweetSpot = true;
             this.currentValue = (_c = options.initialValue) !== null && _c !== void 0 ? _c : 0.2;
             this.zoneColors = this.buildZoneColors();
         }
@@ -2426,6 +2414,12 @@ var Jamble;
         getDebugMode() {
             return this.debugMode;
         }
+        setShowSweetSpot(enabled) {
+            this.showSweetSpot = enabled;
+        }
+        getShowSweetSpot() {
+            return this.showSweetSpot;
+        }
         generateSample(_sampleIntervalSeconds) {
             return this.currentValue;
         }
@@ -2434,12 +2428,64 @@ var Jamble;
             return this.zoneColors[index];
         }
         render() {
-            super.render();
+            const width = this.logicalWidth;
+            const height = this.logicalHeight;
+            this.ctx.clearRect(0, 0, width, height);
+            if (this.showSweetSpot && this.npc) {
+                this.renderSweetSpotZone();
+            }
+            const totalSegments = this.dataBuffer.length - 1;
+            if (totalSegments > 0) {
+                const sampleSpacing = this.sampleSpacing;
+                const totalWidth = totalSegments * sampleSpacing;
+                const startX = width - totalWidth;
+                for (let i = 0; i < totalSegments; i++) {
+                    const x1 = startX + i * sampleSpacing;
+                    const x2 = startX + (i + 1) * sampleSpacing;
+                    const y1 = this.valueToY(this.dataBuffer[i], height);
+                    const y2 = this.valueToY(this.dataBuffer[i + 1], height);
+                    const age = (i + 1) / totalSegments;
+                    const opacity = Math.pow(age, 1.5);
+                    const segmentValue = this.dataBuffer[i + 1];
+                    const strokeColor = this.getStrokeColor(segmentValue);
+                    this.ctx.save();
+                    this.ctx.globalAlpha = opacity;
+                    this.ctx.strokeStyle = strokeColor;
+                    this.ctx.lineWidth = 3;
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(x1, y1);
+                    this.ctx.lineTo(x2, y2);
+                    this.ctx.stroke();
+                    this.ctx.restore();
+                }
+            }
             if (this.debugMode && this.npc) {
-                this.renderDebugOverlay();
+                this.renderPainThresholdLine();
             }
         }
-        renderDebugOverlay() {
+        renderSweetSpotZone() {
+            if (!this.npc)
+                return;
+            const crescendoConfig = this.npc.crescendoConfig;
+            if (!crescendoConfig)
+                return;
+            const arousalRange = this.npc.getArousalRange();
+            const targetValue = crescendoConfig.targetArousalValue;
+            const tolerance = crescendoConfig.arousalTolerance;
+            const zoneMin = targetValue - tolerance;
+            const zoneMax = targetValue + tolerance;
+            const normalizedMin = this.mapArousalToNormalized(zoneMin, arousalRange);
+            const normalizedMax = this.mapArousalToNormalized(zoneMax, arousalRange);
+            const yTop = this.computeYFromNormalized(normalizedMax);
+            const yBottom = this.computeYFromNormalized(normalizedMin);
+            const zoneHeight = yBottom - yTop;
+            const canvasWidth = this.canvas.width / (window.devicePixelRatio || 1);
+            this.ctx.save();
+            this.ctx.fillStyle = 'rgba(216, 251, 255, 1)';
+            this.ctx.fillRect(0, yTop, canvasWidth, zoneHeight);
+            this.ctx.restore();
+        }
+        renderPainThresholdLine() {
             if (!this.npc)
                 return;
             const painThreshold = this.npc.getPainThreshold();
@@ -2578,6 +2624,12 @@ var Jamble;
         }
         getSensationDebugMode() {
             return this.sensationPanel.getDebugMode();
+        }
+        setShowSweetSpot(enabled) {
+            this.sensationPanel.setShowSweetSpot(enabled);
+        }
+        getShowSweetSpot() {
+            return this.sensationPanel.getShowSweetSpot();
         }
         getSampleSpacing() {
             return this.heartRatePanel.getSampleSpacing();
@@ -3670,6 +3722,12 @@ var Jamble;
         getSensationDebugMode() {
             return this.monitorPanel.getSensationDebugMode();
         }
+        setShowSweetSpot(enabled) {
+            this.monitorPanel.setShowSweetSpot(enabled);
+        }
+        getShowSweetSpot() {
+            return this.monitorPanel.getShowSweetSpot();
+        }
         showPortraitPain() {
             this.portraitPanel.showPainFeedback();
         }
@@ -3700,9 +3758,15 @@ var Jamble;
                 controls: [
                     {
                         type: 'checkbox',
-                        label: 'Sensation Thresholds',
+                        label: 'Pain Threshold Line',
                         getValue: () => this.getSensationDebugMode(),
                         setValue: (value) => this.setSensationDebugMode(value)
+                    },
+                    {
+                        type: 'checkbox',
+                        label: 'Sweet Spot Zone',
+                        getValue: () => this.getShowSweetSpot(),
+                        setValue: (value) => this.setShowSweetSpot(value)
                     },
                     {
                         type: 'slider',
@@ -3942,6 +4006,7 @@ var Jamble;
             this.slotManager = slotManager;
             this.gameWidth = gameWidth;
             this.gameHeight = gameHeight;
+            const paddingPercent = (this.overlayPadding / gameHeight) * 100;
             this.backgroundCanvas = document.createElement('canvas');
             const dpr = window.devicePixelRatio || 1;
             this.backgroundCanvas.width = gameWidth * dpr;
@@ -3951,7 +4016,7 @@ var Jamble;
         top: 0;
         left: 0;
         width: 100%;
-        height: calc(100% + ${this.overlayPadding}px);
+        height: calc(100% + ${paddingPercent}%);
         pointer-events: none;
         display: none;
         z-index: 2;
@@ -3967,7 +4032,7 @@ var Jamble;
         top: 0;
         left: 0;
         width: 100%;
-        height: calc(100% + ${this.overlayPadding}px);
+        height: calc(100% + ${paddingPercent}%);
         pointer-events: auto;
         cursor: pointer;
         display: none;
@@ -3976,7 +4041,10 @@ var Jamble;
             this.ctx = this.canvas.getContext('2d');
             this.ctx.scale(dpr, dpr);
             parent.appendChild(this.canvas);
-            this.canvas.addEventListener('click', (e) => this.handleClick(e));
+            this.canvas.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                this.handleClick(e);
+            });
         }
         show() {
             this.isVisible = true;
@@ -4107,12 +4175,13 @@ var Jamble;
             const dpr = window.devicePixelRatio || 1;
             this.canvas.width = gameWidth * dpr;
             this.canvas.height = (gameHeight + this.overlayPadding) * dpr;
+            const paddingPercent = (this.overlayPadding / gameHeight) * 100;
             this.canvas.style.cssText = `
         position: absolute;
         top: 0;
         left: 0;
         width: 100%;
-        height: calc(100% + ${this.overlayPadding}px);
+        height: calc(100% + ${paddingPercent}%);
         pointer-events: auto;
         z-index: 5;
       `;
@@ -4122,7 +4191,10 @@ var Jamble;
             this.ctx = ctx;
             this.ctx.scale(dpr, dpr);
             canvasHost.appendChild(this.canvas);
-            this.canvas.addEventListener('click', this.handleClick.bind(this));
+            this.canvas.addEventListener('pointerdown', (e) => {
+                e.preventDefault();
+                this.handleClick(e);
+            });
         }
         show(playerX, playerY) {
             this.visible = true;
@@ -4179,7 +4251,7 @@ var Jamble;
             return this.visible;
         }
         destroy() {
-            this.canvas.removeEventListener('click', this.handleClick.bind(this));
+            this.canvas.removeEventListener('pointerdown', this.handleClick.bind(this));
             if (this.canvas.parentNode) {
                 this.canvas.parentNode.removeChild(this.canvas);
             }
@@ -4238,14 +4310,6 @@ var Jamble;
                     break;
             }
         }
-        wantsKnobHidden() {
-            const state = this.getArousalState();
-            return state === 'pain';
-        }
-        wantsMoreStimulation() {
-            const state = this.getArousalState();
-            return state === 'default' || state === 'minimum';
-        }
         resolveExpression() {
             var _a, _b, _c, _d, _e;
             if (this.isPainExpressionActive()) {
@@ -4293,7 +4357,7 @@ var Jamble;
             this.gameWidth = 500;
             this.gameHeight = 100;
             try {
-                console.log('🎮 Jamble Game Initializing - Build: v2.0.461');
+                console.log('🎮 Jamble Game Initializing - Build: v2.0.476');
                 let options = {};
                 if (optionsOrContainer instanceof HTMLElement) {
                     options = { debug: true, container: optionsOrContainer };
@@ -4306,17 +4370,17 @@ var Jamble;
                 this.gameShell = document.createElement('div');
                 this.gameShell.className = 'game-shell';
                 this.rootElement.appendChild(this.gameShell);
-                const canvasWrapper = document.createElement('div');
-                canvasWrapper.className = 'canvas-wrapper';
-                canvasWrapper.style.cssText = `
+                this.canvasWrapper = document.createElement('div');
+                this.canvasWrapper.className = 'canvas-wrapper';
+                this.canvasWrapper.style.cssText = `
           position: relative;
           width: 100%;
           overflow: visible;
         `;
-                this.gameShell.appendChild(canvasWrapper);
+                this.gameShell.appendChild(this.canvasWrapper);
                 this.canvasHost = document.createElement('div');
                 this.canvasHost.className = 'game-canvas';
-                canvasWrapper.appendChild(this.canvasHost);
+                this.canvasWrapper.appendChild(this.canvasHost);
                 this.renderer = new Jamble.CanvasRenderer(this.canvasHost, this.gameWidth, this.gameHeight);
                 this.debugRenderer = new Jamble.DebugRenderer(this.canvasHost);
                 this.stateManager = new Jamble.StateManager();
@@ -4329,8 +4393,8 @@ var Jamble;
                 this.hudManager = new Jamble.HUDManager(this.gameShell, this.gameWidth, this.gameHeight);
                 this.hudManager.setStateManager(this.stateManager);
                 this.hudManager.setNPC(this.activeNPC);
-                this.treePlacementOverlay = new Jamble.TreePlacementOverlay(this.canvasHost, this.slotManager, this.gameWidth, this.gameHeight);
-                this.tapIndicator = new Jamble.TapIndicator(this.canvasHost, this.gameWidth, this.gameHeight);
+                this.treePlacementOverlay = new Jamble.TreePlacementOverlay(this.canvasWrapper, this.slotManager, this.gameWidth, this.gameHeight);
+                this.tapIndicator = new Jamble.TapIndicator(this.canvasWrapper, this.gameWidth, this.gameHeight);
                 this.tapIndicator.setOnTap(() => {
                     if (this.stateManager.isIdle()) {
                         this.stateManager.startRun();
@@ -5203,6 +5267,6 @@ var Jamble;
             return this.showSlots;
         }
     }
-    DebugSystem.BUILD_VERSION = "v2.0.461";
+    DebugSystem.BUILD_VERSION = "v2.0.476";
     Jamble.DebugSystem = DebugSystem;
 })(Jamble || (Jamble = {}));

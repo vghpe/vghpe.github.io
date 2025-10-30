@@ -1,6 +1,6 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">    
-<meta name="viewport" content="width=device-width,minimum-scale=1">
+<meta name="viewport" content="width=device-width,minimum-scale=1,maximum-scale=1,user-scalable=no">
 <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
 
 <!-- Open Graph meta tags for social sharing -->
@@ -53,3 +53,32 @@
   <link href="{{ .RelPermalink }}" rel="alternate" type="application/rss+xml" title="{{ $.Site.Title }}" />
   <link href="{{ .RelPermalink }}" rel="feed" type="application/rss+xml" title="{{ $.Site.Title }}" />
 {{ end }}
+
+<script>
+// Disable double-tap and pinch zoom on iOS Safari
+// iOS 10+ ignores viewport meta tags, so we need JavaScript
+document.addEventListener('gesturestart', function(e) {
+  e.preventDefault();
+  document.body.style.zoom = 1;
+});
+
+document.addEventListener('gesturechange', function(e) {
+  e.preventDefault();
+  document.body.style.zoom = 1;
+});
+
+document.addEventListener('gestureend', function(e) {
+  e.preventDefault();
+  document.body.style.zoom = 1;
+});
+
+// Disable double-tap zoom by preventing rapid taps
+var lastTouchEnd = 0;
+document.addEventListener('touchend', function(e) {
+  var now = Date.now();
+  if (now - lastTouchEnd <= 300) {
+    e.preventDefault();
+  }
+  lastTouchEnd = now;
+}, { passive: false });
+</script>
