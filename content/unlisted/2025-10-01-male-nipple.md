@@ -47,7 +47,7 @@ A JavaScript build (written in TypeScript) playable at HowToStimulateMaleNipple.
 
 ### Play The Prototype
 
-**Goal**: Reach peak arousal by filling up the love bar <img src="/images/crescendo-bar.png" style="display:inline; height:1.3em; vertical-align:middle;">
+**Goal**: Reach peak arousal by filling the love bar <img src="/images/crescendo-bar.png" style="display:inline; height:1.3em; vertical-align:middle;">
 
 **Instructions**: 
 - Jump or bump the nipple to increase sensation
