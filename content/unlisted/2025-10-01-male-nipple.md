@@ -14,7 +14,8 @@ description: Game Pitch for Friends
 
 **Artist statement**: The male nipple is so enigmatic! How does one touch it? Does it do anything? Do you know? Prove it!
 
-HTSMN is an relationship/intimacy sim disguised as an auto-runner puzzle platformer.  Through basic platforming you manipulate parameters inside a selected hottie's 'box', each with their own quirks. The goal is to reach "peak arousal".
+**HTSMN** is a relationship and intimacy sim disguised as an auto-runner puzzle platformer. You are a specialist who probes and twists within each client’s “box” to identify their needs and guide them toward peak arousal.
+
  <!--more-->
 [Jump to prototype](#play-the-prototype)
 
@@ -25,14 +26,14 @@ The playable jumper will ping-pong inside a rectangular canvas featuring a cente
 
 ![Each characters box is like an ecosystem, with different needs](/images/knob-design-3.jpg)
 
-System depth is added through in-canvas elements that evolve or grow with each cycle you pass through or over them. Additional outside-canvas elements, such as the profile portrait, need to be observed for state changes or monitored to see how they respond to various stimuli.
+System depth emerges through evolving level elements and curious contraptions designed to read your client’s needs. Probing for clues can be both physical and interpersonal. Like picking apart a witness’s lies to unravel the truth in [Ace Attorney](https://en.wikipedia.org/wiki/Ace_Attorney), you’ll dissect your client’s internal barriers and release their blockages.
 
-Like any good dating sim, there are many character parameters—some visible, others hidden. The path to peak arousal isn’t always straightforward.
+The client portrait in particular will be important for reading your clients responses and ground the gameplay abstractions in something human and intimate. 
 
 ![Your clients, some are rare, some are very difficult](/images/knob-design-4.jpg)
 
 **Art**:
-The art is non-explicit, but highly suggestive in its springy physicality, shapes, and juicy animation. The roster should be filled with hotties.
+The art is non-explicit, but highly suggestive in its springy physicality, shapes, and juicy animation. The roster should be filled with hotties and mysterious characters. 
 
 The game should comply with video platform guidelines, so players can stream it without needing to switch to an 18+ channel.
 
@@ -41,7 +42,7 @@ A JavaScript build (written in TypeScript) playable at HowToStimulateMaleNipple.
 
 --- 
 
-**Why it will be a hit**: The cheeky playfulness, “dating sim” character hotties, and the gauntlet of arousing the hardest character are designed to attract streamers, letting them prove to their audience that they are, in fact, a “pro arouser” with unmatched “touch prowess.”
+**Why it will be a hit:** The cheeky playfulness, the “dating-sim” roster of hotties, and the gauntlet of arousing the toughest clients are all designed to attract streamers, letting them prove to their audience that they are, in fact, “pro arousers” with unmatched “touch prowess.”
 
 ---
 
@@ -51,9 +52,9 @@ A JavaScript build (written in TypeScript) playable at HowToStimulateMaleNipple.
 
 **Instructions**: 
 - Jump or bump the nipple to increase sensation
+- Edge close to the pain threshold but avoid crossing it. 
 - Return Home 🟨 to tweak values
-- Plant Trees 🌲 to help increase bump-ins 
-- Don't cross your clients pain thresholds
+- Plant Trees 🌲 to increase bump-ins 
 - Recover the nipple by spending ❤️
 
 
@@ -61,5 +62,3 @@ A JavaScript build (written in TypeScript) playable at HowToStimulateMaleNipple.
 
  
 {{< jamble >}}
-
-
