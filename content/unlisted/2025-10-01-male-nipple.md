@@ -6,7 +6,7 @@ slug: earthly-pigs-garter
 aliases:
 tags:
   - design
-image: images/knob-design-2.jpg
+image: images/knob-design-1.jpg
 caption: An design page, with a wider gender ranger
 description: Game Pitch for Friends
 ---
