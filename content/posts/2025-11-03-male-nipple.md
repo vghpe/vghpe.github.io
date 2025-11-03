@@ -1,14 +1,15 @@
 ---
 title: "Prototype: How to stimulate the male nipple (Working Title)"
-date: 2025-10-21T13:17:00
+date: 2025-11-03T00:00:00
 draft: false
-slug: earthly-pigs-garter
+slug: nipps-prototype
 aliases:
+  - /unlisted/earthly-pigs-garter/
 tags:
   - design
 image: images/knob-design-1.jpg
 caption: An design page, with a wider gender ranger
-description: Game Pitch for Friends
+description: Prove your touch prowess
 ---
 **Genre**: Platforming Auto-Runner, Dating Sim, Puzzle
 
