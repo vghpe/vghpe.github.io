@@ -2,22 +2,22 @@
 title: "Prototype: How to stimulate the male nipple (Working Title)"
 date: 2025-11-03T00:00:00
 draft: false
-slug: nipps-prototype
+slug: nipps-proto
 aliases:
   - /unlisted/earthly-pigs-garter/
 tags:
   - design
-image: images/knob-design-1.jpg
-caption: An design page, with a wider gender ranger
+image: images/knob-design-5.jpg
 description: Prove your touch prowess
 ---
-**Genre**: Platforming Auto-Runner, Dating Sim, Puzzle
-
-**Artist statement**: The male nipple is so enigmatic! How does one touch it? Does it do anything? Do you know? Prove it!
+The male nipple is so enigmatic! How does one touch it? Does it do anything? Do you know? Prove it!
 
 **HTSMN** is a relationship and intimacy sim disguised as an auto-runner puzzle platformer. You are a specialist who probes and twists within each client’s “box” to identify their needs and guide them toward peak arousal.
 
  <!--more-->
+**Genre**: Platforming Auto-Runner, Dating Sim, Puzzle
+
+
 [Jump to prototype](#play-the-prototype)
 
 ---
