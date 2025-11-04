@@ -7,6 +7,7 @@ aliases:
   - /unlisted/earthly-pigs-garter/
 tags:
   - design
+  - playable
 image: images/knob-design-5.jpg
 description: Prove your touch prowess
 ---

@@ -85,9 +85,11 @@ html {
 
 /* Read More Link */
 .read-more {
-  /*  margin-top: 10px; */
+    margin-top: 10px;
     font-size: 1rem;
     font-weight: bold;
+    text-align: right;
+    display: block;
 }
 
 .read-more a {
@@ -375,9 +377,7 @@ nav.navigation a.button {
 /* profile  */
 
 .profile {
-  margin: 50px auto 0 auto;
-  margin-bottom: 60px auto 0 auto;
-
+  margin: 50px auto 30px auto;
   text-align: center;
 }
 
@@ -410,7 +410,14 @@ nav.navigation a.button {
 }
 
 .tags a.article {
-    background-color: #fbeaea; /* Very light pink */
+    background-color: #ff7f8b;
+    color: #fbfbfb !important;
+    font-weight: 500;
+}
+
+.tags a.article:hover {
+    background-color: #a03535;
+    color: #fbfbfb !important;
 }
 
 .tags a.research {
@@ -435,6 +442,17 @@ nav.navigation a.button {
 
 .tags a.ai {
     background-color: #f3f7ea; /* Very light olive */
+}
+
+.tags a.playable {
+    background-color: #619cd7;
+    color: #fbfbfb !important;
+    font-weight: 500;
+}
+
+.tags a.playable:hover {
+    background-color: #507fb8;
+    color: #fbfbfb !important;
 }
 
 
@@ -809,4 +827,100 @@ details[open] summary::after { content: " ▲"; }
 .summary-text {
     margin-block-start: 0em;
     margin-block-end: 0em;
+}
+
+/* Feature page grid layout */
+#list-page.feature-grid {
+  /* Two columns of 350px items with 50px gutter when space allows */
+  max-width: 100%;
+  margin: 0 auto;
+  padding: 0 8px; /* minimal outer padding to favor 2 columns */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 350px));
+  column-gap: 50px; /* requested column spacing */
+  row-gap: 30px;    /* some vertical spacing between items */
+  justify-content: center;
+}
+
+#list-page.feature-grid .item {
+  max-width: 350px; /* clamp item cell to 350px */
+  width: 100%;      /* follow column width (300–350px) */
+  margin: 0; /* grid handles spacing */
+}
+
+/* Hide the post divider in grid layout */
+#list-page.feature-grid .post-divider {
+  display: none;
+}
+
+/* In grid, use width-based constraint and keep aspect ratio */
+#list-page.feature-grid .content-center img {
+  width: 100%;       /* fill the item column width */
+  height: auto;      /* maintain aspect ratio */
+  max-width: 350px;  /* width cap instead of height */
+}
+
+/* Title styling in grid - fixed 2 lines with ellipsis */
+#list-page.feature-grid .item .title {
+  margin-bottom: 10px;
+  height: calc(1.2rem * 1.4 * 2); /* 2 lines */
+  display: flex;
+  align-items: center;
+}
+
+#list-page.feature-grid .item .title h1 {
+  font-size: 1.2rem;
+  font-weight: normal;
+  margin: 0;
+  line-height: 1.4;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  text-overflow: ellipsis;
+  width: 100%;
+}
+
+/* Summary text alignment within grid items */
+#list-page.feature-grid .summary-text {
+  text-align: left;
+  margin-top: 10px;
+}
+
+/* Tags and date container below title - tags left, date right */
+#list-page.feature-grid .tags-date-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+  min-height: 24px;
+}
+
+#list-page.feature-grid .tags-date-container .date a {
+  color: #bbb;
+  text-decoration: none;
+  font-size: 0.9rem;
+}
+
+#list-page.feature-grid .tags-date-container .date a:hover {
+  color: #0366d6;
+}
+
+/* Pagination styling for grid */
+#list-page.feature-grid .pagination {
+  grid-column: 1 / -1; /* span all columns */
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#list-page.feature-grid .pagination .prev {
+  text-align: left;
+}
+
+#list-page.feature-grid .pagination .next {
+  text-align: right;
+  margin-left: auto;
 }
