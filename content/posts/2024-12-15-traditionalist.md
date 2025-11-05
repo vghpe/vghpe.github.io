@@ -1,20 +1,18 @@
 ---
-title: What does the angry mob actually "say" about Intergalactic
+title: What's the rage about Naughty Dog's Intergalactic all about?
 date: 2024-12-15T12:00:00Z
 slug: traditionalist
 aliases:
   - /posts/traditionalist/
-draft: false
+draft: true
 tags:
   - research
 ---
-I decided to catalog internet "grievances" over the *Intergalactic* reveal trailer at The Game Awards 2024. 
+At The Game Awards 2024 Naughty Dog revealed Intergalactic: The Heretic Prophet. I thought the setup, concept, presentation and music was great. But a lot of people were very very angry apparently. 
 
-Why am I doing this? Well. I.. don't.. get it. So let's do some science!! <!--more-->
+Why? Well, the culture war is confusing and it can be hard to pull out the true grievances from the layers of memes, obsession over like/dislike ratios, and content creators with questionable motives who financially benefit from outrage.
 
-It can be hard to pull out the true grievances from the layers of memes, obsession over like/dislike ratios, and content creators with questionable motives who financially benefit from outrage.
-
-The quotes below are gathered from users on Reddit, X, Youtube and Instagram. I ignored anything that seemed purely spiteful and focused on repeating patterns. 
+Here's is an attempt to catalogue a list of what's being said on Reddit, X, Youtube and Instagram. I ignored anything that seemed purely spiteful and focused on repeating patterns. 
 
 ---
 
@@ -63,4 +61,4 @@ The quotes below are gathered from users on Reddit, X, Youtube and Instagram. I 
 
 ---
 
-Did we learn anything?  
+What did you learn? Anything useful? 

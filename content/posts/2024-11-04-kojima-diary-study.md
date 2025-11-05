@@ -9,12 +9,13 @@ tags:
   - article
   - design
 image: images/features/img_article_kojima-diary-closed.png
+summary: I break open Hideo Kojima's diary from the turn of the century and examine the work and processes of the famous director
 description: I break open Hideo Kojima's diary from the turn of the century and examine the work and processes of the famous director
 ---
 
 Hideo Kojima's development diary for *Metal Gear Solid 2: Sons of Liberty* was penned between 1998 and 2001 and published in the book *METAL GEAR SOLID 2 THE MAKING* in 2002. 
 
-Going in, I wanted to understand if there was anything in the development that sets his process apart from what I’m familiar with. How does Kojima write and what inspires him, how are the playful mechanics prototyped, and how does he handle production, scope, and being a leader? <!--more-->
+Going in, I wanted to understand if there was anything in the development that sets his process apart from what I’m familiar with. How does Kojima write and what inspires him, how are the playful mechanics prototyped, and how does he handle production, scope, and being a leader? 
 
 I’m also interested in understanding how he sees and grows the “Kojima” brand. Is that something he’s conscious of and fosters, or is it all about the games? And finally, how does he handle the stress and pressure that comes with the almost impossible task of shipping a game on time.
 

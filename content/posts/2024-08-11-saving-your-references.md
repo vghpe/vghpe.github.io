@@ -1,7 +1,7 @@
 ---
 title: Saving Youtube videos for personal reference
 date: 2024-08-11T12:00:00Z
-draft: false
+draft: true
 slug: saving-your-references
 aliases:
   - /posts/saving-your-references/

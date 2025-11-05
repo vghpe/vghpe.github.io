@@ -6,24 +6,11 @@ aliases:
   - /posts/2025_02_22-mediaLiteracy/
   - /posts/2025_02_22-medialiteracy/
 draft: false
+image: images/tagging.png
 tags:
   - tool
   - research
 ---
-
-<div class="video-wrapper">
-  <figure class="video-container">
-    <video width="640" height="360" controls>
-      <source src="/videos/analysis.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
-  </figure>
-  <figcaption class="image-caption">
-    Bernie's famous plea sitting in as our test case
-  </figcaption>
-</div>
-
-
 
 
 There are a lot of YouTubers who release daily videos with long rants about their grievances with the video game industry. As a developer, it can be hard to take these rants at face value. <!--more-->
@@ -76,8 +63,17 @@ Now, process the following text:
 
 Then, we pass the tagged text into a simple HTML page that highlights the words for us.
 
-
-![Factual Claims, Opinions ect has been highlighted](/images/tagging.png)
+<div class="video-wrapper">
+  <figure class="video-container">
+    <video width="640" height="360" controls>
+      <source src="/videos/analysis.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </figure>
+  <figcaption class="image-caption">
+    Bernie's famous plea sitting in as our test case
+  </figcaption>
+</div>
 
 I want to be very clear: **this tool does not perform fact-checking.** A sentence tagged as a **"Factual Claim"** simply means it is presented as a fact—it does **not** verify whether it is actually true. It’s up to you to do the research and determine its accuracy.
 

@@ -541,8 +541,8 @@ nav.navigation a.button {
 
 /* Sketchbook (formerly Notes) grid layout */
 #notes-page #list-page.sketchbook-grid {
-  /* Two columns of 350px items with 50px gutter when space allows */
-  max-width: 100%;
+  /* Maximum 3 columns of 350px items with 50px gutter */
+  max-width: 1200px; /* 3 * 350px + 2 * 50px gaps + 16px padding = 1216px, rounded to 1200px */
   margin: 0 auto;
   padding: 0 8px; /* minimal outer padding to favor 2 columns */
   display: grid;
@@ -577,6 +577,25 @@ nav.navigation a.button {
 /* Summary text alignment within grid items */
 #notes-page #list-page.sketchbook-grid .summary-text {
   text-align: left;
+}
+
+/* Pagination styling for sketchbook grid */
+#notes-page #list-page.sketchbook-grid .pagination {
+  grid-column: 1 / -1; /* span all columns */
+  margin-top: 30px;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#notes-page #list-page.sketchbook-grid .pagination .prev {
+  text-align: left;
+}
+
+#notes-page #list-page.sketchbook-grid .pagination .next {
+  text-align: right;
+  margin-left: auto;
 }
 
 /* single page */
@@ -803,8 +822,8 @@ details[open] summary::after { content: " ▲"; }
 
 /* Feature page grid layout */
 #list-page.feature-grid {
-  /* Two columns of 350px items with 50px gutter when space allows */
-  max-width: 100%;
+  /* Maximum 3 columns of 350px items with 50px gutter */
+  max-width: 1200px; /* 3 * 350px + 2 * 50px gaps + 16px padding = 1216px, rounded to 1200px */
   margin: 0 auto;
   padding: 0 8px; /* minimal outer padding to favor 2 columns */
   display: grid;
@@ -812,12 +831,27 @@ details[open] summary::after { content: " ▲"; }
   column-gap: 50px; /* requested column spacing */
   row-gap: 30px;    /* some vertical spacing between items */
   justify-content: center;
+  position: relative;
 }
 
 #list-page.feature-grid .item {
   max-width: 350px; /* clamp item cell to 350px */
   width: 100%;      /* follow column width (300–350px) */
   margin: 0; /* grid handles spacing */
+  position: relative;
+}
+
+/* Dot divider between items */
+#list-page.feature-grid .item::after {
+  content: '';
+  position: absolute;
+  width: 148px;
+  height: 1px;
+  background-color: #bbb;
+  border-radius: 50%;
+  bottom: -15px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 /* Hide the post divider in grid layout */

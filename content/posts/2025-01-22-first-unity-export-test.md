@@ -1,12 +1,17 @@
 ---
 title: Testing Unity Web Project Export
 date: 2025-01-22T15:30:00-07:00
+image: images/jumproad-export.gif
 tags:
-  - design
+  - design 
+  - playable
 slug: first-unity-export-test
 aliases:
   - /posts/first_unity_export_test/
 ---
+
+Unity has hyped up their web export for version 6. How good is it? Can I make a 1 button game that's playable on phone browser? <!--more-->
+
 
 <div style="display:flex; justify-content:center; margin-bottom:20px; overflow:hidden;">
   <iframe
@@ -20,7 +25,8 @@ aliases:
 </div>
 
 
-Here's a quick test of a Unity Web project. GitHub Pages doesn't seem to support `Content-Encoding`, so I can only build uncompressed for now. **That means it's an 80MB load instead of 6MB (Brotli).** You might want to flip the ringer switch on the side of your phone to hear the audio.
+GitHub page hosting seem to have limited support for `Content-Encoding`, So I can't use the best compression models (6MB on Brotli) but Gzip seems to work, making the build a 12MB load on the network. 
 
+That's still a more than I would prefer but I think that's just a result of using Unity. 
 
-But this is pretty cool! I'll make a half-decent level next. Let me know if you have any issues or know how I can get Brotli compression to work here.
+But I am imporess with input, seems to work flawlessly even in Safari which is known to fight with web games a lot. 
