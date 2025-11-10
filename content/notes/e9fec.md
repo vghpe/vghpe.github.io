@@ -1,7 +1,6 @@
 ---
 date: 2025-11-08T21:51:53.684Z
 publishDate: 2025-11-08T21:51:53.684Z
-draft: true
 images:
   - notes/img-5165.jpg
 photo:
