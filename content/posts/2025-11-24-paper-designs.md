@@ -1,6 +1,6 @@
 ---
 title: A week of Pen & Paper design
-date: 2025-11-03T00:00:00
+date: 2025-11-25T00:00:00
 draft: false
 slug: paper-designs
 aliases:
