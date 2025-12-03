@@ -14,7 +14,7 @@ I was able source a translation of Kojima's diary that was done commissioned by 
 
 [Go here](/posts/ai-translation/) to read the previous entry 
 
-I wanted to see just how accurate the chatbots had been—and, more importantly, to gain greater confidence in my understanding and takeaways. On initial examination, I noticed some differences in language and tone, as well as a few concerning inconsistencies.
+I wanted to see just how accurate the chatbots had been and, more importantly, to gain greater confidence in my understanding and takeaways. On initial examination, I noticed some differences in language and tone, as well as a few concerning inconsistencies.
 
 ## Phase 6
 
