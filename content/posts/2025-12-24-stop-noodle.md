@@ -17,7 +17,7 @@ Designed to use a local Eagle image library and serve it so it’s accessible fr
 
 The app scans the Eagle library and its metadata to generate timed drawing sessions. Session types are filtered using Eagle tags, and users can star images during a session to apply a favorite tag that’s written back to the library.
 
-![An Eagle library tagged with "hands" Photos by Satine Zillah](/images/features/img_noodle_hands.jpg)
+![An Eagle library tagged with hands - Photos by Satine Zillah](/images/features/img_noodle_hands.jpg)
 
 #### Features:
 1. Setup a draw session 
