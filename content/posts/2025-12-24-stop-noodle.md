@@ -11,11 +11,14 @@ description:
 ---
 **Stop Noodling** is a timed drawing webapp
 
-It's designed to use a local Eagle image library and it's tags and run on a local home server. 
+Designed to use a local Eagle image library and serve it so it’s accessible from all your devices.
 
  <!--more-->
 
-[Eagle](http://eagle.cool) is a great software for storing and organizing reference images. This tool, uses it's library and metadata to make a timed drawing session. Which is often used for drawing warmups and to focus on the fundamentals rather than rendering. 
+The app scans the Eagle library and its metadata to generate timed drawing sessions. Session types are filtered using Eagle tags, and users can star images during a session to apply a favorite tag that’s written back to the library.
+
+![An Eagle library I've tagged with 'hands' Photos by Satine Zillah](/images/features/img_noodle_hands.jpg)
+
 #### Features:
 1. Setup a draw session 
 	- Types of images (Hands, Clothed, Figure, Portrait)
@@ -28,14 +31,15 @@ It's designed to use a local Eagle image library and it's tags and run on a loca
 	- Re-access session images
 	- Zoom/Pan
 
-#### Home server setup:
+Test out a live demo here - [Live Demo](https://vghpe.github.io/stop-noodeling/demo/) 
 
-Stop noodling is design to run as a web service. I've set it up on my Rasberry Pi so it's always running and I can access it from any of my devices anywhere. Apples PWA (Add to Home Screen) features let's it become it's own app. 
+## Home server setup:
 
+Stop Noodling is designed to run as a web service. I’ve set it up on my Raspberry Pi so it’s always running and accessible from any device, anywhere. Apple’s PWA (“Add to Home Screen”) feature lets it function as a standalone app.
 
 ![Setup Flowchart](/images/features/img_stopnoodle.jpg)
 
-#### Setup Architecture:
+####  My Setup Architecture:
 
 - **Source of Truth**: MacBook Eagle Library (~20K images, 50GB)
 - **Sync Layer**: Syncthing (bidirectional, always-on) keeps Mac ↔ Pi in sync
@@ -45,7 +49,6 @@ Stop noodling is design to run as a web service. I've set it up on my Rasberry P
 - **Workflow**: Favorite images on iPad → metadata syncs back to Mac → appears in Eagle
 
 
-### Links: 
 
-- [Live Demo](https://vghpe.github.io/stop-noodeling/demo/) 
+### Links: 
 - [Repository](https://github.com/vghpe/stop-noodeling)
