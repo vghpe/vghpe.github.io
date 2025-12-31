@@ -11,11 +11,9 @@ description:
 ---
 **Stop Noodling** is a timed drawing webapp
 
-Designed to use a local image library and serve it so it’s accessible from any device with a browser.
-
+The tools works as plugin for [Eagle](http://eagle.cool) (a software to organize locally images) and serve it so it’s accessible from any device with a browser.
+ 
  <!--more-->
-
-The tools works as plugin for [Eagle](http://eagle.cool) a software to organize images stored locally.
 
 The script scans the Eagle library and uses the tags to filter the images requested for the drawing session. Tag data can be also sent back to the library from the webapp if the users tags an image as a favorite. 
 
