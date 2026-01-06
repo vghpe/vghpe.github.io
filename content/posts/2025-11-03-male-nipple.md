@@ -1,5 +1,5 @@
 ---
-title: "Prototype: How to stimulate the male nipple (Working Title)"
+title: "Prototype: How to touch the male nipple"
 date: 2025-11-03T00:00:00
 draft: false
 slug: nipps-proto
@@ -13,7 +13,7 @@ description: Prove your touch prowess
 ---
 The male nipple is so enigmatic! How does one touch it? Does it do anything? Do you know? Prove it!
 
-**HTSMN** is a relationship and intimacy sim disguised as an auto-runner puzzle platformer. You are a specialist who probes and twists within each client’s “box” to identify their needs and guide them toward peak arousal.
+**HTTMN** is a comedy relationship sim disguised as an auto-runner puzzle platformer. You are a specialist who probes and twists within each client’s “box” to identify their needs.
 
  <!--more-->
 **Genre**: Platforming Auto-Runner, Dating Sim, Puzzle
@@ -35,7 +35,7 @@ The client portrait in particular will be important for reading your clients res
 ![Your clients, some are rare, some are very difficult](/images/knob-design-4.jpg)
 
 **Art**:
-The art is non-explicit, but highly suggestive in its springy physicality, shapes, and juicy animation. The roster should be filled with hotties and mysterious characters. 
+The art is non-explicit, but suggestive in its springy physicality, shapes, and juicy animation. The roster should be filled with hotties and mysterious characters. 
 
 The game should comply with video platform guidelines, so players can stream it without needing to switch to an 18+ channel.
 
