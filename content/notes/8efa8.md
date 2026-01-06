@@ -2,6 +2,7 @@
 date: 2025-07-25T21:53:55.064Z
 publishDate: 2025-07-25T21:53:55.064Z
 lastmod: 2025-07-25T21:55:32.821Z
+draft: true
 images:
   - notes/img-eagle.jpg
 photo:
