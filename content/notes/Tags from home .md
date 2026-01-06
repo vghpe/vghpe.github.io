@@ -1,9 +1,11 @@
 ---
-title: Tags from home 
+title: Tags from home
 date: 2024-08-18T02:47:19-07:00
-draft: false
-tags: ["fluff", "web-dev", "shortcut"]
-#image
+draft: true
+tags:
+  - fluff
+  - web-dev
+  - shortcut
 ---
 
 I’ve updated my iOS quick post app to let me add tags. It prompts me with a list of preset tags. I can also write a custom one if I like.

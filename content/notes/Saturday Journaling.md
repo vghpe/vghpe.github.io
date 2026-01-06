@@ -1,8 +1,8 @@
 ---
 title: Saturday Journaling
 date: 2024-08-17T11:48:36-07:00
-draft: false
-image: "images/IMG_2632.jpeg"
+draft: true
+image: images/IMG_2632.jpeg
 ---
 Deciding between 3 smaller project. 
 

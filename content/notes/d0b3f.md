@@ -2,6 +2,7 @@
 date: 2025-05-15T16:38:40.345Z
 publishDate: 2025-05-15T16:38:40.345Z
 lastmod: 2025-05-15T16:42:15.168Z
+draf: true
 images:
   - notes/img-4445.jpg
 photo:
