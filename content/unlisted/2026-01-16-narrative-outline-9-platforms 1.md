@@ -34,18 +34,28 @@ Sub-themes: *Desire, Identity, Determinism*
 - **Body Shapes** — The group wakes up and immediately notes that their bodies are unlike the ones they left. Instead they look more like mannequins, with unfamiliar details and engravings
 	- Connected to their seats is a panel that lets them morph into the bodies they had on earth.
 
-### Act 1
 
-They step out onto a platform. The train’s track stretches in a straight line into the starry void in both directions. What’s more upsetting is that their bodies look like mannequins, but with decorative engravings. They hesitate, argue, and begin to explore. 
+## World
+
+![An layout and early concept of the 9 platforms](/images/nine-platfoms-map.png)
+
+
+- **The Station** — Nine platforms are suspended in space, laid out in a grid next to the the train line. Each platform is rich on life, warm and community. Locals live here.
+
+- **Inhabitants & Tongue** — The **Guide** is a local. Other residents follow daily rituals; their language is unintelligible to the four strangers. Communication relies on gesture, tone, and inference.
+
+- **The Inner Layers** —  Each platform’s has a stack of virtual layers, a ghost-like space. The first layer stays linked to its occupants; deeper layers are older and more system-like, hostile to intrusion. The Guide can support the protagonist there but each deep descent strains her, leaving visible effects.
+
+### Act 1
+The story opens with a brief snapshot of the protagonist in the middle of their _expected_ human life, just moments before a major milestone ). Something in their demeanor, a strained tick, suggests a quiet absence, a sense that something essential is missing.
 
 Without warning reality collapses. The protagonist and 3 others find themselves sitting together on a stationary train adrift in a living starfield.
-
 
 ![Mood Concept, the stationary train, credit @ventiquePxl](/images/nine-platforms-temp.jpg)
 
 They step out onto a platform. The train’s track stretches in a straight line into the starry void in both directions. What’s more upsetting is that their bodies look like mannequins, but with decorative engravings. They hesitate, argue, and begin to explore. 
 
-A figure appears, they call themself “Guide”. They help the passengers use the train to return to their familiar shapes. Grabriell and Mattias do so but Ash hesitates. 
+A figure appears, they call themself “Guide”. They help the passengers use the train to morph to their familiar shapes. Gabrielle and Matt do so but Ash hesitates. 
 
 Rules emerge in fragments over several encounters: the track is a single line; the train only stops when it has a reason to; it can be started again through repairs; but all passengers must be present to depart.  
 ### Act 2
@@ -82,13 +92,3 @@ The decision splits the ending:
   The 3 passenger board the train and return to their lives just as they were, no memory of the events that happened. The train departs the station continuing toward it's cosmic destination far far away. 
 
 
-## World
-
-![An layout and early concept of the 9 platforms](/images/nine-platfoms-map.png)
-
-
-- **The Station** — Nine platforms are suspended in space, laid out in a grid next to the the train line. Each platform is rich on life, warm and community. Locals live here.
-
-- **Inhabitants & Tongue** — The **Guide** is a local. Other residents follow daily rituals; their language is unintelligible to the four strangers. Communication relies on gesture, tone, and inference.
-
-- **The Inner Layers** —  Each platform’s has a stack of virtual layers, a ghost-like space. The first layer stays linked to its occupants; deeper layers are older and more system-like, hostile to intrusion. The Guide can support the protagonist there but each deep descent strains her, leaving visible effects.
