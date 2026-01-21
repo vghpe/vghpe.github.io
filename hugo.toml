@@ -17,6 +17,7 @@ enableRSS = true
 subscribe = "RSS"
 copyright = "© 2024 Henrik Pettersson. All rights reserved."
 showPowerBy = false
+author = "Henrik Pettersson"
 
 [markup]
   [markup.goldmark]
