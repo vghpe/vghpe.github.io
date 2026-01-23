@@ -4,6 +4,7 @@ date: 2025-01-02T04:06:55Z
 tags:
   - narrative
   - design
+  - article
 image: images/arranger-short-title.png
 slug: compare-dilalogue
 aliases:

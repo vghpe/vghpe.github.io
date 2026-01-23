@@ -63,9 +63,8 @@
         <div class="info">
           <div class="date">{{ $page.Date.Format "Jan 2, 2006" }}</div>
           <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
-          <p class="summary">{{ $page.Summary | plainify | truncate 120 }}</p>
+          <p class="summary">{{ $page.Summary | plainify | truncate 150 }}</p>
         </div>
-        <a href="{{ $page.RelPermalink }}" class="arrow">→</a>
       </div>
       {{ end }}
     {{ end }}
@@ -73,7 +72,15 @@
   {{ end }}
 
   {{/* ==================== FEATURED ARTICLES ==================== */}}
-  {{ $articles := where .Site.RegularPages "Params.tags" "intersect" (slice "article") }}
+  {{/* Filter posts that have "article" in their tags */}}
+  {{ $articles := slice }}
+  {{ range $page := .Site.RegularPages }}
+    {{ with $page.Params.tags }}
+      {{ if in . "article" }}
+        {{ $articles = $articles | append $page }}
+      {{ end }}
+    {{ end }}
+  {{ end }}
   
   {{ if gt (len $articles) 0 }}
   <div class="section-header">
@@ -81,36 +88,17 @@
   </div>
   
   <div class="featured-grid">
-    {{ range $index, $page := first 3 $articles }}
-      {{ if eq $index 0 }}
-      {{/* First article - larger */}}
-      <div class="featured-large">
-        {{ with $page.Params.image }}
-        <a href="{{ $page.RelPermalink }}">
-          <img src="{{ . | absURL }}" alt="{{ $page.Title }}">
-        </a>
-        {{ end }}
-        <div class="info">
-          <div class="date">{{ $page.Date.Format "Jan 2, 2006" }}</div>
-          <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
-          <p class="summary">{{ $page.Summary | plainify | truncate 180 }}</p>
-        </div>
-      </div>
-      {{ else }}
-      {{/* Other articles - smaller */}}
-      <div class="featured-small">
-        {{ with $page.Params.image }}
-        <a href="{{ $page.RelPermalink }}">
-          <img src="{{ . | absURL }}" alt="{{ $page.Title }}">
-        </a>
-        {{ end }}
-        <div class="info">
-          <div class="date">{{ $page.Date.Format "Jan 2, 2006" }}</div>
-          <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
-          <p class="summary">{{ $page.Summary | plainify | truncate 120 }}</p>
-        </div>
-      </div>
+    {{ range first 3 $articles }}
+    <div class="featured-article">
+      {{ with .Params.image }}
+      <img src="{{ . | absURL }}" alt="">
       {{ end }}
+      <div class="info">
+        <div class="date">{{ .Date.Format "Jan 2, 2006" }}</div>
+        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        <p class="summary">{{ .Summary | plainify | truncate 160 }}</p>
+      </div>
+    </div>
     {{ end }}
   </div>
   {{ end }}

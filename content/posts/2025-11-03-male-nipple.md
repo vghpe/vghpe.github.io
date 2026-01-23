@@ -10,6 +10,7 @@ tags:
   - playable
 image: images/knob-design-5.jpg
 description: Prove your touch prowess
+disableZoom: true
 ---
 The male nipple is so enigmatic! How does one touch it? Does it do anything? Do you know? Prove it!
 
