@@ -1,40 +1,64 @@
 {{ define "main" }}
-<div class="container">
-  <article>
-    <header>
-      <h1>{{ .Title }}</h1>
-      {{ if .Description }}
-        <p class="description">{{ .Description }}</p>
-      {{ end }}
-    </header>
+{{ partial "profile.html" . }}
 
+<div id="list-page" class="feature-grid">
+
+    <!-- Projects intro -->
     {{ if .Content }}
-      <div class="projects-intro">
+    <section class="item projects-intro-section">
+      <div class="content">
         {{ .Content }}
       </div>
+    </section>
+    <hr class="post-divider" />
     {{ end }}
 
-    <div class="featured-grid">
-      {{ range .Pages }}
-        <div class="featured-article">
-          {{ with .Params.image }}
-            <img src="{{ . | absURL }}" alt="{{ $.Title }}">
-          {{ end }}
-          <div class="info">
-            {{ with .Params.tags }}
-              <div class="tags">
-                {{ range . }}
-                  <span class="tag">{{ . }}</span>
-                {{ end }}
-              </div>
+    <!-- Loop over project pages -->
+    {{ range .Pages }}
+    <section class="item">
+
+      <!-- Title at top -->
+      <div class="title">
+        <h1>{{ .Title }}</h1>
+      </div>
+
+      <!-- Tags and date below title -->
+      <div class="tags-date-container">
+        {{ with .Params.tags }}
+        <div class="tags">
+            {{ range . }}
+                <a href="{{ "tags/" | absURL }}{{ . | urlize }}" class="tag {{ . | urlize }}">{{ . }}</a>
             {{ end }}
-            <div class="date">{{ .Date.Format "Jan 2, 2006" }}</div>
-            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-            <p class="summary">{{ .Summary | plainify | truncate 160 }}</p>
-          </div>
         </div>
-      {{ end }}
-    </div>
-  </article>
+        {{ end }}
+
+        <div class="date">
+          <a href="{{ .RelPermalink }}"><time datetime="{{ .PublishDate }}">{{ .PublishDate.Format "Jan 2, 2006" }}</time></a>
+        </div>
+      </div>
+
+      <!-- Image content -->
+      <div class="content content-center">
+        {{ if .Params.image }}
+        <a href="{{ .RelPermalink }}">
+          <img src="{{ .Params.image | absURL }}" alt="{{ .Title }}">
+        </a>
+        {{ end }}
+      </div>
+
+      <p class="summary-text">
+        {{ .Summary | replaceRE "</p>$" "" | markdownify | safeHTML }}
+      </p>
+      <div class="read-more">
+        <a href="{{ .RelPermalink }}">Read More</a>
+      </div>
+
+    </section>
+
+    <!-- Divider between posts -->
+    <hr class="post-divider" />
+
+    {{ end }}
 </div>
+
 {{ end }}
