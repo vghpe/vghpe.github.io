@@ -33,6 +33,10 @@
 
 <link rel="stylesheet" href="{{ "/css/style.css" | relURL }}">
 
+{{ if or (eq .Section "projects") (in .RelPermalink "/projects/") }}
+  <link rel="stylesheet" href="{{ "/css/projects.css" | relURL }}">
+{{ end }}
+
 {{ range .Site.Params.customCSS }}
   {{ if ( or ( hasPrefix . "http://" ) ( hasPrefix . "https://" ) ) }}
     <!-- remote css -->

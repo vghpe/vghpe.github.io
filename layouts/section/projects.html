@@ -1,0 +1,40 @@
+{{ define "main" }}
+<div class="container">
+  <article>
+    <header>
+      <h1>{{ .Title }}</h1>
+      {{ if .Description }}
+        <p class="description">{{ .Description }}</p>
+      {{ end }}
+    </header>
+
+    {{ if .Content }}
+      <div class="projects-intro">
+        {{ .Content }}
+      </div>
+    {{ end }}
+
+    <div class="featured-grid">
+      {{ range .Pages }}
+        <div class="featured-article">
+          {{ with .Params.image }}
+            <img src="{{ . | absURL }}" alt="{{ $.Title }}">
+          {{ end }}
+          <div class="info">
+            {{ with .Params.tags }}
+              <div class="tags">
+                {{ range . }}
+                  <span class="tag">{{ . }}</span>
+                {{ end }}
+              </div>
+            {{ end }}
+            <div class="date">{{ .Date.Format "Jan 2, 2006" }}</div>
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            <p class="summary">{{ .Summary | plainify | truncate 160 }}</p>
+          </div>
+        </div>
+      {{ end }}
+    </div>
+  </article>
+</div>
+{{ end }}
