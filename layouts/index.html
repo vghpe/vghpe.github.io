@@ -36,6 +36,7 @@
   {{ if gt (len $recentPosts) 0 }}
   <div class="section-header">
     <h2>Recent Posts</h2>
+    <a href="{{ "/blog/" | relURL }}">View all →</a>
   </div>
   
   <div class="recent-grid">
@@ -131,38 +132,6 @@
     </div>
     {{ end }}
   </div>
-  {{ end }}
-
-  {{/* ==================== ALL POSTS ==================== */}}
-  {{/* Get all posts excluding notes, unlisted, docs */}}
-  {{ $allPosts := slice }}
-  {{ range .Site.RegularPages }}
-    {{ if and (ne .Section "notes") (ne .Section "unlisted") (ne .Section "docs") }}
-      {{ $allPosts = $allPosts | append . }}
-    {{ end }}
-  {{ end }}
-  
-  {{ if gt (len $allPosts) 0 }}
-  <div class="section-header">
-    <h2>All Posts</h2>
-  </div>
-  
-  <div class="all-posts-grid">
-    {{ range first 9 $allPosts }}
-    <div class="all-post-item">
-      <div class="date">{{ .Date.Format "Jan 2, 2006" }}</div>
-      <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-      <p class="summary">{{ .Summary | plainify | truncate 100 }}</p>
-    </div>
-    {{ end }}
-  </div>
-  
-  {{/* Pagination link to full archive if more than 9 posts */}}
-  {{ if gt (len $allPosts) 9 }}
-  <div class="landing-pagination">
-    <a href="{{ "/posts/" | relURL }}">View all posts →</a>
-  </div>
-  {{ end }}
   {{ end }}
 
 </div>
