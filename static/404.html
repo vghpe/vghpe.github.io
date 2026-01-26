@@ -21,18 +21,7 @@
         text-decoration: underline;
       }
     </style>
-    <script>
-      (function () {
-        const { pathname, search, hash } = window.location;
-        if (pathname.toLowerCase().startsWith("/blog/")) {
-          const targetPath = pathname.replace(/^\/blog/, "") || "/";
-          const normalized =
-            targetPath.startsWith("/") ? targetPath : `/${targetPath}`;
-          const destination = `${normalized}${search}${hash}`;
-          window.location.replace(destination);
-        }
-      })();
-    </script>
+    <!-- Redirect for /blog/ removed to prevent unwanted redirection. -->
   </head>
   <body>
     <h1>Page not found</h1>
