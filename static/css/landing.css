@@ -9,19 +9,19 @@
 
 /* Site Header */
 .site-header {
-  padding: 50px 0 40px;
+  padding: 50px 0 0 0;
 }
 
 .site-header h1 {
   font-size: 42px;
   font-weight: 600;
   color: #364e4a;
-  margin: 0 0 16px 0;
+  margin: 0 0 0 0;
   text-align: left;
 }
 
 .site-header .tagline {
-  font-size: 18px;
+  font-size: 14px;
   color: #555;
   margin: 0;
   max-width: 500px;
@@ -31,7 +31,7 @@
 .site-header .site-intro {
   font-size: 16px;
   color: #666;
-  margin: 20px 0 0 0;
+  margin: 40px 0 0 0;
   max-width: 600px;
   line-height: 1.6;
 }

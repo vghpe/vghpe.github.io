@@ -1,5 +1,5 @@
 baseURL = "https://vghpe.github.io/"
-title = "Henrik Pettersson"
+title = "Henrik's working docs"
 relativeURLs = false
 canonifyURLs = true
 languageCode = 'en-us'
@@ -11,7 +11,7 @@ summaryLength = 45
   home = ["HTML", "RSS"]
   section = ["HTML", "RSS"]
 [params]
-bio = "Game Designer · Narrative & Systems · Based in Gothenburg"
+bio = "Game Design · Systems · Narrative · Art"
 hiddenPostSummaryInHomePage = false
 enableRSS = true
 subscribe = "RSS"
