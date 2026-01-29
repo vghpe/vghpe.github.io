@@ -11,7 +11,7 @@ summaryLength = 45
   home = ["HTML", "RSS"]
   section = ["HTML", "RSS"]
 [params]
-bio = "Games · Systems · Narrative · Art"
+bio = "Game Design · Systems · Narrative · Art"
 hiddenPostSummaryInHomePage = false
 enableRSS = true
 subscribe = "RSS"

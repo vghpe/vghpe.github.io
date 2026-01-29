@@ -328,16 +328,88 @@
 
 /* Responsive */
 @media (max-width: 768px) {
+  /* Make recent posts scroll horizontally like sketchbook */
   .recent-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 10px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
   }
   
   .recent-featured {
-    grid-row: span 1;
+    flex-shrink: 0;
+    width: 70vw;
+    max-width: 350px;
+    scroll-snap-align: start;
   }
   
+  .recent-featured img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+  
+  .recent-small {
+    flex-shrink: 0;
+    width: 70vw;
+    max-width: 350px;
+    scroll-snap-align: start;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+  
+  .recent-small img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+  }
+  
+  /* Fix text sizing for recent-small on mobile */
+  .recent-small .info {
+    padding: 12px;
+  }
+  
+  .recent-small h3 {
+    font-size: 20px;
+    margin: 0 0 8px 0;
+  }
+  
+  .recent-small .date {
+    margin: 0 0 6px 0;
+  }
+  
+  .recent-small .summary {
+    font-size: 15px;
+  }
+  
+  /* Make featured articles scroll horizontally like sketchbook */
   .featured-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 10px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .featured-article {
+    flex-shrink: 0;
+    width: 60vw;
+    max-width: 340px;
+    scroll-snap-align: start;
+  }
+  
+  .featured-article img {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
   }
   
   .all-posts-grid {
