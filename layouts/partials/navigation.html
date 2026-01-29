@@ -1,12 +1,12 @@
 <nav class="navigation">
   <!-- Home -->
-  <a href="{{ "/" | relURL }}">Home</a>
+  <a href="{{ "/" | relURL }}">Index</a>
 
   <!-- Blog -->
   <a href="{{ "/archive/" | relURL }}">Blog</a>
 
   <!-- Projects -->
-  <a href="{{ "/projects/" | relURL }}">Projects</a>
+  <a href="{{ "/projects/" | relURL }}">9 Platforms</a>
 
   <!-- Sketchbook Section (was Notes) -->
   <a href="{{ "/sketchbook/" | relURL }}">Sketchbook</a>
@@ -14,13 +14,6 @@
   <!-- About -->
   <a href="{{ "/about/" | relURL }}">About</a>
 
-  <!-- RSS (only if enabled and available) -->
-  {{ if .Site.Params.enableRSS }}
-    {{ with .Site.Home.OutputFormats.Get "RSS" }}
-      <a href="{{ .RelPermalink }}">
-        {{ with $.Site.Params.subscribe }}{{ . }}{{ else }}{{ i18n "subscribe" }}{{ end }}
-      </a>
-    {{ end }}
-  {{ end }}
+
 </nav>
 
