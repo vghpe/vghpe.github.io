@@ -19,6 +19,36 @@
     {{ end }}
   </header>
 
+    {{/* ==================== SKETCHBOOK PREVIEW ==================== */}}
+  {{ $sketches := where .Site.RegularPages "Section" "notes" }}
+  {{/* Filter to only those with images */}}
+  {{ $sketchesWithImages := slice }}
+  {{ range $sketches }}
+    {{ if .Params.images }}
+      {{ $sketchesWithImages = $sketchesWithImages | append . }}
+    {{ end }}
+  {{ end }}
+  
+  {{ if gt (len $sketchesWithImages) 0 }}
+  <div class="section-header">
+    <h2>From the Sketchbook</h2>
+    <a href="{{ "/sketchbook/" | relURL }}">View all →</a>
+  </div>
+  
+  <div class="sketches-row">
+    {{ range first 6 $sketchesWithImages }}
+    <div class="sketch-thumb">
+      <a href="{{ .RelPermalink }}">
+        {{ with index .Params.images 0 }}
+        <img src="{{ . | absURL }}" alt="Sketch">
+        {{ end }}
+      </a>
+      <div class="caption">{{ .Date.Format "Jan 2" }}</div>
+    </div>
+    {{ end }}
+  </div>
+  {{ end }}
+
   {{/* ==================== RECENT POSTS ==================== */}}
   {{/* Get all regular pages, exclude notes/unlisted/docs, exclude articles */}}
   {{ $allPages := .Site.RegularPages }}
@@ -104,36 +134,6 @@
         <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
         <p class="summary">{{ .Summary | plainify | truncate 160 }}</p>
       </div>
-    </div>
-    {{ end }}
-  </div>
-  {{ end }}
-
-  {{/* ==================== SKETCHBOOK PREVIEW ==================== */}}
-  {{ $sketches := where .Site.RegularPages "Section" "notes" }}
-  {{/* Filter to only those with images */}}
-  {{ $sketchesWithImages := slice }}
-  {{ range $sketches }}
-    {{ if .Params.images }}
-      {{ $sketchesWithImages = $sketchesWithImages | append . }}
-    {{ end }}
-  {{ end }}
-  
-  {{ if gt (len $sketchesWithImages) 0 }}
-  <div class="section-header">
-    <h2>From the Sketchbook</h2>
-    <a href="{{ "/sketchbook/" | relURL }}">View all →</a>
-  </div>
-  
-  <div class="sketches-row">
-    {{ range first 6 $sketchesWithImages }}
-    <div class="sketch-thumb">
-      <a href="{{ .RelPermalink }}">
-        {{ with index .Params.images 0 }}
-        <img src="{{ . | absURL }}" alt="Sketch">
-        {{ end }}
-      </a>
-      <div class="caption">{{ .Date.Format "Jan 2" }}</div>
     </div>
     {{ end }}
   </div>
