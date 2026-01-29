@@ -1,5 +1,5 @@
 baseURL = "https://vghpe.github.io/"
-title = "Henrik's working docs"
+title = "Henrik design docs"
 relativeURLs = false
 canonifyURLs = true
 languageCode = 'en-us'
