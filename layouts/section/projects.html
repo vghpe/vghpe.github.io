@@ -1,17 +1,16 @@
 {{ define "main" }}
 {{ partial "profile.html" . }}
 
-<div id="list-page" class="feature-grid">
+<!-- Projects intro as page header -->
+{{ if .Content }}
+<div style="max-width: 580px; margin: 0 auto 30px auto; padding: 0 24px;">
+  <div style="font-size: 16px; color: #666; line-height: 1.6;">
+    {{ .Content }}
+  </div>
+</div>
+{{ end }}
 
-    <!-- Projects intro -->
-    {{ if .Content }}
-    <section class="item projects-intro-section">
-      <div class="content">
-        {{ .Content }}
-      </div>
-    </section>
-    <hr class="post-divider" />
-    {{ end }}
+<div id="list-page" class="feature-grid">
 
     <!-- Loop over project pages -->
     {{ range .Pages }}

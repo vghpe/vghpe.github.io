@@ -1,15 +1,7 @@
-<header class="profile">
-    {{ if .Site.Params.avatarLink }}
-        <a href="{{ .Site.Params.avatarLink }}">
-          <img class="avatar" alt="avatar" src="{{ "/images/avatar.png" | relURL }}" />
-        </a>
-    {{ else }}
-        <img class="avatar" alt="avatar" src="{{ "/images/avatar.png" | relURL }}" />
-    {{ end }}
-
-    <h1>{{ .Site.Title }}</h1>
+<header class="profile" style="text-align: left; max-width: 580px; padding: 0 24px;">
+    <h1 style="font-size: 42px; font-weight: 600; color: #364e4a; margin: 50px 0 0 0; font-family: Futura;">{{ .Site.Title }}</h1>
     
     {{ with .Site.Params.bio }}
-      <p>{{ . }}</p>
+      <p style="font-size: 14px; color: #555; margin: 0; max-width: 500px; line-height: 1.5;">{{ . }}</p>
     {{ end }}
 </header>
