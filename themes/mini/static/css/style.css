@@ -351,7 +351,7 @@ nav.navigation a.button {
 /* profile  */
 
 .profile {
-  margin: 50px auto 30px auto;
+  margin: 20px auto 50px auto;
   text-align: center;
 }
 
@@ -458,12 +458,13 @@ nav.navigation a.button {
 }
 
 .profile p {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 300;
   color: #757575;
   margin-top: 0;
   margin-bottom: 0;
   line-height: 1.5;
+  text-align: center;
 }
 
 /* index post list */

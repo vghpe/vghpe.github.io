@@ -1,11 +1,7 @@
 {{ define "main" }}
 {{ partial "profile.html" . }}
 
-<div style="max-width: 580px; margin: 0 auto 20px auto; padding: 0 24px; text-align: right;">
-  {{ with .OutputFormats.Get "RSS" }}
-  <a href="{{ .RelPermalink }}" style="color: #5badf0; text-decoration: none; font-size: 14px;">Subscribe to RSS →</a>
-  {{ end }}
-</div>
+
 
 <div id="list-page" class="feature-grid">
     <!-- Only include pages from the 'posts' section. -->
