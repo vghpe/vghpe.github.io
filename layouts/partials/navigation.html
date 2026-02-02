@@ -74,7 +74,13 @@
 <nav class="navigation{{ if not .IsHome }} with-border{{ end }}">
   <!-- Branding on left (hidden on home page) -->
   {{ if not .IsHome }}
-    <a href="{{ "/" | relURL }}" class="nav-branding">henrik docs</a>
+    <div style="display: flex; align-items: center; gap: 8px; line-height: 1; font-family: Futura;">
+      <a href="{{ "/" | relURL }}" class="nav-branding">henrik docs</a>
+      {{ if and (eq .Section "projects") (ne .Kind "section") }}
+        <span style="color: #333; font-size: 13px; font-weight: 300; font-family: Futura;">·</span>
+        <a href="{{ "/projects/" | relURL }}" style="font-size: 13px; font-weight: 300; color: #333; font-family: Futura; text-decoration: none; line-height: 1;">9 Platforms</a>
+      {{ end }}
+    </div>
   {{ end }}
 
   <!-- Navigation items on right -->

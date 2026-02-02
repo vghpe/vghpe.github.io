@@ -1,13 +1,15 @@
 ---
-title: "9 Platforms - Narrative Outline v1"
+title: "Narrative Outline"
 date: 2025-08-13T13:17:00
 draft: false
-slug: nine-platforms-rev1
+slug: nine-platforms-narrative-outline-v1
+document: "narrative-outline"
+revision: "v1.0"
 aliases: 
 tags:
   - narrative
 image: images/nine-platfoms-town_1.gif
-description: First published revistion of a Narrative Puzzle game titled 9 Platforms
+description: First published revision of a Narrative Puzzle game titled 9 Platforms
 ---
 
 Reality rips, and 4 strangers comes to on a stalled star-born train. To return, they must explore 9 platforms, mend what’s broken, and confront the pull of a world that feels more like home than the one they left.

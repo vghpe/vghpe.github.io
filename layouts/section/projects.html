@@ -1,17 +1,36 @@
 {{ define "main" }}
 <!-- Projects intro as page header -->
 {{ if .Content }}
-<div style="max-width: 580px; margin: 0 auto 30px auto; padding: 0 24px;">
-  <div style="font-size: 16px; color: #666; line-height: 1.6;">
-    {{ .Content }}
+<section id="single" style="margin-top: 0;">
+  <div style="max-width: 580px; margin: 30px auto 30px auto; padding: 0 24px;">
+    <div style="font-size: 16px; color: #666; line-height: 1.6;">
+      {{ .Content }}
+    </div>
   </div>
-</div>
+</section>
 {{ end }}
 
 <div id="list-page" class="feature-grid">
 
-    <!-- Loop over project pages -->
+    {{/* Group pages by document field and get only latest version */}}
+    {{ $documents := dict }}
     {{ range .Pages }}
+      {{ $doc := .Params.document }}
+      {{ if $doc }}
+        {{ $existing := index $documents $doc }}
+        {{ if $existing }}
+          {{/* Compare revisions - keep the one with higher version */}}
+          {{ if gt .Params.revision $existing.Params.revision }}
+            {{ $documents = merge $documents (dict $doc .) }}
+          {{ end }}
+        {{ else }}
+          {{ $documents = merge $documents (dict $doc .) }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+
+    <!-- Loop over latest versions only -->
+    {{ range $documents }}
     <section class="item">
 
       <!-- Title at top -->
@@ -19,13 +38,11 @@
         <h1>{{ .Title }}</h1>
       </div>
 
-      <!-- Tags and date below title -->
+      <!-- Revision and date below title -->
       <div class="tags-date-container">
-        {{ with .Params.tags }}
+        {{ with .Params.revision }}
         <div class="tags">
-            {{ range . }}
-                <a href="{{ "tags/" | absURL }}{{ . | urlize }}" class="tag {{ . | urlize }}">{{ . }}</a>
-            {{ end }}
+          <span class="tag">{{ . }}</span>
         </div>
         {{ end }}
 

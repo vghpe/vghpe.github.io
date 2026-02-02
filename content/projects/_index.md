@@ -1,5 +1,5 @@
 ---
-title: "Projects"
+title: "9 Platforms"
 description: "Active game design projects and development wikis"
 ---
 

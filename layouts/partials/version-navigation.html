@@ -1,0 +1,57 @@
+{{ if and .Params.document .Params.revision }}
+<div style="max-width: 680px; margin: 60px auto 0; padding: 0 24px; border-top: 1px solid #eee; padding-top: 30px;">
+  <div style="display: flex; justify-content: space-between; align-items: center;">
+    
+    {{/* Find all versions of this document */}}
+    {{ $currentDoc := .Params.document }}
+    {{ $currentRev := .Params.revision }}
+    {{ $allVersions := slice }}
+    
+    {{ range where .Site.RegularPages "Params.document" $currentDoc }}
+      {{ $allVersions = $allVersions | append . }}
+    {{ end }}
+    
+    {{/* Sort by revision string */}}
+    {{ $allVersions = sort $allVersions ".Params.revision" }}
+    
+    {{/* Find previous and next */}}
+    {{ $prev := "" }}
+    {{ $next := "" }}
+    {{ range $index, $page := $allVersions }}
+      {{ if eq $page.Params.revision $currentRev }}
+        {{ if gt $index 0 }}
+          {{ $prev = index $allVersions (sub $index 1) }}
+        {{ end }}
+        {{ if lt $index (sub (len $allVersions) 1) }}
+          {{ $next = index $allVersions (add $index 1) }}
+        {{ end }}
+      {{ end }}
+    {{ end }}
+    
+    <div>
+      {{ if $prev }}
+        <a href="{{ $prev.RelPermalink }}" style="color: #4a9eff; text-decoration: none;">
+          ← {{ $prev.Params.revision }}
+        </a>
+      {{ else }}
+        <span style="color: #ccc;">← Older version</span>
+      {{ end }}
+    </div>
+    
+    <div style="color: #666;">
+      {{ $currentRev }}
+    </div>
+    
+    <div>
+      {{ if $next }}
+        <a href="{{ $next.RelPermalink }}" style="color: #4a9eff; text-decoration: none;">
+          {{ $next.Params.revision }} →
+        </a>
+      {{ else }}
+        <span style="color: #ccc;">Newer version →</span>
+      {{ end }}
+    </div>
+    
+  </div>
+</div>
+{{ end }}
