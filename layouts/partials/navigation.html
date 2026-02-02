@@ -1,19 +1,98 @@
-<nav class="navigation">
-  <!-- Home -->
-  <a href="{{ "/" | relURL }}">Index</a>
+<style>
+  .navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 50px;
+    max-height: 50px;
+  }
+  
+  .navigation.with-border {
+    border-bottom: 1px solid #eee;
+    padding-bottom: 24px;
+    margin-bottom: 48px;
+  }
+  
+  .nav-branding {
+    font-size: 20px !important;
+    font-weight: 600;
+    color: #df3636 !important;
+    font-family: Futura;
+    text-decoration: none;
+    line-height: 1 !important;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 16px;
+    margin-left: auto;
+  }
+  
+  .nav-links a {
+    font-size: 13px;
+    line-height: 1;
+  }
+  
+  @media (max-width: 700px) {
+    .navigation {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 0px;
+      min-height: 50px;
+      max-height: 50px;
+    }
+    
+    .navigation.with-border {
+      padding-bottom: 24px;
+    }
+    
+    .nav-branding {
+      font-size: 20px !important;
+      line-height: 1 !important;
+      margin: 0;
+      padding: 0;
+    }
+    
+    .nav-links {
+      margin-left: 0;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      line-height: 1;
+    }
+    
+    .nav-links a {
+      font-size: 13px;
+      line-height: 1;
+      margin: 0;
+      padding: 0;
+    }
+  }
+</style>
 
-  <!-- Blog -->
-  <a href="{{ "/archive/" | relURL }}">Blog</a>
+<nav class="navigation{{ if not .IsHome }} with-border{{ end }}">
+  <!-- Branding on left (hidden on home page) -->
+  {{ if not .IsHome }}
+    <a href="{{ "/" | relURL }}" class="nav-branding">henrik docs</a>
+  {{ end }}
 
-  <!-- Projects -->
-  <a href="{{ "/projects/" | relURL }}">9 Platforms</a>
+  <!-- Navigation items on right -->
+  <div class="nav-links">
+    <!-- Home -->
+    <a href="{{ "/" | relURL }}">Home</a>
 
-  <!-- Sketchbook Section (was Notes) -->
-  <a href="{{ "/sketchbook/" | relURL }}">Sketchbook</a>
+    <!-- Blog -->
+    <a href="{{ "/archive/" | relURL }}">Blog</a>
 
-  <!-- About -->
-  <a href="{{ "/about/" | relURL }}">About</a>
+    <!-- Projects -->
+    <a href="{{ "/projects/" | relURL }}">9 Platforms</a>
 
+    <!-- Sketchbook Section (was Notes) -->
+    <a href="{{ "/sketchbook/" | relURL }}">Sketchbook</a>
 
+    <!-- About -->
+    <a href="{{ "/about/" | relURL }}">About</a>
+  </div>
 </nav>
 

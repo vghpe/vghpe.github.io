@@ -1,8 +1,8 @@
 ---
-title: 9 Platforms - Narrative Outline v1.3
+title: 9 Platforms - Narrative Outline v1.1
 date: 2025-08-13T13:17:00
 draft: false
-slug: nine-platforms-rev1-5
+slug: nine-platforms-rev1-1
 aliases:
 tags:
   - narrative

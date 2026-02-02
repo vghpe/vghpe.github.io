@@ -1,6 +1,4 @@
 {{ define "main" }}
-{{ partial "profile.html" . }}
-
 <div id="list-page" class="feature-grid">
     <!-- Only include pages from the 'posts' section. -->
     {{ $postsPages := where .Site.RegularPages "Section" "posts" }}
