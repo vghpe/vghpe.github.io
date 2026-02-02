@@ -26,6 +26,9 @@
         {{ else }}
           {{ $documents = merge $documents (dict $doc .) }}
         {{ end }}
+      {{ else }}
+        {{/* Error: document field is missing */}}
+        {{ errorf "ERROR: Page '%s' in projects section is missing 'document' field in frontmatter. Add 'document: \"document-name\"' to show it on the 9 Platforms page." .File.Path }}
       {{ end }}
     {{ end }}
 

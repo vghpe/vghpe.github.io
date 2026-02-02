@@ -1,5 +1,7 @@
 ---
-title: Characters bios v.1
+title: Characters bios
+revision: "v1.0"
+document: "characters"
 date: 2026-01-16T00:00:00
 draft: false
 slug: characters
@@ -9,18 +11,6 @@ tags:
 image: images/IMG_5639.jpg
 description:
 ---
-**Ashvini** "Ash" (Protagonist)
-
-Being a wife was something she fell into as it fell in line with how she expected things to go. She's followed the path of expectation, and fulfilled her duties of her role. But despite just turning 32, for the past year, she's been feeling, so, very, old. 
-
-Her husband Andrew 45 is kind, spontaneous and makes her feel safe. They talked about leaving the city for a while. To be able to put proper nails into the walls or even tear one down. Andrew, who's getting older, has been dreaming about finally becoming a father. 
-
-Is she being honest to herself planning a future getting a house? Is she telling the truth to her loved ones and herself? Or has she been lying for a while? Why does it feel like she's only able to breathe when Andrew has fallen asleep?
-
-If she decides to stay at The Station she has to admit that she has been lying to Andrew for a while. She will abandon him and cause tremendous harm to someone who's done nothing wrong, and rob him of the life he's been dreaming of.
-
----
-
 **Mosse**, 25 year old graphics designer, -- The one that wants to be pretty
 
 Mosse was always drawn to aesthetics, art and beauty but grew up in a home where eccentric behavior and standing out was frowned upon. He once came home from Art class where he'd caked color on his nails and was promptly corrected by his mother that boys don't do that. 
@@ -66,3 +56,15 @@ When waking up on the Station his objective is clear, He needs to get back. Ther
 More than than disappearing from his loved ones and the grief it would inflict, he could never reckon with the state confusion his disappearance would cause. How could his loved ones ever trust again? 
 
 To leave for a personal request, causing so much hurt and destruction would unequivocally be a  cruel and selfish act.
+
+**Ashvini** "Ash" (Protagonist)
+
+Being a wife was something she fell into as it fell in line with how she expected things to go. She's followed the path of expectation, and fulfilled her duties of her role. But despite just turning 32, for the past year, she's been feeling, so, very, old. 
+
+Her husband Andrew 45 is kind, spontaneous and makes her feel safe. They talked about leaving the city for a while. To be able to put proper nails into the walls or even tear one down. Andrew, who's getting older, has been dreaming about finally becoming a father. 
+
+Is she being honest to herself planning a future getting a house? Is she telling the truth to her loved ones and herself? Or has she been lying for a while? Why does it feel like she's only able to breathe when Andrew has fallen asleep?
+
+If she decides to stay at The Station she has to admit that she has been lying to Andrew for a while. She will abandon him and cause tremendous harm to someone who's done nothing wrong, and rob him of the life he's been dreaming of.
+
+---

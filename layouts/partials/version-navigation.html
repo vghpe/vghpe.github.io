@@ -14,19 +14,25 @@
     {{/* Sort by revision string */}}
     {{ $allVersions = sort $allVersions ".Params.revision" }}
     
-    {{/* Find previous and next */}}
-    {{ $prev := "" }}
-    {{ $next := "" }}
-    {{ range $index, $page := $allVersions }}
-      {{ if eq $page.Params.revision $currentRev }}
-        {{ if gt $index 0 }}
-          {{ $prev = index $allVersions (sub $index 1) }}
+    {{/* Find prev and next */}}
+    {{ .Scratch.Set "prevPage" false }}
+    {{ .Scratch.Set "nextPage" false }}
+    {{ .Scratch.Set "foundCurrent" false }}
+    
+    {{ range $allVersions }}
+      {{ if eq .Params.revision $currentRev }}
+        {{ $.Scratch.Set "foundCurrent" true }}
+      {{ else if $.Scratch.Get "foundCurrent" }}
+        {{ if not ($.Scratch.Get "nextPage") }}
+          {{ $.Scratch.Set "nextPage" . }}
         {{ end }}
-        {{ if lt $index (sub (len $allVersions) 1) }}
-          {{ $next = index $allVersions (add $index 1) }}
-        {{ end }}
+      {{ else }}
+        {{ $.Scratch.Set "prevPage" . }}
       {{ end }}
     {{ end }}
+    
+    {{ $prev := .Scratch.Get "prevPage" }}
+    {{ $next := .Scratch.Get "nextPage" }}
     
     <div>
       {{ if $prev }}

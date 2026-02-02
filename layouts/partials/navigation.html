@@ -22,6 +22,15 @@
     line-height: 1 !important;
   }
   
+  .nav-breadcrumb {
+    color: #333;
+    font-size: 13px;
+    font-weight: 300;
+    font-family: Futura;
+    text-decoration: none;
+    line-height: 1;
+  }
+  
   .nav-links {
     display: flex;
     gap: 16px;
@@ -76,9 +85,18 @@
   {{ if not .IsHome }}
     <div style="display: flex; align-items: center; gap: 8px; line-height: 1; font-family: Futura;">
       <a href="{{ "/" | relURL }}" class="nav-branding">henrik docs</a>
-      {{ if and (eq .Section "projects") (ne .Kind "section") }}
+      {{ if or (eq .Section "projects") (eq .Section "Projects") }}
         <span style="color: #333; font-size: 13px; font-weight: 300; font-family: Futura;">·</span>
-        <a href="{{ "/projects/" | relURL }}" style="font-size: 13px; font-weight: 300; color: #333; font-family: Futura; text-decoration: none; line-height: 1;">9 Platforms</a>
+        <span class="nav-breadcrumb">9 Platforms</span>
+      {{ else if or (eq .Section "posts") (eq .Section "archive") (eq .Section "Archive") }}
+        <span style="color: #333; font-size: 13px; font-weight: 300; font-family: Futura;">·</span>
+        <span class="nav-breadcrumb">Blog</span>
+      {{ else if or (eq .Section "notes") (eq .Section "sketchbook") (eq .Section "Sketchbook") }}
+        <span style="color: #333; font-size: 13px; font-weight: 300; font-family: Futura;">·</span>
+        <span class="nav-breadcrumb">Sketchbook</span>
+      {{ else if or (eq .Section "about") (eq .Section "About") }}
+        <span style="color: #333; font-size: 13px; font-weight: 300; font-family: Futura;">·</span>
+        <span class="nav-breadcrumb">About</span>
       {{ end }}
     </div>
   {{ end }}

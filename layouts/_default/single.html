@@ -15,6 +15,10 @@
         <span>{{ i18n "wordCount" . }}</span>
         <span class="split">·</span>
         <span>{{ i18n "minuteRead" . }}</span>
+        {{ if .Params.revision }}
+        <span class="split">·</span>
+        <span>{{ .Params.revision }}</span>
+        {{ end }}
     </div>
 
     {{ if or .Site.Params.showToc .Params.showToc }}
