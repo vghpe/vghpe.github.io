@@ -62,6 +62,7 @@
   <link href="{{ .RelPermalink }}" rel="feed" type="application/rss+xml" title="{{ $.Site.Title }}" />
 {{ end }}
 
+{{ if .Params.disableZoom }}
 <script>
 // Disable double-tap and pinch zoom on iOS Safari
 // iOS 10+ ignores viewport meta tags, so we need JavaScript
@@ -90,3 +91,4 @@ document.addEventListener('touchend', function(e) {
   lastTouchEnd = now;
 }, { passive: false });
 </script>
+{{ end }}
