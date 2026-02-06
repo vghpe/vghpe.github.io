@@ -3,6 +3,8 @@ title: "Site Introduction"
 date: 2026-01-27
 ---
 
-Welcome! I've designed games professionally for 15 years and currently live in Gothenburg. I'm keenly interested in creative craft, and these docs contain **tools**, **prototypes**, and **essays** on design theory.
+**Welcome!** I've designed games professionally for 15 years and currently live in Gothenburg. These docs are creative musings, sketches, and writing about design and making things.
 
-For more about me, including my portfolio and [résumé](/resume/Henrik_Pettersson_Resume.pdf) from my work in the games industry, see the [About](/about/) page.
+If you're a local creative curious about games, or interested in collaborating on something different, **say hi.**
+
+For more info on me, see the [About](/about/) page.

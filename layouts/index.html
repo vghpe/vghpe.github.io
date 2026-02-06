@@ -54,7 +54,7 @@
   {{ $allPages := .Site.RegularPages }}
   {{ $recentPosts := slice }}
   {{ range $allPages }}
-    {{ if and (ne .Section "notes") (ne .Section "unlisted") (ne .Section "docs") }}
+    {{ if and (ne .Section "notes") (ne .Section "unlisted") (ne .Section "docs") (ne .Section "projects") }}
       {{/* Exclude articles from recent posts */}}
       {{ $isArticle := false }}
       {{ with .Params.tags }}
