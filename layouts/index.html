@@ -19,35 +19,40 @@
     {{ end }}
   </header>
 
-    {{/* ==================== SKETCHBOOK PREVIEW ==================== */}}
-  {{ $sketches := where .Site.RegularPages "Section" "notes" }}
-  {{/* Filter to only those with images */}}
-  {{ $sketchesWithImages := slice }}
-  {{ range $sketches }}
-    {{ if .Params.images }}
-      {{ $sketchesWithImages = $sketchesWithImages | append . }}
+
+  {{/* ==================== POPULAR POSTS ==================== */}}
+  {{/* Filter posts that have "article" in their tags */}}
+  {{ $articles := slice }}
+  {{ range $page := .Site.RegularPages }}
+    {{ with $page.Params.tags }}
+      {{ if in . "article" }}
+        {{ $articles = $articles | append $page }}
+      {{ end }}
     {{ end }}
   {{ end }}
   
-  {{ if gt (len $sketchesWithImages) 0 }}
+  {{ if gt (len $articles) 0 }}
   <div class="section-header">
-    <h2>From the Sketchbook</h2>
-    <a href="{{ "/sketchbook/" | relURL }}">View all →</a>
+    <h2>Popular Posts</h2>
   </div>
   
-  <div class="sketches-row">
-    {{ range first 6 $sketchesWithImages }}
-    <div class="sketch-thumb">
-      <a href="{{ .RelPermalink }}">
-        {{ with index .Params.images 0 }}
-        <img src="{{ . | absURL }}" alt="Sketch">
-        {{ end }}
-      </a>
-      <div class="caption">{{ .Date.Format "Jan 2" }}</div>
+  <div class="featured-grid">
+    {{ range first 3 $articles }}
+    <div class="featured-article">
+      {{ with .Params.image }}
+      <img src="{{ . | absURL }}" alt="">
+      {{ end }}
+      <div class="info">
+        <div class="date">{{ .Date.Format "Jan 2, 2006" }}</div>
+        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+        <p class="summary">{{ .Summary | plainify | truncate 160 }}</p>
+      </div>
     </div>
     {{ end }}
   </div>
   {{ end }}
+
+  
 
   {{/* ==================== RECENT POSTS ==================== */}}
   {{/* Get all regular pages, exclude notes/unlisted/docs, exclude articles */}}
@@ -107,33 +112,33 @@
   </div>
   {{ end }}
 
-  {{/* ==================== FEATURED ARTICLES ==================== */}}
-  {{/* Filter posts that have "article" in their tags */}}
-  {{ $articles := slice }}
-  {{ range $page := .Site.RegularPages }}
-    {{ with $page.Params.tags }}
-      {{ if in . "article" }}
-        {{ $articles = $articles | append $page }}
-      {{ end }}
+  
+
+  {{/* ==================== SKETCHBOOK PREVIEW ==================== */}}
+  {{ $sketches := where .Site.RegularPages "Section" "notes" }}
+  {{/* Filter to only those with images */}}
+  {{ $sketchesWithImages := slice }}
+  {{ range $sketches }}
+    {{ if .Params.images }}
+      {{ $sketchesWithImages = $sketchesWithImages | append . }}
     {{ end }}
   {{ end }}
   
-  {{ if gt (len $articles) 0 }}
+  {{ if gt (len $sketchesWithImages) 0 }}
   <div class="section-header">
-    <h2>Featured Articles</h2>
+    <h2>From the Sketchbook</h2>
+    <a href="{{ "/sketchbook/" | relURL }}">View all →</a>
   </div>
   
-  <div class="featured-grid">
-    {{ range first 3 $articles }}
-    <div class="featured-article">
-      {{ with .Params.image }}
-      <img src="{{ . | absURL }}" alt="">
-      {{ end }}
-      <div class="info">
-        <div class="date">{{ .Date.Format "Jan 2, 2006" }}</div>
-        <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-        <p class="summary">{{ .Summary | plainify | truncate 160 }}</p>
-      </div>
+  <div class="sketches-row">
+    {{ range first 6 $sketchesWithImages }}
+    <div class="sketch-thumb">
+      <a href="{{ .RelPermalink }}">
+        {{ with index .Params.images 0 }}
+        <img src="{{ . | absURL }}" alt="Sketch">
+        {{ end }}
+      </a>
+      <div class="caption">{{ .Date.Format "Jan 2" }}</div>
     </div>
     {{ end }}
   </div>
