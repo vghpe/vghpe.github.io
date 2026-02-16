@@ -8,9 +8,11 @@
   'use strict';
 
   // ── Paths ──────────────────────────────────────────────
-  const ATLAS_JSON = '/fonts/futura-sdf-size48-pxrange8.json';
   const ATLAS_PNG  = '/fonts/futura-sdf-size48-pxrange8.png';
   const EXPAND     = 60; // px padding around text for displacement overflow
+
+  // ── Inlined atlas metadata (avoids extra network fetch) ─
+  const ATLAS_DATA = {"atlas":{"type":"sdf","distanceRange":8,"distanceRangeMiddle":0,"size":48,"width":132,"height":132,"yOrigin":"bottom"},"name":"Futura Bold","metrics":{"emSize":1,"lineHeight":1.424,"ascender":1.07,"descender":-0.264,"underlineY":-0.224,"underlineThickness":0.075},"glyphs":[{"unicode":32,"advance":0.343},{"unicode":99,"advance":0.483,"planeBounds":{"left":-0.065167,"bottom":-0.114583,"right":0.518167,"top":0.614583},"atlasBounds":{"left":0.5,"bottom":46.5,"right":28.5,"top":81.5}},{"unicode":100,"advance":0.682,"planeBounds":{"left":-0.056417,"bottom":-0.114583,"right":0.714417,"top":0.927083},"atlasBounds":{"left":0.5,"bottom":81.5,"right":37.5,"top":131.5}},{"unicode":101,"advance":0.61,"planeBounds":{"left":-0.0705,"bottom":-0.114583,"right":0.6795,"top":0.614583},"atlasBounds":{"left":0.5,"bottom":11.5,"right":36.5,"top":46.5}},{"unicode":104,"advance":0.661,"planeBounds":{"left":-0.023667,"bottom":-0.09375,"right":0.684667,"top":0.927083},"atlasBounds":{"left":37.5,"bottom":82.5,"right":71.5,"top":131.5}},{"unicode":105,"advance":0.302,"planeBounds":{"left":-0.0365,"bottom":-0.09375,"right":0.3385,"top":0.90625},"atlasBounds":{"left":110.5,"bottom":83.5,"right":128.5,"top":131.5}},{"unicode":107,"advance":0.688,"planeBounds":{"left":-0.02825,"bottom":-0.09375,"right":0.78425,"top":0.927083},"atlasBounds":{"left":71.5,"bottom":82.5,"right":110.5,"top":131.5}},{"unicode":110,"advance":0.661,"planeBounds":{"left":-0.023667,"bottom":-0.09375,"right":0.684667,"top":0.614583},"atlasBounds":{"left":96.5,"bottom":47.5,"right":130.5,"top":81.5}},{"unicode":111,"advance":0.662,"planeBounds":{"left":-0.064833,"bottom":-0.114583,"right":0.726833,"top":0.614583},"atlasBounds":{"left":28.5,"bottom":46.5,"right":66.5,"top":81.5}},{"unicode":114,"advance":0.453,"planeBounds":{"left":-0.02875,"bottom":-0.09375,"right":0.53375,"top":0.614583},"atlasBounds":{"left":36.5,"bottom":12.5,"right":63.5,"top":46.5}},{"unicode":115,"advance":0.513,"planeBounds":{"left":-0.062,"bottom":-0.114583,"right":0.563,"top":0.614583},"atlasBounds":{"left":66.5,"bottom":46.5,"right":96.5,"top":81.5}}],"kerning":[]};
 
   // ── Find H1 ────────────────────────────────────────────
   const h1 = document.querySelector('.site-header h1');
@@ -55,7 +57,6 @@
   let textBounds = { top: 0, baseline: 0 };
   let textRect = { x: 0, y: 0, w: 0, h: 0, baseline: 0, bottom: 0 };
   let logicalW = 0, logicalH = 0;
-  let targetWidth = 0, targetHeight = 0;
   let textScale = 1;
   let dpr = 1;
   let textOffsetX = 0, textOffsetY = 0;
@@ -70,8 +71,7 @@
   canvas.className = 'title-warp-canvas';
   header.appendChild(canvas);
 
-  // Hide H1 text (keep in flow for layout & SEO)
-  h1.classList.add('warp-hidden');
+  // H1 is already hidden via template class; JS removes it on error fallback
 
   // ── sampleField (CPU side, for debug overlays) ─────────
   function sampleField(x, y, t) {
@@ -159,8 +159,6 @@
     const scaledW = textW * textScale;   // = domTextRect.width
     const scaledH = textH * textScale;
 
-    targetWidth  = scaledW;
-    targetHeight = scaledH;
     logicalW = scaledW + 2 * EXPAND;
     logicalH = scaledH + 2 * EXPAND;
 
@@ -700,8 +698,7 @@
   // ── Load atlas + init WebGL ────────────────────────────
   async function init() {
     try {
-      const resp = await fetch(ATLAS_JSON);
-      sdfData = await resp.json();
+      sdfData = ATLAS_DATA;
 
       for (const g of sdfData.glyphs) glyphMap[g.unicode] = g;
       if (sdfData.kerning) {
@@ -743,7 +740,7 @@
     } catch (e) {
       console.error('SDF title warp init failed:', e);
       // Fallback: show the original H1
-      h1.classList.remove('warp-hidden');
+      h1.classList.add('warp-fallback');
     }
   }
 

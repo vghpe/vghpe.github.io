@@ -26,6 +26,12 @@
   visibility: hidden;
 }
 
+/* Fallback: show H1 if JS is disabled */
+noscript ~ .site-header h1.warp-hidden,
+.site-header h1.warp-hidden.warp-fallback {
+  visibility: visible;
+}
+
 .title-warp-canvas {
   position: absolute;
   pointer-events: none;

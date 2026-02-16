@@ -7,7 +7,7 @@
   
   {{/* Site Header */}}
   <header class="site-header">
-    <h1>{{ .Site.Title }}</h1>
+    <h1 class="warp-hidden">{{ .Site.Title }}</h1>
     {{ with .Site.Params.bio }}
     <p class="tagline">{{ . }}</p>
     {{ end }}
@@ -150,6 +150,9 @@
   </div>
 
 </div>
+
+{{/* Preload atlas image */}}
+<link rel="preload" href="{{ "fonts/futura-sdf-size48-pxrange8.png" | relURL }}" as="image">
 
 {{/* SDF title warp animation */}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/regl/2.1.0/regl.min.js"></script>
