@@ -424,8 +424,4 @@
   .all-posts-grid {
     grid-template-columns: 1fr;
   }
-  
-  .site-header h1 {
-    font-size: 32px;
-  }
 }

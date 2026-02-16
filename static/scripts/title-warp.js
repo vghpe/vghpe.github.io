@@ -111,6 +111,25 @@
     return w;
   }
 
+  // ── Reposition canvas (without rescaling geometry) ─────
+  function repositionCanvas() {
+    if (!sdfData) return;
+    dpr = window.devicePixelRatio || 1;
+    
+    // Get current H1 position and update canvas position/size
+    const h1Rect     = h1.getBoundingClientRect();
+    const headerRect = header.getBoundingClientRect();
+    const left = h1Rect.left - headerRect.left - EXPAND;
+    const top  = h1Rect.top  - headerRect.top  - EXPAND;
+
+    canvas.width  = logicalW * dpr;
+    canvas.height = logicalH * dpr;
+    canvas.style.width  = logicalW + 'px';
+    canvas.style.height = logicalH + 'px';
+    canvas.style.left   = left + 'px';
+    canvas.style.top    = top  + 'px';
+  }
+
   // ── Resize ─────────────────────────────────────────────
   function resize() {
     if (!sdfData) return;
@@ -714,13 +733,12 @@
       resize();
       rafId = requestAnimationFrame(renderLoop);
       
-      // Canvas initialized at current viewport size - no rescaling on resize
-      // (Disabled: resize listener commented out)
-      // let resizeTimer;
-      // window.addEventListener('resize', () => {
-      //   clearTimeout(resizeTimer);
-      //   resizeTimer = setTimeout(resize, 100);
-      // });
+      // Reposition canvas on viewport change (without rescaling geometry)
+      let resizeTimer;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(repositionCanvas, 50);
+      });
 
     } catch (e) {
       console.error('SDF title warp init failed:', e);
@@ -878,6 +896,10 @@
     bindCheck('wAtlas', 'showAtlas');
   }
 
-  createDebugPanel();
+  // Only show debug panel when ?debug is in the URL
+  const urlParams = new URLSearchParams(window.location.search);
+  if (urlParams.has('debug')) {
+    createDebugPanel();
+  }
   init();
 })();
