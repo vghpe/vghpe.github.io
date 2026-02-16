@@ -10,15 +10,25 @@
 /* Site Header */
 .site-header {
   padding: 50px 0 0 0;
+  position: relative;
 }
 
 .site-header h1 {
   font-size: 42px;
   font-weight: 600;
-  color: #df3636;
+  color: #ff3838;
   margin: 0 0 0 0;
   text-align: left;
   font-family: Futura;
+}
+
+.site-header h1.warp-hidden {
+  visibility: hidden;
+}
+
+.title-warp-canvas {
+  position: absolute;
+  pointer-events: none;
 }
 
 .site-header .tagline {
