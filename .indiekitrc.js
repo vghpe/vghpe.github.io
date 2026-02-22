@@ -3,6 +3,7 @@
 // Path to custom plugin for routing Photo posts into the Notes section
 const path = require('path');
 const photoToNotesPlugin = path.join(__dirname, 'plugins', 'photo-to-notes.js');
+const syndicatorX = path.join(__dirname, 'plugins', 'syndicator-x.js');
 
 module.exports = {
   /* Mongo cache / token store (Atlas) */
@@ -22,6 +23,7 @@ module.exports = {
     '@indiekit/endpoint-micropub',
     '@indiekit/endpoint-media',
     '@indiekit/syndicator-bluesky',
+    syndicatorX,
     '@indiekit/post-type-note',
     '@indiekit/post-type-photo',
     photoToNotesPlugin
@@ -44,7 +46,14 @@ module.exports = {
     password: process.env.BLUESKY_PASSWORD, // Bluesky password / app-password
     checked:  true                          // tick “Syndicate” by default
   },
-
+  [syndicatorX]: {
+    handle:       process.env.TWITTER_HANDLE,       // your X username
+    apiKey:       process.env.TWITTER_API_KEY,       // OAuth 1.0a consumer key
+    apiSecret:    process.env.TWITTER_API_SECRET,    // OAuth 1.0a consumer secret
+    accessToken:  process.env.TWITTER_ACCESS_TOKEN,  // OAuth 1.0a access token
+    accessSecret: process.env.TWITTER_ACCESS_SECRET, // OAuth 1.0a access secret
+    checked:      true                               // tick "Syndicate" by default
+  },
   // Preserve animated GIFs when resizing via Sharp
   '@indiekit/endpoint-media': {
     imageProcessing: {

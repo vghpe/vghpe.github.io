@@ -28,6 +28,10 @@ plugins:
   # password pulled from env var BLUESKY_PASSWORD by default
   checked: true
 
+# Configure X syndicator (set TWITTER_* env vars)
+# Note: local dev uses the plugin path relative to project root
+# You must add the plugin path to the plugins list above when using locally
+
 # Use default front-matter format (YAML) for Hugo preset
 '@indiekit/preset-hugo':
   frontMatterFormat: yaml
