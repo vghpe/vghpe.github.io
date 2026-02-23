@@ -197,8 +197,28 @@ class XSyndicator {
       // Resolve relative URLs against the publication URL
       const mediaUrl = url.startsWith('http') ? url : new URL(url, me).href;
 
-      // Download the image
-      const response = await fetch(mediaUrl);
+      // Try fetching the image from the public site URL first
+      let response = await fetch(mediaUrl);
+
+      // If the public URL 404s (GitHub Pages hasn't rebuilt yet),
+      // fall back to the raw GitHub content URL
+      if (!response.ok && response.status === 404) {
+        const ghUser = process.env.GITHUB_USER;
+        const ghRepo = process.env.GITHUB_REPO;
+        const ghBranch = process.env.GITHUB_BRANCH || 'main';
+
+        if (ghUser && ghRepo) {
+          // The media path in JF2 is like "notes/img-5376.jpg"
+          // which maps to "static/notes/img-5376.jpg" in the repo
+          const relativePath = url.startsWith('http')
+            ? new URL(url).pathname.replace(/^\//, '')
+            : url;
+          const rawUrl = `https://raw.githubusercontent.com/${ghUser}/${ghRepo}/${ghBranch}/static/${relativePath}`;
+          console.info(`[X syndicator] Public URL 404, trying raw GitHub: ${rawUrl}`);
+          response = await fetch(rawUrl);
+        }
+      }
+
       if (!response.ok) {
         throw new Error(`Failed to fetch media: ${response.status} ${response.statusText}`);
       }
