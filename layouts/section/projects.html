@@ -8,7 +8,7 @@
   <img src="{{ . | relURL }}" alt="{{ $.Title }}" class="projects-header-image">
   {{ end }}
   <div class="projects-intro">
-    {{ partial "render-content-with-highlight.html" .Content }}
+    {{ partial "markup.html" .Content }}
   </div>
 </section>
 {{ end }}

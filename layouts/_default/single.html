@@ -60,7 +60,7 @@
 
 <div class="content">
     {{ $content := .Content | replaceRE "(<img [^>]*src=\"[^\"]*\"[^>]*alt=\"([^\"]*)\"[^>]*>)" "<div class=\"content-center\">$1<p class=\"image-caption\">$2</p></div>" }}
-    {{ $content | safeHTML }}
+    {{ partial "markup.html" $content }}
 </div>
 
     {{ with .Params.tags }}

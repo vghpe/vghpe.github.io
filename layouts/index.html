@@ -14,7 +14,7 @@
     {{ $intro := .Site.GetPage "home/_index.md" }}
     {{ if $intro }}
       <div class="site-intro">
-        {{ $intro.Content }}
+        {{ partial "markup.html" $intro.Content }}
       </div>
     {{ end }}
   </header>

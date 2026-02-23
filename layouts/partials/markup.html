@@ -1,0 +1,3 @@
+{{- $content := . | replaceRE "==(.+?)==" "<mark class=\"text-highlight\">$1</mark>" -}}
+{{- $content = $content | replaceRE "%%(.+?)?%%" "<span class=\"text-blue\">$1</span>" -}}
+{{- $content | safeHTML -}}

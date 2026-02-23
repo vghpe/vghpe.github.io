@@ -1,7 +1,7 @@
 {{ define "main" }}
 
 <section id="section" class="about-page">
-    {{ .Content }}
+    {{ partial "markup.html" .Content }}
 
     {{ partial "comment.html" . }}
 </section>
