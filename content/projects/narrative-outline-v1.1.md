@@ -1,15 +1,15 @@
 ---
-title: "Narrative Outline"
+title: Narrative Outline
 date: 2025-08-13T13:17:00
 draft: false
 slug: nine-platforms-narrative-outline-v1-1
-document: "narrative-outline"
-revision: "v1.1"
+document: narrative-outline
+revision: v1.1
 aliases:
 tags:
   - narrative
 image: images/nine-platfoms-town_1.gif
-description: First published revision of a Narrative Puzzle game titled 9 Platforms
+description: A basic outline of the acts and events
 ---
 
 Reality rips, and 4 strangers come to on a stalled star-born train. A new reality that tempts them with something they secretly always wanted while taking everything else away.  

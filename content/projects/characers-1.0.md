@@ -1,7 +1,7 @@
 ---
 title: Characters bios
-revision: "v1.0"
-document: "characters"
+revision: v1.0
+document: characters
 date: 2026-01-16T00:00:00
 draft: false
 slug: characters
@@ -9,7 +9,7 @@ aliases:
 tags:
   - narrative
 image: images/IMG_5639.jpg
-description:
+description: Details on the characters
 ---
 **Mosse**, 25 year old graphics designer, -- The one that wants to be pretty
 

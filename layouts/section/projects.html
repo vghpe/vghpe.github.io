@@ -1,81 +1,55 @@
 {{ define "main" }}
-<!-- Projects intro as page header -->
+
+<link rel="stylesheet" href="{{ "css/projects.css" | relURL }}">
+
 {{ if .Content }}
-<section id="single" style="margin-top: 0;">
-  <div style="max-width: 580px; margin: 30px auto 30px auto; padding: 0 24px;">
-    <div style="font-size: 16px; color: #666; line-height: 1.6;">
-      {{ .Content }}
-    </div>
+<section id="single" class="projects-header">
+  {{ with .Params.image }}
+  <img src="{{ . | relURL }}" alt="{{ $.Title }}" class="projects-header-image">
+  {{ end }}
+  <div class="projects-intro">
+    {{ partial "render-content-with-highlight.html" .Content }}
   </div>
 </section>
 {{ end }}
 
-<div id="list-page" class="feature-grid">
-
-    {{/* Group pages by document field and get only latest version */}}
-    {{ $documents := dict }}
-    {{ range .Pages }}
-      {{ $doc := .Params.document }}
-      {{ if $doc }}
-        {{ $existing := index $documents $doc }}
-        {{ if $existing }}
-          {{/* Compare revisions - keep the one with higher version */}}
-          {{ if gt .Params.revision $existing.Params.revision }}
-            {{ $documents = merge $documents (dict $doc .) }}
-          {{ end }}
-        {{ else }}
-          {{ $documents = merge $documents (dict $doc .) }}
-        {{ end }}
-      {{ else }}
-        {{/* Error: document field is missing */}}
-        {{ errorf "ERROR: Page '%s' in projects section is missing 'document' field in frontmatter. Add 'document: \"document-name\"' to show it on the 9 Platforms page." .File.Path }}
+{{/* Group pages by document field, keeping only the latest revision */}}
+{{ $documents := dict }}
+{{ range .Pages }}
+  {{ $doc := .Params.document }}
+  {{ if $doc }}
+    {{ $existing := index $documents $doc }}
+    {{ if $existing }}
+      {{ if gt .Params.revision $existing.Params.revision }}
+        {{ $documents = merge $documents (dict $doc .) }}
       {{ end }}
+    {{ else }}
+      {{ $documents = merge $documents (dict $doc .) }}
     {{ end }}
+  {{ else }}
+    {{ errorf "ERROR: Page '%s' in projects section is missing 'document' field in frontmatter." .File.Path }}
+  {{ end }}
+{{ end }}
 
-    <!-- Loop over latest versions only -->
+<div class="projects-container">
+  <ul class="projects-list">
     {{ range $documents }}
-    <section class="item">
-
-      <!-- Title at top -->
-      <div class="title">
-        <h1>{{ .Title }}</h1>
-      </div>
-
-      <!-- Revision and date below title -->
-      <div class="tags-date-container">
+    <li>
+      <div class="projects-list-item-header">
+        <div class="projects-list-item-title-group">
+          <a href="{{ .RelPermalink }}" class="project-title">{{ .Title }}</a>
+          {{ with .Params.description }}<span class="project-description">— {{ . }}</span>{{ end }}
+        </div>
         {{ with .Params.revision }}
-        <div class="tags">
-          <span class="tag">{{ . }}</span>
-        </div>
-        {{ end }}
-
-        <div class="date">
-          <a href="{{ .RelPermalink }}"><time datetime="{{ .PublishDate }}">{{ .PublishDate.Format "Jan 2, 2006" }}</time></a>
-        </div>
-      </div>
-
-      <!-- Image content -->
-      <div class="content content-center">
-        {{ if .Params.image }}
-        <a href="{{ .RelPermalink }}">
-          <img src="{{ .Params.image | absURL }}" alt="{{ .Title }}">
-        </a>
+        <span class="project-version-badge">{{ . }}</span>
         {{ end }}
       </div>
-
-      <p class="summary-text">
-        {{ .Summary | replaceRE "</p>$" "" | markdownify | safeHTML }}
-      </p>
-      <div class="read-more">
-        <a href="{{ .RelPermalink }}">Read More</a>
+      <div class="project-date">
+        <time>{{ .PublishDate.Format "Jan 2, 2006" }}</time>
       </div>
-
-    </section>
-
-    <!-- Divider between posts -->
-    <hr class="post-divider" />
-
+    </li>
     {{ end }}
+  </ul>
 </div>
 
 {{ end }}

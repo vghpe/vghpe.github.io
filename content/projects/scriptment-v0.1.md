@@ -16,33 +16,33 @@ description: Dialogue Script and Game logic callouts
 - ==Is it interesting? Moment to moment are you curious and engaged? Why or why not? ==
 - ==What do you think about the characters? What type of person do you think they are? Do the conversations flow?==
 
-## ACT 1
+# ACT 1
 
--- LIVE ACTION --
+##### -- LIVE ACTION --
 
 Ash is sitting in her kitchen. The camera is close to her face. She's on her phone but not really looking. Her husband (Andrew) is moving around and talking. The space is small, and Andrew brushes past her as he’s navigating around trying to find a space to hang a new plant. 
 
 ![](/images/scriptment_face.jpg)
 
-She’s present to Andrew, there is love there. Andrew is so happy to talk and share his day and Ash likes seeing him happy. She knows sharing means so much for him. 
+She’s present to Andrew, there is love there. Andrew is so happy to talk and share his day and Ash likes seeing him happy. She knows sharing means so much for him.
 
-But it takes effort to meet Andrew's energy. Ash’s jaw is tight, her mind easily drifts, and she needs to refocus to keep attention.
+But it takes effort to meet Andrew's energy. Ash’s jaw is tight, her mind easily drifts, and she needs to refocus to keep attention. 
 
 There’s a sudden rumble around her, a low-pitched noise that doesn’t belong.  The camera moves in closer still. Time slows with the exception of Ash’s pupils dashing around. What is happening? 
 
 Reality rips and we match cut to Ash’s eyes waking up in a dark carriage. Warning lights are flickering, Ash stumbles out of the carriage.
 
---TRANSITION TO GAME GRAPHICS--
+##### --TRANSITION TO GAME GRAPHICS--
 
 ![Mood Concept, the stationary train, credit @ventiquePxl](/images/nine-platforms-temp.jpg)
 
 ![](/images/scriptment_awake.jpg)
 
-\[Locked top down camera, portrait pictures are used during dialogue\]
+%% Locked top down camera, portrait pictures are used during dialogue %%
 
-\[9 Platforms don't gate the player and it’s always possible to walk away, information is the key to progress, so players may rush forward if they know what to do, but NPC will respond appropriately to your behaviour.\]
+%% 9 Platforms don't gate the player and it’s always possible to walk away, information is the key to progress, so players may rush forward if they know what to do, but NPC will respond appropriately to your behaviour. %%
 
-### Platform A2 - An impossible space
+## Platform A2 - An impossible space
 
 Ash steps out onto a platform. The train’s track stretches in a straight line into the starry void in both directions. She’s standing on a square station platform seemingly suspended in air.
 
@@ -54,14 +54,14 @@ On the platform’s south edge there’s a panel that accepts input. Through clu
 
 Ash cautiously moves across.
 
-### Platform B2 - One new and one familiar face
+## Platform B2 - One new and one familiar face
 
 We arrive at a new square platform, it’s green and humid, a wooden construction is going upward and carries water down in channels. Plants and greenery are hanging from the irrigation system. They’re all dripping, making it feel like it’s raining. 
 
 Lots of pots with plants decorate the ground and raised platforms. The plants look cared for. In the center of the platform is a figure. They are wearing a robe and a bizarre frog mask on their face. (There is a face behind it, right?. Their posture is nervous, and it appears as if they've been waiting for Ash. In their arms is an impressive flower, it looks heavy. 
 
-![[scriptment_guide.jpg]]
-![[scriptment_flower.jpg]]
+![](/images/scriptment_guide.jpg)
+![](/images/scriptment_flower.jpg)
 GUIDE: Welcome to Somia\!
 
 They bow, and put the flower down in front of them. Still bowing, they step back and expand their arms outward as they slowly lift their gaze. The gesture looks ritual and probably meant to be graceful but the person is a little uncoordinated. 
@@ -70,31 +70,31 @@ GUIDE: My name is Guide. If you let me, I can adjust your masks so that we can t
 
 The person in the Frog mask doesn't motion towards Ash. They don’t raise their hands. Instead, they take a passive stance with their arms down. 
 
-{If we walk up to Guide}
+`If we walk up to Guide`
 
 GUIDE: Will you let me adjust your mask? Don’t worry, you will not turn into a frog. 
 
-{if nod}
+`if nod`
 
 GUIDE: Thank you.  Now, I can either explain and point, so you can do it all yourself or, I can help directly with the manipulation, it will make it a bit easier but I'll need to place my hand on your face. Is that ok?
 
-{If nod} 
+`If nod`
 
 GUIDE: Please take a seat. 
 
 They motion to a bench next to a large potplant.  
 
-{If we sit down}
+`If we sit down`
 
 GUIDE: When I place my hand on your mask you’ll see it but you won't feel it. Close your eyes and move your facial muscles around as you know them. Initially, nothing moves like usual which will feel weird. But continue to visualize the muscles; stretch and scrunch. Don’t strain or do it too fast. You should start to feel my hands, nod your head when you do. 
 
 Guide slowly moves their hand towards Ash's face. Their fingers and sleeves show traces of dirt and greenery. 
 
-\[Through audio, or haptic feedback we’re able to notice a change\]
+%% Through audio, or haptic feedback we’re able to notice a change %%
 
 GUIDE: Good, keep your eyes closed and place your own hands on the mask now. You feel how the surface has turned soft. Push it in lightly and just stop when it feels familiar. You know your face, you know what feels right. You won’t need to sculpt, just press and let go until it feels right and the mask will find its place. Open your eyes when you feel like yourself. 
 
-\[Through visual, audio, or haptic feedback we’re able to sense something's snap into place.\]
+%% Through visual, audio, or haptic feedback we’re able to sense something's snap into place. %%
 
 We can see our face from the intro. Ash stands up and faces Guide.
 
@@ -125,7 +125,7 @@ GUIDE: Please cross the bridge here, and I’ll meet up with you shortly. Please
 
 Guide moves around the platform, like they’re looking for something. 
 
-GUIDE: Here\!
+GUIDE: Here!
 
 Guide seats themself cross legged on the ground, focuses, pulls their sleeves up (it looks cool), with force they pushes their hands into the dirt and, like a light switch, their head slumps.. 
 
@@ -133,11 +133,11 @@ ASH: Are you ok? (No response)
 
 A beat… Then Guide’s body, slightly off balance, rolls forward and their face goes into the dirt. (awkward, uncool)
 
-![[scriptment_flattfall.jpg]]
+![](/images/scriptment_flattfall.jpg)
 
-{If the player approach Guide the get no response, Option to sit their body up} 
+`If the player approach Guide the get no response, Option to sit their body up` 
 
-### **Platform C3 \- Meeting another Passenger**
+## Platform C3 Meeting another Passenger
 
 This platform is also dense with greenery, a canopy of leaves and brushes hanging down from above. Wherever they’re growing from, it’s somewhere above you can’t see. In the center of the platform water is falling into a pool and then runs off the side of the platform.
 
@@ -175,7 +175,7 @@ ASH: Ash.
 
 MATT: I’m Matt and I need to get back home Ash. I have to. 
 
-{If we walk up to Matt to talk more}
+`If we walk up to Matt to talk more`
 
 **A** Were you also on the train?
 
@@ -191,9 +191,9 @@ MATT: That’s Mosse, he went and put his fingers into “space instrument”. I
 
 (Matt recalls that he got verbally aggressive towards Guide. He expresses guilt for his behaviour, but maintains suspicion towards them.)
 
-\--- 
+--- 
 
-### **Dialogue Test \- Ash and Mosse, later in Act 1**
+## Dialogue Test  Ash and Mosse, later in Act 1
 
 In these conversations: 
 

@@ -1,6 +1,10 @@
 ---
 title: "9 Platforms"
 description: "Active game design projects and development wikis"
+image: "images/nine-platfoms-town_1.gif"
 ---
 
-9 Platforms is an exploration into themes of expectation vs hidden longings. It may be a game, but right now it’s a narrative and storytelling exercise.
+<div style="text-align: center; max-width: 600px; margin: 0 auto;">
+
+
+</div>
