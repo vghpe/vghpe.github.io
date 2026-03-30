@@ -5,7 +5,7 @@ tags:
   - narrative
   - design
   - article
-image: images/arranger-short-title.png
+image: /images/posts/compare-dilalogue/arranger-short-title.png
 slug: compare-dilalogue
 aliases:
   - /posts/compare_dilalogue/
@@ -30,13 +30,13 @@ Let’s break it down and compare *Arranger* to another game, *A Short Hike*, wh
 
 *Arranger* uses a traditional adventure game flow for NPC conversations. Engagement is commonly force-triggered on approach. Once the dialogue is done, the player can choose to re-engage the NPC for a short affirmation script (usually to remind the player of the goal) that can be re-triggered indefinitely.
 
-![Arranger\'s engagement design is quite similar to a Zelda game](/images/arranger-flow.png)
+![Arranger\'s engagement design is quite similar to a Zelda game](/images/posts/compare-dilalogue/arranger-flow.png)
 
 *A Short Hike* leans into player agency and the toy-box nature of its core design. NPC engagement is always player-controlled and (entirely?) optional.
 
 It also uses a re-engagement design I'm a big fan of. On engagement, high-level information is frontloaded with a short script. When the player is released from the conversation, they can choose to re-engage for more narrative details or just move on. The twitchy player can go jump off a rock, and the curious player can get to know the characters more.
 
-![In A Short Hike, personality and depth are revealed to players who re-engage](/images/short-hike-flow.png)
+![In A Short Hike, personality and depth are revealed to players who re-engage](/images/posts/compare-dilalogue/short-hike-flow.png)
 
 ---
 
@@ -148,11 +148,11 @@ There's something I appreciate about the very brief lines in *A Short Hike*. It'
 
 The text speed in both games is fast. *Arranger* is pretty much on par with my reading speed, while *A Short Hike* speeds ahead. Neither game offers options to adjust text speed, but both games allow tapping to instantly complete the line.
 
-![Arranger\'s textbox animation at 0.25 speed](/images/arranger-textbox-2.gif)
+![Arranger\'s textbox animation at 0.25 speed](/images/posts/compare-dilalogue/arranger-textbox-2.gif)
 
 Legibility in both games is excellent. The fonts are sharp and contrast well against the text boxes. *Arranger* plays a sound effect with each new box, while *A Short Hike* plays one when the speaker changes. *Arranger* also uses an idle animation on the text boxes, which keeps the screen from feeling too static.
 
-![A Short Hike\'s textbox animation at 0.25 speed](/images/shorthike-textbox-2.gif)
+![A Short Hike\'s textbox animation at 0.25 speed](/images/posts/compare-dilalogue/shorthike-textbox-2.gif)
 
 One notable difference in the presentation is that all NPCs in *A Short Hike* are assigned a unique color for their text. In *Arranger*, only Jemma gets a special text color treatment.
 

@@ -8,7 +8,7 @@ aliases:
 tags:
   - research
   - AI
-image: images/kojima-drawing.jpg
+image: /images/posts/ai-translation/kojima-drawing.jpg
 ---
 Kojima's dev-diary was originally published in the book *Metal Gear Solid 2: The Making*, which was released exclusively in Japan 2002 and never translated into English. <!--more-->
 
@@ -21,7 +21,7 @@ I have previously used ChatGPT for various translation tasks and was impressed w
 Before I get started I just want to make it clear that I do not speak or read Japanese. I am a curious Games Designer who wants to know how this wild game came together. 
 
 ## Phase 1
-![Full Page Scan](/images/fullpage-scan.jpeg)
+![Full Page Scan](/images/posts/ai-translation/fullpage-scan.jpeg)
 
 With an OpenAI Plus subscription, you can upload images to GPT. So, I simply dropped a full page of the scan into GPT-4 and asked it to translate everything. The chatbot complied and provided the diary entries in English.
 
@@ -42,7 +42,7 @@ Instead of asking GPT-4 to translate the scans directly, I'll first have it tran
 
 ## Phase 3
 
-![Cross-Compare](/images/cross-compare.png)
+![Cross-Compare](/images/posts/ai-translation/cross-compare.png)
 
 I set up a spreadsheet where each column included [the scanned image], [GPT-4 transcript], [GPT-4 translation], and [Google Translate]. I would spot-check a few Japanese characters at the start and end of the transcript. This was time-consuming, but I felt much more confident about the process since I was able to run that check.
 
@@ -56,7 +56,7 @@ Maybe GPT-4 has poor eyesight. It seems like old Google Translate was more capab
 
 ## Phase 4
 
-![Meld](/images/meld.png)
+![Meld](/images/posts/ai-translation/meld.png)
 
 
 Using Gemini to transcribe and then [Meld](https://meldmerge.org/) to compare its transcript against GPT-4's revealed just how many errors were present in the GPT-4 version. If the diff showed 20 conflicting characters, GPT-4 would be wrong 90% of the time. Frustratingly, Gemini also made mistakes, though much less frequently.

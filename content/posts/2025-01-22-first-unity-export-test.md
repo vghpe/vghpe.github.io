@@ -1,7 +1,7 @@
 ---
 title: Testing Unity Web Project Export
 date: 2025-01-22T15:30:00-07:00
-image: images/jumproad-export.gif
+image: /images/posts/first-unity-export-test/jumproad-export.gif
 tags:
   - design 
   - playable

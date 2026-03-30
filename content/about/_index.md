@@ -7,7 +7,7 @@ author = "Henrik Pettersson"
 enableComments = false
 +++
 
-![](/images/IMG_1647.jpg)
+![](/images/posts/about/IMG_1647.jpg)
 
 Henrik Pettersson is best known as the designer and creator of the award-winning adventure game The Gardens Between. It was described as “a masterwork” by The Guardian and earned 20+ international awards, including the 2019 Apple Design Award.
 

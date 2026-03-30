@@ -1,0 +1,304 @@
+=== Image Migration Mon Mar 30 14:27:31 CEST 2026 ===
+DRY_RUN=0
+
+--- Phase 1: Moving files ---
+[MOVED] static/images/avatar.png -> static/images/site/avatar.png
+[MOVED] static/images/favicon.ico -> static/images/site/favicon.ico
+[MOVED] static/images/arranger-flow.png -> static/images/posts/compare-dilalogue/arranger-flow.png
+[MOVED] static/images/arranger-short-title.png -> static/images/posts/compare-dilalogue/arranger-short-title.png
+[MOVED] static/images/arranger-textbox-2.gif -> static/images/posts/compare-dilalogue/arranger-textbox-2.gif
+[MOVED] static/images/short-hike-flow.png -> static/images/posts/compare-dilalogue/short-hike-flow.png
+[MOVED] static/images/shorthike-textbox-2.gif -> static/images/posts/compare-dilalogue/shorthike-textbox-2.gif
+[MOVED] static/images/features/img_article_kojima-bigjuggle.png -> static/images/posts/kojima-diary-study/img_article_kojima-bigjuggle.png
+[MOVED] static/images/features/img_article_kojima-bigshell.png -> static/images/posts/kojima-diary-study/img_article_kojima-bigshell.png
+[MOVED] static/images/features/img_article_kojima-deadcell.png -> static/images/posts/kojima-diary-study/img_article_kojima-deadcell.png
+[MOVED] static/images/features/img_article_kojima-diary-closed.png -> static/images/posts/kojima-diary-study/img_article_kojima-diary-closed.png
+[MOVED] static/images/features/img_article_kojima-diary-open.png -> static/images/posts/kojima-diary-study/img_article_kojima-diary-open.png
+[MOVED] static/images/features/img_article_kojima-diary.png -> static/images/posts/kojima-diary-study/img_article_kojima-diary.png
+[MOVED] static/images/features/img_article_kojima-juggling.png -> static/images/posts/kojima-diary-study/img_article_kojima-juggling.png
+[MOVED] static/images/features/img_article_kojima-luden.png -> static/images/posts/kojima-diary-study/img_article_kojima-luden.png
+[MOVED] static/images/features/img_article_kojima-sweroom.png -> static/images/posts/kojima-diary-study/img_article_kojima-sweroom.png
+[MOVED] static/images/features/img_article_kojima-t2.png -> static/images/posts/kojima-diary-study/img_article_kojima-t2.png
+[MOVED] static/images/features/img_article_kojima-diary.xcf -> static/images/posts/kojima-diary-study/img_article_kojima-diary.xcf
+[MOVED] static/images/fullpage-scan.jpeg -> static/images/posts/ai-translation/fullpage-scan.jpeg
+[MOVED] static/images/cross-compare.png -> static/images/posts/ai-translation/cross-compare.png
+[MOVED] static/images/meld.png -> static/images/posts/ai-translation/meld.png
+[MOVED] static/images/kojima-drawing.jpg -> static/images/posts/ai-translation/kojima-drawing.jpg
+[MOVED] static/images/kojima-drawing-inverted.jpg -> static/images/posts/human-translation/kojima-drawing-inverted.jpg
+[MOVED] static/images/features/flcl-bird.jpg -> static/images/posts/flcl-creative-process/flcl-bird.jpg
+[MOVED] static/images/features/flcl-evangelion.jpg -> static/images/posts/flcl-creative-process/flcl-evangelion.jpg
+[MOVED] static/images/features/flcl-music.jpg -> static/images/posts/flcl-creative-process/flcl-music.jpg
+[MOVED] static/images/features/flcl-note-a.jpg -> static/images/posts/flcl-creative-process/flcl-note-a.jpg
+[MOVED] static/images/features/flcl-note-b.jpg -> static/images/posts/flcl-creative-process/flcl-note-b.jpg
+[MOVED] static/images/features/flcl-ohira.jpg -> static/images/posts/flcl-creative-process/flcl-ohira.jpg
+[MOVED] static/images/features/flcl-title.jpg -> static/images/posts/flcl-creative-process/flcl-title.jpg
+[MOVED] static/images/features/flcl-voice.jpg -> static/images/posts/flcl-creative-process/flcl-voice.jpg
+[MOVED] static/images/features/flcl-animation.gif -> static/images/posts/flcl-creative-process/flcl-animation.gif
+[MOVED] static/images/features/flcl-styles.gif -> static/images/posts/flcl-creative-process/flcl-styles.gif
+[MOVED] static/images/features/img_noodle_hands.jpg -> static/images/posts/stop-noodle/img_noodle_hands.jpg
+[MOVED] static/images/features/img_stopnoodle.jpg -> static/images/posts/stop-noodle/img_stopnoodle.jpg
+[MOVED] static/images/features/noodle-animation_1.gif -> static/images/posts/stop-noodle/noodle-animation_1.gif
+[MOVED] static/images/knob-design-3.jpg -> static/images/posts/nipps-proto/knob-design-3.jpg
+[MOVED] static/images/knob-design-4.jpg -> static/images/posts/nipps-proto/knob-design-4.jpg
+[MOVED] static/images/knob-design-5.jpg -> static/images/posts/nipps-proto/knob-design-5.jpg
+[MOVED] static/images/crescendo-bar.png -> static/images/posts/nipps-proto/crescendo-bar.png
+[MOVED] static/images/pen_paper_a.jpg -> static/images/posts/paper-designs/pen_paper_a.jpg
+[MOVED] static/images/pen_paper_b.jpg -> static/images/posts/paper-designs/pen_paper_b.jpg
+[MOVED] static/images/pen_paper_c.jpg -> static/images/posts/paper-designs/pen_paper_c.jpg
+[MOVED] static/images/pen_paper_d.jpg -> static/images/posts/paper-designs/pen_paper_d.jpg
+[MOVED] static/images/pen_paper_title5.webp -> static/images/posts/paper-designs/pen_paper_title5.webp
+[MOVED] static/images/get_cookies_locally.png -> static/images/posts/twitter-dl-guide/get_cookies_locally.png
+[MOVED] static/images/twitter_path.png -> static/images/posts/twitter-dl-guide/twitter_path.png
+[MOVED] static/images/img-eagle.jpg -> static/images/posts/twitter-dl-guide/img-eagle.jpg
+[MOVED] static/images/IMG_2703.jpeg -> static/images/posts/mgs2-revisit/IMG_2703.jpeg
+[MOVED] static/images/IMG_2718.jpeg -> static/images/posts/evil-apes/IMG_2718.jpeg
+[MOVED] static/images/jumproad-export.gif -> static/images/posts/first-unity-export-test/jumproad-export.gif
+[MOVED] static/images/tagging.png -> static/images/posts/media-literacy/tagging.png
+[MOVED] static/images/nine-platfoms-guide.gif -> static/images/projects/narrative-outline/nine-platfoms-guide.gif
+[MOVED] static/images/nine-platfoms-map.png -> static/images/projects/narrative-outline/nine-platfoms-map.png
+[MOVED] static/images/nine-platfoms-town_1.gif -> static/images/projects/narrative-outline/nine-platfoms-town_1.gif
+[MOVED] static/images/nine-platfoms-town_2.png -> static/images/projects/narrative-outline/nine-platfoms-town_2.png
+[MOVED] static/images/nine-platforms-temp.jpg -> static/images/projects/narrative-outline/nine-platforms-temp.jpg
+[MOVED] static/images/nine-platforms-transporter.gif -> static/images/projects/narrative-outline/nine-platforms-transporter.gif
+[MOVED] static/images/scriptment_awake.jpg -> static/images/projects/scriptment/scriptment_awake.jpg
+[MOVED] static/images/scriptment_face.jpg -> static/images/projects/scriptment/scriptment_face.jpg
+[MOVED] static/images/scriptment_flattfall.jpg -> static/images/projects/scriptment/scriptment_flattfall.jpg
+[MOVED] static/images/scriptment_flower.jpg -> static/images/projects/scriptment/scriptment_flower.jpg
+[MOVED] static/images/scriptment_guide.jpg -> static/images/projects/scriptment/scriptment_guide.jpg
+[MOVED] static/images/IMG_5639.jpg -> static/images/projects/characters/IMG_5639.jpg
+[MOVED] static/images/IMG_1647.jpg -> static/images/posts/about/IMG_1647.jpg
+[MOVED] static/images/IMG_2454.jpeg -> static/notes/IMG_2454.jpeg
+[MOVED] static/images/IMG_2483.jpeg -> static/notes/IMG_2483.jpeg
+[MOVED] static/images/IMG_2609.jpeg -> static/notes/IMG_2609.jpeg
+[MOVED] static/images/IMG_2632.jpeg -> static/notes/IMG_2632.jpeg
+[MOVED] static/images/IMG_2642.jpeg -> static/notes/IMG_2642.jpeg
+[MOVED] static/images/IMG_2652.jpeg -> static/notes/IMG_2652.jpeg
+[MOVED] static/images/IMG_2776.jpeg -> static/notes/IMG_2776.jpeg
+[MOVED] static/images/IMG_2824.jpeg -> static/notes/IMG_2824.jpeg
+[MOVED] static/images/IMG_2826.jpeg -> static/notes/IMG_2826.jpeg
+[MOVED] static/images/IMG_2831.jpeg -> static/notes/IMG_2831.jpeg
+[MOVED] static/images/IMG_2832.jpeg -> static/notes/IMG_2832.jpeg
+[MOVED] static/images/IMG_2841.jpeg -> static/notes/IMG_2841.jpeg
+[MOVED] static/images/IMG_2850.jpeg -> static/notes/IMG_2850.jpeg
+[MOVED] static/images/IMG_2855.jpeg -> static/notes/IMG_2855.jpeg
+[MOVED] static/images/FullSizeRender.jpeg -> static/notes/FullSizeRender.jpeg
+[MOVED] static/images/new_icon.png -> static/notes/new_icon.png
+[MOVED] static/photos/gpsruhbbkaadv8y.jpg -> static/notes/gpsruhbbkaadv8y.jpg
+[MOVED] static/photos/img-4181.jpg -> static/notes/img-4181.jpg
+[MOVED] static/photos/pink.png -> static/notes/pink.png
+[MOVED] static/photos/purple.png -> static/notes/purple.png
+[MOVED] static/images/2025_02_18.png -> static/images/misc/2025_02_18.png
+[MOVED] static/images/arranger-talk.png -> static/images/misc/arranger-talk.png
+[MOVED] static/images/arranger-textbox.gif -> static/images/misc/arranger-textbox.gif
+[MOVED] static/images/blue.png -> static/images/misc/blue.png
+[MOVED] static/images/GpsrUHBbkAADv8y.jpeg -> static/images/misc/GpsrUHBbkAADv8y.jpeg
+[MOVED] static/images/IMG_1577.jpg -> static/images/misc/IMG_1577.jpg
+[MOVED] static/images/IMG_2580.jpeg -> static/images/misc/IMG_2580.jpeg
+[MOVED] static/images/IMG_2582-2.jpeg -> static/images/misc/IMG_2582-2.jpeg
+[MOVED] static/images/IMG_2582.jpeg -> static/images/misc/IMG_2582.jpeg
+[MOVED] static/images/IMG_2584.jpeg -> static/images/misc/IMG_2584.jpeg
+[MOVED] static/images/IMG_2585.jpeg -> static/images/misc/IMG_2585.jpeg
+[MOVED] static/images/IMG_2587.jpeg -> static/images/misc/IMG_2587.jpeg
+[MOVED] static/images/IMG_2590.jpg -> static/images/misc/IMG_2590.jpg
+[MOVED] static/images/IMG_2592.jpeg -> static/images/misc/IMG_2592.jpeg
+[MOVED] static/images/IMG_2593.jpeg -> static/images/misc/IMG_2593.jpeg
+[MOVED] static/images/IMG_2602.jpeg -> static/images/misc/IMG_2602.jpeg
+[MOVED] static/images/IMG_2626.jpeg -> static/images/misc/IMG_2626.jpeg
+[MOVED] static/images/IMG_2639-2.jpeg -> static/images/misc/IMG_2639-2.jpeg
+[MOVED] static/images/IMG_2639.jpeg -> static/images/misc/IMG_2639.jpeg
+[MOVED] static/images/IMG_2710.jpeg -> static/images/misc/IMG_2710.jpeg
+[MOVED] static/images/IMG_2727.jpeg -> static/images/misc/IMG_2727.jpeg
+[MOVED] static/images/IMG_2777.jpeg -> static/images/misc/IMG_2777.jpeg
+[MOVED] static/images/knob-design-1.jpg -> static/images/misc/knob-design-1.jpg
+[MOVED] static/images/knob-design-2.jpg -> static/images/misc/knob-design-2.jpg
+[MOVED] static/images/pink.png -> static/images/misc/pink.png
+[MOVED] static/images/purple.png -> static/images/misc/purple.png
+[MOVED] static/images/shorthike-textbox.gif -> static/images/misc/shorthike-textbox.gif
+[MOVED] static/images/stitch.png -> static/images/misc/stitch.png
+[KEPT] static/images/features/ (not empty)
+[REMOVED] static/photos/ (empty)
+
+--- Phase 1 complete ---
+
+--- Phase 2: Updating references ---
+[STANDARDIZED] content/posts/2025-08-23-twitter-dl-guide.md
+[STANDARDIZED] content/posts/2024-11-04-kojima-diary-study.md
+[STANDARDIZED] content/posts/2025-02-22-media-literacy.md
+[STANDARDIZED] content/posts/2025-01-22-first-unity-export-test.md
+[STANDARDIZED] content/posts/2024-11-03-human-translation.md
+[STANDARDIZED] content/posts/2025-11-24-paper-designs.md
+[STANDARDIZED] content/posts/2025-07-17-flcl-creative-process.md
+[STANDARDIZED] content/posts/2025-12-24-stop-noodle.md
+[STANDARDIZED] content/posts/2024-09-14-ai-translation.md
+[STANDARDIZED] content/posts/2025-01-02-compare-dilalogue.md
+[STANDARDIZED] content/posts/2024-08-27-mgs2-revisit.md
+[STANDARDIZED] content/posts/2024-09-01-evil-apes-dukin-it-out-on-a-giant-ball.md
+[STANDARDIZED] content/posts/2025-11-03-male-nipple.md
+[STANDARDIZED] content/unlisted/narrative-outline-v1.1.md
+[STANDARDIZED] content/drafts/2025-08-28-all-AI-Misstakes-ive-made.md
+[STANDARDIZED] content/drafts/2025-12-20-WorkingWithAI2025.md
+[STANDARDIZED] content/projects/characers-1.0.md
+[STANDARDIZED] content/projects/narrative-outline-v1.md
+[STANDARDIZED] content/projects/narrative-outline-v1.1.md
+[STANDARDIZED] content/projects/_index.md
+[STANDARDIZED] content/notes/Inktober 01.md
+[STANDARDIZED] content/notes/Article Illustration 5.md
+[STANDARDIZED] content/notes/Article Illustration 3 .md
+[STANDARDIZED] content/notes/Illustration for Kojima diary #1 .md
+[STANDARDIZED] content/notes/Article illustration 2 .md
+[STANDARDIZED] content/notes/Article Illustration 4.md
+[STANDARDIZED] content/notes/Design club.md
+[STANDARDIZED] content/notes/Having a hang .md
+[STANDARDIZED] content/notes/2025_02_18-BlogApp.md
+[STANDARDIZED] content/notes/Texture test.md
+[STANDARDIZED] content/notes/Updated icon.md
+[STANDARDIZED] content/notes/Article Illustration 7.md
+[STANDARDIZED] content/notes/Saturday Journaling.md
+[STANDARDIZED] content/notes/Article Illustration 6.md
+[STANDARDIZED] content/notes/A little icon.md
+[UPDATED] content/posts/2025-01-02-compare-dilalogue.md: /images/arranger-flow.png -> /images/posts/compare-dilalogue/arranger-flow.png
+[UPDATED] content/posts/2025-01-02-compare-dilalogue.md: /images/arranger-short-title.png -> /images/posts/compare-dilalogue/arranger-short-title.png
+[UPDATED] content/posts/2025-01-02-compare-dilalogue.md: /images/arranger-textbox-2.gif -> /images/posts/compare-dilalogue/arranger-textbox-2.gif
+[UPDATED] content/posts/2025-01-02-compare-dilalogue.md: /images/short-hike-flow.png -> /images/posts/compare-dilalogue/short-hike-flow.png
+[UPDATED] content/posts/2025-01-02-compare-dilalogue.md: /images/shorthike-textbox-2.gif -> /images/posts/compare-dilalogue/shorthike-textbox-2.gif
+[UPDATED] content/posts/2024-11-04-kojima-diary-study.md: /images/features/img_article_kojima-bigshell.png -> /images/posts/kojima-diary-study/img_article_kojima-bigshell.png
+[UPDATED] content/posts/2024-11-04-kojima-diary-study.md: /images/features/img_article_kojima-juggling.png -> /images/posts/kojima-diary-study/img_article_kojima-juggling.png
+[UPDATED] content/posts/2024-11-04-kojima-diary-study.md: /images/features/img_article_kojima-bigjuggle.png -> /images/posts/kojima-diary-study/img_article_kojima-bigjuggle.png
+[UPDATED] content/posts/2024-11-04-kojima-diary-study.md: /images/features/img_article_kojima-sweroom.png -> /images/posts/kojima-diary-study/img_article_kojima-sweroom.png
+[UPDATED] content/posts/2024-11-04-kojima-diary-study.md: /images/features/img_article_kojima-t2.png -> /images/posts/kojima-diary-study/img_article_kojima-t2.png
+[UPDATED] content/posts/2024-11-04-kojima-diary-study.md: /images/features/img_article_kojima-luden.png -> /images/posts/kojima-diary-study/img_article_kojima-luden.png
+[UPDATED] content/posts/2024-11-04-kojima-diary-study.md: /images/features/img_article_kojima-deadcell.png -> /images/posts/kojima-diary-study/img_article_kojima-deadcell.png
+[UPDATED] content/posts/2024-11-04-kojima-diary-study.md: /images/features/img_article_kojima-diary-closed.png -> /images/posts/kojima-diary-study/img_article_kojima-diary-closed.png
+[UPDATED] content/posts/2024-09-14-ai-translation.md: /images/fullpage-scan.jpeg -> /images/posts/ai-translation/fullpage-scan.jpeg
+[UPDATED] content/posts/2024-09-14-ai-translation.md: /images/cross-compare.png -> /images/posts/ai-translation/cross-compare.png
+[UPDATED] content/posts/2024-09-14-ai-translation.md: /images/meld.png -> /images/posts/ai-translation/meld.png
+[UPDATED] content/posts/2024-09-14-ai-translation.md: /images/kojima-drawing.jpg -> /images/posts/ai-translation/kojima-drawing.jpg
+[UPDATED] content/posts/2024-11-03-human-translation.md: /images/kojima-drawing-inverted.jpg -> /images/posts/human-translation/kojima-drawing-inverted.jpg
+[UPDATED] content/posts/2025-07-17-flcl-creative-process.md: /images/features/flcl-title.jpg -> /images/posts/flcl-creative-process/flcl-title.jpg
+[UPDATED] content/posts/2025-07-17-flcl-creative-process.md: /images/features/flcl-evangelion.jpg -> /images/posts/flcl-creative-process/flcl-evangelion.jpg
+[UPDATED] content/posts/2025-07-17-flcl-creative-process.md: /images/features/flcl-note-a.jpg -> /images/posts/flcl-creative-process/flcl-note-a.jpg
+[UPDATED] content/posts/2025-07-17-flcl-creative-process.md: /images/features/flcl-note-b.jpg -> /images/posts/flcl-creative-process/flcl-note-b.jpg
+[UPDATED] content/posts/2025-07-17-flcl-creative-process.md: /images/features/flcl-voice.jpg -> /images/posts/flcl-creative-process/flcl-voice.jpg
+[UPDATED] content/posts/2025-07-17-flcl-creative-process.md: /images/features/flcl-music.jpg -> /images/posts/flcl-creative-process/flcl-music.jpg
+[UPDATED] content/posts/2025-07-17-flcl-creative-process.md: /images/features/flcl-styles.gif -> /images/posts/flcl-creative-process/flcl-styles.gif
+[UPDATED] content/posts/2025-07-17-flcl-creative-process.md: /images/features/flcl-bird.jpg -> /images/posts/flcl-creative-process/flcl-bird.jpg
+[UPDATED] content/posts/2025-07-17-flcl-creative-process.md: /images/features/flcl-animation.gif -> /images/posts/flcl-creative-process/flcl-animation.gif
+[UPDATED] content/posts/2025-07-17-flcl-creative-process.md: /images/features/flcl-ohira.jpg -> /images/posts/flcl-creative-process/flcl-ohira.jpg
+[UPDATED] content/posts/2025-12-24-stop-noodle.md: /images/features/noodle-animation_1.gif -> /images/posts/stop-noodle/noodle-animation_1.gif
+[UPDATED] content/posts/2025-12-24-stop-noodle.md: /images/features/img_noodle_hands.jpg -> /images/posts/stop-noodle/img_noodle_hands.jpg
+[UPDATED] content/posts/2025-12-24-stop-noodle.md: /images/features/img_stopnoodle.jpg -> /images/posts/stop-noodle/img_stopnoodle.jpg
+[UPDATED] content/posts/2025-11-03-male-nipple.md: /images/knob-design-3.jpg -> /images/posts/nipps-proto/knob-design-3.jpg
+[UPDATED] content/posts/2025-11-03-male-nipple.md: /images/knob-design-4.jpg -> /images/posts/nipps-proto/knob-design-4.jpg
+[UPDATED] content/posts/2025-11-03-male-nipple.md: /images/knob-design-5.jpg -> /images/posts/nipps-proto/knob-design-5.jpg
+[UPDATED] content/posts/2025-11-03-male-nipple.md: /images/crescendo-bar.png -> /images/posts/nipps-proto/crescendo-bar.png
+[UPDATED] content/posts/2025-11-24-paper-designs.md: /images/pen_paper_a.jpg -> /images/posts/paper-designs/pen_paper_a.jpg
+[UPDATED] content/posts/2025-11-24-paper-designs.md: /images/pen_paper_b.jpg -> /images/posts/paper-designs/pen_paper_b.jpg
+[UPDATED] content/posts/2025-11-24-paper-designs.md: /images/pen_paper_c.jpg -> /images/posts/paper-designs/pen_paper_c.jpg
+[UPDATED] content/posts/2025-11-24-paper-designs.md: /images/pen_paper_d.jpg -> /images/posts/paper-designs/pen_paper_d.jpg
+[UPDATED] content/posts/2025-11-24-paper-designs.md: /images/pen_paper_title5.webp -> /images/posts/paper-designs/pen_paper_title5.webp
+[UPDATED] content/drafts/2025-12-20-WorkingWithAI2025.md: /images/pen_paper_title5.webp -> /images/posts/paper-designs/pen_paper_title5.webp
+[UPDATED] content/posts/2025-08-23-twitter-dl-guide.md: /images/get_cookies_locally.png -> /images/posts/twitter-dl-guide/get_cookies_locally.png
+[UPDATED] content/posts/2025-08-23-twitter-dl-guide.md: /images/twitter_path.png -> /images/posts/twitter-dl-guide/twitter_path.png
+[UPDATED] content/posts/2025-08-23-twitter-dl-guide.md: /images/img-eagle.jpg -> /images/posts/twitter-dl-guide/img-eagle.jpg
+[UPDATED] content/drafts/2025-08-28-all-AI-Misstakes-ive-made.md: /images/img-eagle.jpg -> /images/posts/twitter-dl-guide/img-eagle.jpg
+[UPDATED] content/posts/2024-08-27-mgs2-revisit.md: /images/IMG_2703.jpeg -> /images/posts/mgs2-revisit/IMG_2703.jpeg
+[UPDATED] content/posts/2024-09-01-evil-apes-dukin-it-out-on-a-giant-ball.md: /images/IMG_2718.jpeg -> /images/posts/evil-apes/IMG_2718.jpeg
+[UPDATED] content/posts/2025-01-22-first-unity-export-test.md: /images/jumproad-export.gif -> /images/posts/first-unity-export-test/jumproad-export.gif
+[UPDATED] content/posts/2025-02-22-media-literacy.md: /images/tagging.png -> /images/posts/media-literacy/tagging.png
+[UPDATED] content/unlisted/narrative-outline-v1.1.md: /images/nine-platfoms-guide.gif -> /images/projects/narrative-outline/nine-platfoms-guide.gif
+[UPDATED] content/projects/narrative-outline-v1.md: /images/nine-platfoms-guide.gif -> /images/projects/narrative-outline/nine-platfoms-guide.gif
+[UPDATED] content/projects/narrative-outline-v1.1.md: /images/nine-platfoms-guide.gif -> /images/projects/narrative-outline/nine-platfoms-guide.gif
+[UPDATED] content/unlisted/narrative-outline-v1.1.md: /images/nine-platfoms-map.png -> /images/projects/narrative-outline/nine-platfoms-map.png
+[UPDATED] content/projects/narrative-outline-v1.md: /images/nine-platfoms-map.png -> /images/projects/narrative-outline/nine-platfoms-map.png
+[UPDATED] content/projects/narrative-outline-v1.1.md: /images/nine-platfoms-map.png -> /images/projects/narrative-outline/nine-platfoms-map.png
+[UPDATED] content/unlisted/narrative-outline-v1.1.md: /images/nine-platfoms-town_1.gif -> /images/projects/narrative-outline/nine-platfoms-town_1.gif
+[UPDATED] content/projects/narrative-outline-v1.md: /images/nine-platfoms-town_1.gif -> /images/projects/narrative-outline/nine-platfoms-town_1.gif
+[UPDATED] content/projects/narrative-outline-v1.1.md: /images/nine-platfoms-town_1.gif -> /images/projects/narrative-outline/nine-platfoms-town_1.gif
+[UPDATED] content/projects/_index.md: /images/nine-platfoms-town_1.gif -> /images/projects/narrative-outline/nine-platfoms-town_1.gif
+[UPDATED] content/unlisted/narrative-outline-v1.1.md: /images/nine-platforms-temp.jpg -> /images/projects/narrative-outline/nine-platforms-temp.jpg
+[UPDATED] content/projects/narrative-outline-v1.md: /images/nine-platforms-temp.jpg -> /images/projects/narrative-outline/nine-platforms-temp.jpg
+[UPDATED] content/projects/narrative-outline-v1.1.md: /images/nine-platforms-temp.jpg -> /images/projects/narrative-outline/nine-platforms-temp.jpg
+[UPDATED] content/projects/scriptment-v0.1.md: /images/nine-platforms-temp.jpg -> /images/projects/narrative-outline/nine-platforms-temp.jpg
+[UPDATED] content/unlisted/narrative-outline-v1.1.md: /images/nine-platforms-transporter.gif -> /images/projects/narrative-outline/nine-platforms-transporter.gif
+[UPDATED] content/projects/narrative-outline-v1.md: /images/nine-platforms-transporter.gif -> /images/projects/narrative-outline/nine-platforms-transporter.gif
+[UPDATED] content/projects/narrative-outline-v1.1.md: /images/nine-platforms-transporter.gif -> /images/projects/narrative-outline/nine-platforms-transporter.gif
+[UPDATED] content/projects/scriptment-v0.1.md: /images/scriptment_awake.jpg -> /images/projects/scriptment/scriptment_awake.jpg
+[UPDATED] content/projects/scriptment-v0.1.md: /images/scriptment_face.jpg -> /images/projects/scriptment/scriptment_face.jpg
+[UPDATED] content/projects/scriptment-v0.1.md: /images/scriptment_flattfall.jpg -> /images/projects/scriptment/scriptment_flattfall.jpg
+[UPDATED] content/projects/scriptment-v0.1.md: /images/scriptment_flower.jpg -> /images/projects/scriptment/scriptment_flower.jpg
+[UPDATED] content/projects/scriptment-v0.1.md: /images/scriptment_guide.jpg -> /images/projects/scriptment/scriptment_guide.jpg
+[UPDATED] content/projects/characers-1.0.md: /images/IMG_5639.jpg -> /images/projects/characters/IMG_5639.jpg
+[UPDATED] content/about/_index.md: /images/IMG_1647.jpg -> /images/posts/about/IMG_1647.jpg
+[UPDATED] content/notes/Texture: images/IMG_2454.jpeg -> notes/IMG_2454.jpeg
+[UPDATED] test.md: images/IMG_2454.jpeg -> notes/IMG_2454.jpeg
+[UPDATED] content/notes/Point: images/IMG_2483.jpeg -> notes/IMG_2483.jpeg
+[UPDATED] Dune.md: images/IMG_2483.jpeg -> notes/IMG_2483.jpeg
+[UPDATED] content/notes/Design: images/IMG_2609.jpeg -> notes/IMG_2609.jpeg
+[UPDATED] club.md: images/IMG_2609.jpeg -> notes/IMG_2609.jpeg
+[UPDATED] content/notes/Saturday: images/IMG_2632.jpeg -> notes/IMG_2632.jpeg
+[UPDATED] Journaling.md: images/IMG_2632.jpeg -> notes/IMG_2632.jpeg
+[UPDATED] content/notes/Updated: images/IMG_2642.jpeg -> notes/IMG_2642.jpeg
+[UPDATED] icon.md: images/IMG_2642.jpeg -> notes/IMG_2642.jpeg
+[UPDATED] content/notes/Having: images/IMG_2652.jpeg -> notes/IMG_2652.jpeg
+[UPDATED] a: images/IMG_2652.jpeg -> notes/IMG_2652.jpeg
+[UPDATED] hang: images/IMG_2652.jpeg -> notes/IMG_2652.jpeg
+[UPDATED] .md: images/IMG_2652.jpeg -> notes/IMG_2652.jpeg
+[UPDATED] content/notes/Inktober: images/IMG_2776.jpeg -> notes/IMG_2776.jpeg
+[UPDATED] 01.md: images/IMG_2776.jpeg -> notes/IMG_2776.jpeg
+[UPDATED] content/notes/Illustration: images/IMG_2824.jpeg -> notes/IMG_2824.jpeg
+[UPDATED] for: images/IMG_2824.jpeg -> notes/IMG_2824.jpeg
+[UPDATED] Kojima: images/IMG_2824.jpeg -> notes/IMG_2824.jpeg
+[UPDATED] diary: images/IMG_2824.jpeg -> notes/IMG_2824.jpeg
+[UPDATED] #1: images/IMG_2824.jpeg -> notes/IMG_2824.jpeg
+[UPDATED] .md: images/IMG_2824.jpeg -> notes/IMG_2824.jpeg
+[UPDATED] content/notes/Article: images/IMG_2826.jpeg -> notes/IMG_2826.jpeg
+[UPDATED] illustration: images/IMG_2826.jpeg -> notes/IMG_2826.jpeg
+[UPDATED] 2: images/IMG_2826.jpeg -> notes/IMG_2826.jpeg
+[UPDATED] .md: images/IMG_2826.jpeg -> notes/IMG_2826.jpeg
+[UPDATED] content/notes/Article: images/IMG_2831.jpeg -> notes/IMG_2831.jpeg
+[UPDATED] Illustration: images/IMG_2831.jpeg -> notes/IMG_2831.jpeg
+[UPDATED] 3: images/IMG_2831.jpeg -> notes/IMG_2831.jpeg
+[UPDATED] .md: images/IMG_2831.jpeg -> notes/IMG_2831.jpeg
+[UPDATED] content/notes/Article: images/IMG_2832.jpeg -> notes/IMG_2832.jpeg
+[UPDATED] Illustration: images/IMG_2832.jpeg -> notes/IMG_2832.jpeg
+[UPDATED] 4.md: images/IMG_2832.jpeg -> notes/IMG_2832.jpeg
+[UPDATED] content/notes/Article: images/IMG_2841.jpeg -> notes/IMG_2841.jpeg
+[UPDATED] Illustration: images/IMG_2841.jpeg -> notes/IMG_2841.jpeg
+[UPDATED] 5.md: images/IMG_2841.jpeg -> notes/IMG_2841.jpeg
+[UPDATED] content/notes/Article: images/IMG_2850.jpeg -> notes/IMG_2850.jpeg
+[UPDATED] Illustration: images/IMG_2850.jpeg -> notes/IMG_2850.jpeg
+[UPDATED] 6.md: images/IMG_2850.jpeg -> notes/IMG_2850.jpeg
+[UPDATED] content/notes/Article: images/IMG_2855.jpeg -> notes/IMG_2855.jpeg
+[UPDATED] Illustration: images/IMG_2855.jpeg -> notes/IMG_2855.jpeg
+[UPDATED] 7.md: images/IMG_2855.jpeg -> notes/IMG_2855.jpeg
+[UPDATED] content/notes/A: images/FullSizeRender.jpeg -> notes/FullSizeRender.jpeg
+[UPDATED] little: images/FullSizeRender.jpeg -> notes/FullSizeRender.jpeg
+[UPDATED] icon.md: images/FullSizeRender.jpeg -> notes/FullSizeRender.jpeg
+[UPDATED] content/notes/2025_02_18-BlogApp.md: images/new_icon.png -> notes/new_icon.png
+
+--- Phase 2 complete ---
+
+[UPDATED] layouts/partials/head.html: favicon path
+--- Phase 3: Verification ---
+
+WARNING: Possible stale flat image references:
+  content/notes/Inktober 01.md:6:image: "/images/IMG_2776.jpeg"
+  content/notes/Point Dune.md:5:image: "/images/IMG_2483.jpeg"
+  content/notes/Article Illustration 5.md:6:image: "/images/IMG_2841.jpeg"
+  content/notes/Article Illustration 3 .md:6:image: "/images/IMG_2831.jpeg"
+  content/notes/Illustration for Kojima diary #1 .md:6:image: "/images/IMG_2824.jpeg"
+  content/notes/Article illustration 2 .md:6:image: "/images/IMG_2826.jpeg"
+  content/notes/Article Illustration 4.md:6:image: "/images/IMG_2832.jpeg"
+  content/notes/Design club.md:5:image: /images/IMG_2609.jpeg
+  content/notes/Having a hang .md:6:image: "/images/IMG_2652.jpeg"
+  content/notes/2025_02_18-BlogApp.md:18:image: "/images/2025_02_18.jpeg"
+  content/notes/Texture test.md:8:image: /images/IMG_2454.jpeg
+  content/notes/Updated icon.md:8:image: /images/IMG_2642.jpeg
+  content/notes/Article Illustration 7.md:6:image: "/images/IMG_2855.jpeg"
+  content/notes/Saturday Journaling.md:5:image: /images/IMG_2632.jpeg
+  content/notes/Article Illustration 6.md:6:image: "/images/IMG_2850.jpeg"
+  content/notes/A little icon.md:5:image: /images/FullSizeRender.jpeg
+WARNING: features/ still has 0 files
+
+=== Migration complete ===
+Review scripts/migration-log.txt for full details

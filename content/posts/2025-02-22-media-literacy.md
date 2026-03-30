@@ -6,7 +6,7 @@ aliases:
   - /posts/2025_02_22-mediaLiteracy/
   - /posts/2025_02_22-medialiteracy/
 draft: false
-image: images/tagging.png
+image: /images/posts/media-literacy/tagging.png
 tags:
   - tool
   - research

@@ -8,7 +8,7 @@ aliases:
 tags:
   - research
   - AI
-image: images/kojima-drawing-inverted.jpg
+image: /images/posts/human-translation/kojima-drawing-inverted.jpg
 ---
 I was able source a translation of Kojima's diary that was done commissioned by the youtube channel *Did You Know Gaming?* After I completed my own AI translation and began working on an article, it arrived in my inbox. How does it compare to the AI version? <!--more-->
 

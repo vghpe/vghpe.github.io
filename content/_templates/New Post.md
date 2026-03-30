@@ -11,7 +11,8 @@ aliases: []
 ---
 <!-- 
 IMAGE GUIDE
-  Recommended: 1200×800px landscape JPEG → save to static/images/features/
+  Recommended: 1200×800px landscape JPEG → save to static/images/posts/{slug}/
+  Set image: /images/posts/{slug}/filename.jpg in frontmatter
   Works across home page, blog listing, and post header (object-fit: cover crops to fit)
   Full guide: docs/image-guide.md
 

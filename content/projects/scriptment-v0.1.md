@@ -22,7 +22,7 @@ description: Dialogue Script and Game logic callouts
 
 Ash is sitting in her kitchen. The camera is close to her face. She's on her phone but not really looking. Her husband (Andrew) is moving around and talking. The space is small, and Andrew brushes past her as he’s navigating around trying to find a space to hang a new plant. 
 
-![](/images/scriptment_face.jpg)
+![](/images/projects/scriptment/scriptment_face.jpg)
 
 She’s present to Andrew, there is love there. Andrew is so happy to talk and share his day and Ash likes seeing him happy. She knows sharing means so much for him.
 
@@ -34,9 +34,9 @@ Reality rips and we match cut to Ash’s eyes waking up in a dark carriage. Warn
 
 ##### --TRANSITION TO GAME GRAPHICS--
 
-![Mood Concept, the stationary train, credit @ventiquePxl](/images/nine-platforms-temp.jpg)
+![Mood Concept, the stationary train, credit @ventiquePxl](/images/projects/narrative-outline/nine-platforms-temp.jpg)
 
-![](/images/scriptment_awake.jpg)
+![](/images/projects/scriptment/scriptment_awake.jpg)
 
 %% Locked top down camera, portrait pictures are used during dialogue %%
 
@@ -60,8 +60,8 @@ We arrive at a new square platform, it’s green and humid, a wooden constructio
 
 Lots of pots with plants decorate the ground and raised platforms. The plants look cared for. In the center of the platform is a figure. They are wearing a robe and a bizarre frog mask on their face. (There is a face behind it, right?. Their posture is nervous, and it appears as if they've been waiting for Ash. In their arms is an impressive flower, it looks heavy. 
 
-![](/images/scriptment_guide.jpg)
-![](/images/scriptment_flower.jpg)
+![](/images/projects/scriptment/scriptment_guide.jpg)
+![](/images/projects/scriptment/scriptment_flower.jpg)
 GUIDE: Welcome to Somia\!
 
 They bow, and put the flower down in front of them. Still bowing, they step back and expand their arms outward as they slowly lift their gaze. The gesture looks ritual and probably meant to be graceful but the person is a little uncoordinated. 
@@ -133,7 +133,7 @@ ASH: Are you ok? (No response)
 
 A beat… Then Guide’s body, slightly off balance, rolls forward and their face goes into the dirt. (awkward, uncool)
 
-![](/images/scriptment_flattfall.jpg)
+![](/images/projects/scriptment/scriptment_flattfall.jpg)
 
 `If the player approach Guide the get no response, Option to sit their body up` 
 
