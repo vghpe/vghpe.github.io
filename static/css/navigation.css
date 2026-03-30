@@ -5,6 +5,7 @@
   align-items: center;
   min-height: 50px;
   max-height: 50px;
+  padding: 20px 24px 0;
 }
 
 .navigation.with-border {
@@ -40,6 +41,8 @@
 .nav-links a {
   font-size: 13px;
   line-height: 1;
+  padding: 8px 12px;
+  border-radius: 3px;
 }
 
 /* Breadcrumb wrapper */
@@ -49,6 +52,7 @@
   gap: 8px;
   line-height: 1;
   font-family: Futura;
+  padding: 0 12px;
 }
 
 /* Breadcrumb separator dot */
