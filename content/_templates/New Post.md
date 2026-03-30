@@ -1,6 +1,13 @@
+<%*
+const date = tp.date.now("YYYY-MM-DD");
+const currentName = tp.file.title;
+if (!currentName.match(/^\d{4}-\d{2}-\d{2}-/)) {
+  await tp.file.rename(`${date}-${currentName}`);
+}
+_%>
 ---
 title: ""
-date: {{date}}T{{time}}
+date: <% tp.date.now("YYYY-MM-DDTHH:mm:ss") %>
 draft: true
 slug: ""
 tags: []
@@ -9,6 +16,7 @@ caption: ""
 description: ""
 aliases: []
 ---
+
 <!-- 
 IMAGE GUIDE
   Recommended: 1200×800px landscape JPEG → save to static/images/posts/{slug}/
