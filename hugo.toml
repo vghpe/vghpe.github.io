@@ -1,5 +1,6 @@
 baseURL = "https://vghpe.github.io/"
 title = "henrik docs"
+timeZone = "Europe/Stockholm"
 relativeURLs = false
 canonifyURLs = true
 languageCode = 'en-us'
