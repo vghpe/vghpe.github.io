@@ -6,7 +6,7 @@ slug: stop-noodle
 aliases:
 tags:
   - tool
-image: images/features/noodle-animation_1.gif
+image: /images/posts/stop-noodle/noodle-animation_1.gif
 description:
 ---
 **Stop Noodling** is a timed drawing webapp
@@ -17,7 +17,7 @@ The tools works as plugin for [Eagle](http://eagle.cool) (a software to organize
 
 The script scans the Eagle library and uses the tags to filter the images requested for the drawing session. Tag data can be also sent back to the library from the webapp if the users tags an image as a favorite. 
 
-![An Eagle library tagged with hands - Photos by Satine Zillah](/images/features/img_noodle_hands.jpg)
+![An Eagle library tagged with hands - Photos by Satine Zillah](/images/posts/stop-noodle/img_noodle_hands.jpg)
 
 #### Webapp Features:
 1. Setup a draw session 
@@ -37,7 +37,7 @@ Test out a live demo here - [Live Demo](https://vghpe.github.io/stop-noodeling/d
 
 Stop Noodling is designed to run as a web service. I’ve set it up on my Raspberry Pi so it’s always running and accessible from any device, anywhere. Apple’s PWA (“Add to Home Screen”) feature lets it function as a standalone app.
 
-![Setup Flowchart](/images/features/img_stopnoodle.jpg)
+![Setup Flowchart](/images/posts/stop-noodle/img_stopnoodle.jpg)
 
 ####  My Setup Architecture:
 

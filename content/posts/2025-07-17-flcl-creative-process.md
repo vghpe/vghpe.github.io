@@ -8,7 +8,7 @@ aliases:
 tags:
   - article
   - research
-image: images/features/flcl-title.jpg
+image: /images/posts/flcl-creative-process/flcl-title.jpg
 description: A heavly sourced article for creatives looking to understand how the cult anime was created from concept to final render
 ---
 
@@ -28,7 +28,7 @@ FLCL lives in the shadow of *Neon Genesis Evangelion*, the studio’s (*GAINAX*)
 
 Speaking to *mynavi.jp* in 2010, Tsurumaki stated that in the year following *Evangelion*'s completion, he juggled numerous ideas for his directorial debut but struggled to solidify any one concept. After taking a break to assist with the production of *His and Her Circumstances (1998)*, he tried again, resolving to be less of a perfectionist, focusing more on the things he loved and less on the things that brought stress.¹ 
 
-![Evangelion(TV) photo credit: twitter @telewaifus](/images/features/flcl-evangelion.jpg)
+![Evangelion(TV) photo credit: twitter @telewaifus](/images/posts/flcl-creative-process/flcl-evangelion.jpg)
 
 In the book *FLCLick Noise*, 2010 Tsurumaki recalls that at this time GAINAX underwent significant changes in the animation staff, impairing the studio’s ability to execute highly realistic animation. But unlike Evangelion, where the directors imposed strict style-guides on the animators, Tsurumaki wanted FLCL to be an animation playground.²
 
@@ -42,7 +42,7 @@ This sentiment not only encapsulates the experience of viewing FLCL, but it also
 
 In the 2019 book FLCL Archives, we can see the early scribbles by Tsurumaki in what would become FLCL. These notes already capture the theme, some of the characters, and the setting.
 
-![FLCL Archives, Initial notes, undated](/images/features/flcl-note-a.jpg)
+![FLCL Archives, Initial notes, undated](/images/posts/flcl-creative-process/flcl-note-a.jpg)
 
 The later, more refined outlines are signed by FLCL’s screenplay writer, Yoji Enokido. Staff comments from the DVD commentary³, FLCL Noise⁴, and in the afterword of the 2007 novelization⁵ make it clear that Enokido played a major role in developing the show’s characters, their interpersonal dynamics, and the snappy, metaphor-heavy dialogue.
 
@@ -52,7 +52,7 @@ For Enokido, like any good writer, it’s all about tying everything back to the
 >
 > — Yoji Enokido FLCL, Ultimate Edition Booklet (2007)
 
-![FLCL Archives (2019), notes dated 4/24/1999](/images/features/flcl-note-b.jpg)
+![FLCL Archives (2019), notes dated 4/24/1999](/images/posts/flcl-creative-process/flcl-note-b.jpg)
 
 My impression is that Tsurumaki had been thinking about the theme of maturity for some time before pre-production. The earliest scribbles include a graph where the characters are plotted by their maturity and age.
 
@@ -74,7 +74,7 @@ Character designer Sadamoto noted that he was struggling with Haruko’s design 
 >
 >— Sadamoto, FLCLick Noise, Episode 1
 
-![Haruko Model Sheet by Yoshiyuki Sadamoto & Mayumi Shintani (right)](/images/features/flcl-voice.jpg)
+![Haruko Model Sheet by Yoshiyuki Sadamoto & Mayumi Shintani (right)](/images/posts/flcl-creative-process/flcl-voice.jpg)
 
 The music was also picked in pre-production. Tsurumaki stated that he lacked confidence in directing composers. To him, a great score is when a well-known, great track is laid on top of the animation.
 
@@ -85,7 +85,7 @@ It was this line of thinking that led him to approach The Pillows, his favorite 
 >
 >— Tsurumaki, FLCLick Noise, Episode 1
 
-![The Pillows in 2011 | Left to right: Yoshiaki Manabe, Sawao Yamanaka, Shinichiro Sato.](/images/features/flcl-music.jpg)
+![The Pillows in 2011 | Left to right: Yoshiaki Manabe, Sawao Yamanaka, Shinichiro Sato.](/images/posts/flcl-creative-process/flcl-music.jpg)
 
 Making this choice in pre-production significantly skewed the tonality of the show. Instead of animating and then placing music to fit, the animation was set to the music (or with the music in mind), similar to music-video production.
 
@@ -103,7 +103,7 @@ More radically, Tsurumaki would shape the script to the style of the animator re
 >
 >— Tsurumaki, FLCLick Noise, Episode 5
 
-![Left: Animator, Tadashi Hiramatsu. Right: Animator, Hiroyuki Imaishi](/images/features/flcl-styles.gif)
+![Left: Animator, Tadashi Hiramatsu. Right: Animator, Hiroyuki Imaishi](/images/posts/flcl-creative-process/flcl-styles.gif)
 
 
 This would generate wildly different animation styles between scenes and episodes depending on which animator was responsible. The mixing of styles also created interesting contrasts, such as Hiramatsu’s skill in conveying intimacy with Imaishi’s wild Kanada style for slapstick comedy.
@@ -124,7 +124,7 @@ With the script getting filled with sub-culture jokes and the animation team goi
 
 In a 2010 interview for mynavi.jp, Tsurumaki notes that he told writer Enokido to skip beats in the dialogue flow and omit everything they didn’t think was important, including elements of the Sci-Fi setting.¹⁰
 
-![Atomsk, the pirate king and desire of Haruko | Concept by Yoshiyuki Sadamoto](/images/features/flcl-bird.jpg)
+![Atomsk, the pirate king and desire of Haruko | Concept by Yoshiyuki Sadamoto](/images/posts/flcl-creative-process/flcl-bird.jpg)
 
 That meant a lot of backstory, character motivations and world building only flash by in a split second between densely packed gags and visual references. 
 
@@ -136,7 +136,7 @@ But it’s worth noting that there are several acknowledgments from the director
 
 GAINAX worked in collaboration with Production I.G. during production. This is where storyboards are turned into video. Even here, where anime production is at its most streamlined, a few stylistic twists still slipped in.
 
-![Layout -> Final Animation (Layout Artist unknown)](/images/features/flcl-animation.gif)
+![Layout -> Final Animation (Layout Artist unknown)](/images/posts/flcl-creative-process/flcl-animation.gif)
 
 In a traditional anime production, each episode has an assigned Animation Director who distributes a number of cuts among the Key Animators. They will draw the essential frames, which are then passed back to the Animation Director for a consistency check and any necessary corrections.¹⁵ ¹⁶
 
@@ -144,7 +144,7 @@ As recounted by Tsurumaki in FLCL Noise¹⁷, Shinya Ohira, a renowned senior fr
 
 The work was supposed to be cleaned up, but a younger Animation Director felt intimidated by the senior and delayed making corrections. With the deadline looming and the young director procrastinating, they simply decided to leave it, add some subtitles with names, and call it a day. After all, it’s FLCL.
 
-![Shinya Ohira scene looks like nothing else in the show](/images/features/flcl-ohira.jpg)
+![Shinya Ohira scene looks like nothing else in the show](/images/posts/flcl-creative-process/flcl-ohira.jpg)
 
 ## What can creators learn from FLCL’s process
 

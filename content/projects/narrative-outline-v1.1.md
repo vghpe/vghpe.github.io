@@ -8,7 +8,7 @@ revision: v1.1
 aliases:
 tags:
   - narrative
-image: images/nine-platfoms-town_1.gif
+image: /images/projects/narrative-outline/nine-platfoms-town_1.gif
 description: A basic outline of the acts and events
 ---
 
@@ -39,7 +39,7 @@ Sub-themes: *Desire, Identity, Determinism*
 
 ## World
 
-![An layout and early concept of the 9 platforms](/images/nine-platfoms-map.png)
+![An layout and early concept of the 9 platforms](/images/projects/narrative-outline/nine-platfoms-map.png)
 
 
 - **The Station** — Nine platforms are suspended in space, laid out in a grid next to the the train line. Each platform is rich on life, warm and community. Locals live here.
@@ -53,7 +53,7 @@ The story opens with a brief snapshot of the protagonist in the middle of their 
 
 Without warning reality collapses. The protagonist and 3 others find themselves sitting together on a stationary train adrift in a living starfield.
 
-![Mood Concept, the stationary train, credit @ventiquePxl](/images/nine-platforms-temp.jpg)
+![Mood Concept, the stationary train, credit @ventiquePxl](/images/projects/narrative-outline/nine-platforms-temp.jpg)
 
 They step out onto a platform. The train’s track stretches in a straight line into the starry void in both directions. What’s more upsetting is that their bodies look like mannequins, but with decorative engravings. They hesitate, argue, and begin to explore. 
 
@@ -64,7 +64,7 @@ Rules emerge in fragments over several encounters: the track is a single line; t
 
 The group splits up, The Guide begins showing the protagonist how to connect with the inner layers of the platforms. In the first layer, they can still interact with the occupants directly, almost like a ghost moving through the world. Some repairs require diving into older, more mechanical system where the Guide cannot follow.
 
-![The Guide teaching the Protagonist about the layers](/images/nine-platfoms-guide.gif)
+![The Guide teaching the Protagonist about the layers](/images/projects/narrative-outline/nine-platfoms-guide.gif)
 
 As the protagonist visits each platforms, they see care and community by the locals — tended gardens, shared rituals, acts of intimacy. A closeness and rich belonging that the protagonist aches for. It makes a quiet argument for staying.  
 
@@ -85,7 +85,7 @@ The decision splits the ending:
 - **Stay** — The protagonist puts the older passengers to sleep, denying them the return to their lives. The younger rushes toward the 9th platform, and the protagonist follows, discovering they have entered the layers. A final descent deep into the ninth platform’s layers is required to bring the youngest passenger back.
 
 
-![When the Protagonist returns to the 9th platform, the Guide and Yougest Passenger are already far down the layers](/images/nine-platforms-transporter.gif)
+![When the Protagonist returns to the 9th platform, the Guide and Yougest Passenger are already far down the layers](/images/projects/narrative-outline/nine-platforms-transporter.gif)
   
   The Guide is able to help but must push themselves further than they can handle, paying a great cost. After completing a difficult sequence of puzzles, the protagonist succeeds in bringing the youngest passenger back. The Guide then asks the protagonist to take on their role as steward of the platforms. While the youngest passenger shows potential for the role, it is not yet their time.
   
