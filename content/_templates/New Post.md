@@ -7,7 +7,7 @@ if (!currentName.match(/^\d{4}-\d{2}-\d{2}-/)) {
 _%>
 ---
 title: ""
-date: <% tp.date.now("YYYY-MM-DDTHH:mm:ss") %>
+date: <% tp.date.now("YYYY-MM-DDTHH:mm:ssZ") %>
 draft: true
 slug: ""
 tags: []
