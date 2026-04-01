@@ -77,11 +77,17 @@
     padding-bottom: 24px;
   }
 
+  .navigation a {
+    padding: 8px 8px;
+    font-size: 13px;
+    line-height: 1.35;
+    border-radius: 3px;
+  }
+
   .nav-branding {
     font-size: 20px !important;
     line-height: 1 !important;
     margin: 0;
-    padding: 0;
   }
 
   .nav-links {
@@ -93,9 +99,6 @@
   }
 
   .nav-links a {
-    font-size: 13px;
-    line-height: 1;
     margin: 0;
-    padding: 0;
   }
 }
