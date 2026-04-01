@@ -34,7 +34,7 @@
 
 .nav-links {
   display: flex;
-  gap: 16px;
+  gap: 8px;
   margin-left: auto;
 }
 
@@ -93,7 +93,7 @@
   .nav-links {
     margin-left: 0;
     justify-content: center;
-    gap: 12px;
+    gap: 8px;
     flex-wrap: wrap;
     line-height: 1;
   }
