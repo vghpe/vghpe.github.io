@@ -5,6 +5,7 @@ draft: false
 slug: nine-platforms-narrative-outline-v2-0
 document: narrative-outline
 revision: v2.0
+weight: 1
 aliases:
 tags:
   - narrative

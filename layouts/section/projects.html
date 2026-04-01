@@ -31,7 +31,7 @@
 
 <div class="projects-container">
   <ul class="projects-list">
-    {{ range $documents }}
+    {{ range sort (sort $documents ".Date" "desc") ".Weight" }}
     <li>
       <div class="projects-list-item-header">
         <div class="projects-list-item-title-group">

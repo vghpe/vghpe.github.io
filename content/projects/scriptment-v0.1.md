@@ -5,6 +5,7 @@ draft: false
 slug: nine-platforms-scriptment
 document: Scriptment
 revision: v0.1
+weight: 10
 aliases:
 tags:
   - narrative

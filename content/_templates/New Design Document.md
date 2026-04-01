@@ -1,8 +1,11 @@
+<%*
+const date = tp.date.now("YYYY-MM-DDTHH:mm:ssZ");
+_%>
 ---
 title: ""
 document: ""
 revision: "v1.0"
-date: {{date}}T{{time}}
+date: <% date %>
 draft: false
 slug: ""
 image: ""
