@@ -13,7 +13,7 @@ image: /images/projects/characters/IMG_5639.jpg
 description: Details on the characters
 ---
 
-**Mosse**, 25 year old graphics designer, -- The one that wants to be pretty
+**Mosse**, 25 year old graphics designer, 
 
 Mosse was always drawn to aesthetics, art and beauty but grew up in a home where eccentric behavior and standing out was frowned upon. He once came home from Art class where he'd caked color on his nails and was promptly corrected by his mother that boys don't do that. 
 
@@ -43,19 +43,19 @@ Later, her social smoothness drops away and she forgets to perform. She starts s
 
 ---
 
-**Matt**, 43 Public Radio Producer -- The one who cherishes love
+**Matt**, 43, Public Radio Producer
 
-His adult life was a long struggle to find purpose and he worked himself to the bone chasing a larger purpose in his career. Trying to carve himself out and a reason to be. 
+Matt has always been quite charming with a bit of dry humor. His adult life was a long struggle to find purpose and, he worked himself to the bone trying to do or be something "important". 
 
-But it wasn't until he became a father that he finally understood that it's our relationship that defines us. He exists because his daughter, (Tilda, 2) can depend on him, he is there to love her, to bed her and to kiss her goodnight.  
+A shift in mindset happened when he became a father and he began to define himself, not by validation, but by the relationships around him. He exists because his daughter, (Tilda, 2) can depend on him, he is there to love her, to bed her and to kiss her goodnight.  
 
-His partner, Saga 35, is a teacher and they have gone through a stormy relationship that settled into something more mature as they started trusting each other more. Mattias has come to know that doing good to family isn't just about the immediate but teaches love and care to humanity. 
+Matt's midlife tranformation has given him confidence that being the cheerleader, a helper that lift people is the best way to be. He does this well in his home and career, for most part, but stress and anxiety can trigger sudden anger-outburst that he's yet learn to control .
 
-When waking up on the Station his objective is clear, He needs to get back. There is no choice here, just escapism. 
+When waking up on the Station his objective is clear, He needs to get back. There is no choice here, just escapism. More than than disappearing from his loved ones and the grief it would inflict, he could never reckon with the state confusion his disappearance would cause. How could his loved ones ever trust again? 
 
-More than than disappearing from his loved ones and the grief it would inflict, he could never reckon with the state confusion his disappearance would cause. How could his loved ones ever trust again? 
+Matt will try to rally the group, while struggling the most with the unfamiliarity of the platforms. His stress and fear caught trouble for himself and others. 
 
-To leave for a personal request, causing so much hurt and destruction would unequivocally be a  cruel and selfish act.
+---
 
 **Ashvini** "Ash" (Protagonist)
 
