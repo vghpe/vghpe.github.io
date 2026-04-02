@@ -68,9 +68,10 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0px;
+    gap: 0;
     min-height: 50px;
-    max-height: 50px;
+    max-height: none;
+    padding: 20px 12px 0;
   }
 
   .navigation.with-border {
@@ -78,10 +79,11 @@
   }
 
   .navigation a {
-    padding: 8px 8px;
+    padding: 6px clamp(4px, 1.2vw, 7px);
     font-size: 13px;
     line-height: 1.35;
     border-radius: 3px;
+    white-space: nowrap;
   }
 
   .nav-branding {
@@ -90,15 +92,38 @@
     margin: 0;
   }
 
+  .navigation.with-border .nav-breadcrumb-group {
+    transform: translateY(-4px);
+  }
+
   .nav-links {
     margin-left: 0;
     justify-content: center;
-    gap: 8px;
+    gap: clamp(8px, 2.4vw, 14px);
+    row-gap: 4px;
     flex-wrap: wrap;
     line-height: 1;
+    width: auto;
+    max-width: 100%;
   }
 
   .nav-links a {
     margin: 0;
+  }
+}
+
+@media (max-width: 420px) {
+  .navigation {
+    padding: 20px 10px 0;
+  }
+
+  .navigation a {
+    padding: 6px clamp(3px, 1vw, 6px);
+  }
+
+  .nav-links {
+    justify-content: space-between;
+    gap: 0;
+    width: 100%;
   }
 }
