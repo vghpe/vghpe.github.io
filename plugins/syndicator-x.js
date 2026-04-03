@@ -47,40 +47,56 @@ function htmlToPlainText(html) {
 }
 
 /**
+ * Build a hashtag string from Micropub category values
+ * @param {object} properties - JF2 properties
+ * @returns {string} Space-separated hashtags e.g. "#sketch #figuredrawing"
+ */
+function buildHashtags(properties) {
+  const cats = properties.category;
+  if (!cats || (Array.isArray(cats) && cats.length === 0)) return '';
+  const tags = Array.isArray(cats) ? cats : [cats];
+  return tags.map(c => `#${c.replace(/^#/, '')}`).join(' ');
+}
+
+/**
  * Truncate text to fit within Twitter's 280 character limit
  * Appends permalink if the text was truncated or includePermalink is true
+ * Appends hashtags at the end, reserving space for them in the budget
  * @param {string} text - Text to truncate
  * @param {string} url - Permalink URL
  * @param {boolean} includePermalink - Whether to always include permalink
+ * @param {string} [hashtags] - Pre-built hashtag string to append
  * @returns {string} Truncated text
  */
-function truncateForTwitter(text, url, includePermalink) {
+function truncateForTwitter(text, url, includePermalink, hashtags = '') {
   // Twitter counts t.co-wrapped URLs as 23 characters
   const URL_LENGTH = 23;
   const MAX_LENGTH = 280;
+  const hashSuffix = hashtags ? `\n\n${hashtags}` : '';
+  const hashLen = hashSuffix.length;
 
-  if (!text) return url || '';
+  if (!text) return `${url || ''}${hashSuffix}`;
 
   // If the text has a title, format as "Title URL"
   // (handled in getPostText below)
 
   if (includePermalink) {
-    // Reserve space for "\n\nURL" (2 newlines + 23 chars for t.co)
-    const available = MAX_LENGTH - URL_LENGTH - 2;
+    // Reserve space for "\n\nURL" (2 newlines + 23 chars for t.co) plus hashtags
+    const available = MAX_LENGTH - URL_LENGTH - 2 - hashLen;
     if (text.length > available) {
       text = text.slice(0, available - 1).trimEnd() + '…';
     }
-    return `${text}\n\n${url}`;
+    return `${text}\n\n${url}${hashSuffix}`;
   }
 
-  if (text.length <= MAX_LENGTH) {
-    return text;
+  if (text.length + hashLen <= MAX_LENGTH) {
+    return `${text}${hashSuffix}`;
   }
 
   // Text is too long — truncate and append permalink
-  const available = MAX_LENGTH - URL_LENGTH - 2; // "\n\n" + URL
+  const available = MAX_LENGTH - URL_LENGTH - 2 - hashLen; // "\n\n" + URL + hashtags
   text = text.slice(0, available - 1).trimEnd() + '…';
-  return `${text}\n\n${url}`;
+  return `${text}\n\n${url}${hashSuffix}`;
 }
 
 /**
@@ -90,11 +106,15 @@ function truncateForTwitter(text, url, includePermalink) {
  * @returns {string} Tweet text
  */
 function getPostText(properties, includePermalink) {
+  const hashtags = buildHashtags(properties);
   let text;
 
   if (properties.name && properties.name !== '') {
-    // Post has a title — show "Title URL"
+    // Post has a title — show "Title URL", append hashtags if they fit
     text = `${properties.name} ${properties.url}`;
+    if (hashtags && text.length + 1 + hashtags.length <= 280) {
+      return `${text} ${hashtags}`;
+    }
     if (text.length <= 280) return text;
     // If still too long, truncate the title
     const available = 280 - 23 - 1; // URL + space
@@ -110,7 +130,7 @@ function getPostText(properties, includePermalink) {
     text = '';
   }
 
-  return truncateForTwitter(text, properties.url, includePermalink);
+  return truncateForTwitter(text, properties.url, includePermalink, hashtags);
 }
 
 class XSyndicator {
