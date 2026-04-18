@@ -90,7 +90,7 @@ Tagging 5 minutes of transcripts seems to go pretty well, but after that the AI 
 Also, As of Feb 22, 2025, making an API call to use the fancy ChatGTO-01 model for a 10-minute transcript costs about $1, which can quickly add up when exploring the tool.
 
 
-[Use the HTML highlighter tool here](/tool/index.html). You can grab YouTube's own transcript, then drop that along with the prompt into any chatbot to try it out.
+[Use the HTML highlighter tool here](/tools/text-highlighter/). You can grab YouTube's own transcript, then drop that along with the prompt into any chatbot to try it out.
 
 [Get the full toolset and instructions here](https://github.com/vghpe/Youtube-Transcript-Rhetoric-Tagging). I found that Whisper does a better job transcribing and also doesn't censor bad language.  
 
