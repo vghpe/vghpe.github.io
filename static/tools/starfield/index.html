@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Gunbuster Starfield</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; overflow: hidden; width: 100vw; height: 100vh; }
+    canvas { display: block; }
+    .lil-gui { --width: 280px; }
+    #ref-wrap {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 25vw;
+      z-index: 10;
+      pointer-events: none;
+    }
+    #ref-img {
+      display: block;
+      width: 100%;
+      height: auto;
+      opacity: 0.9;
+      border: 2px solid rgba(255, 255, 255, 1.0);
+    }
+    #ref-label {
+      position: absolute;
+      bottom: 6px;
+      left: 6px;
+      color: #fff;
+      font: 600 10px/1 monospace;
+      letter-spacing: 0.04em;
+      text-shadow: 0 1px 3px #000, 0 0 6px #000;
+      white-space: nowrap;
+      pointer-events: none;
+    }
+    #load-input { display: none; }
+  </style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="ref-wrap">
+  <img id="ref-img" src="refs/gunbuster_ep2_00m11s.png" alt="reference" />
+  <span id="ref-label">gunbuster_ep2_00m11s</span>
+</div>
+<input type="file" id="load-input" accept=".json" />
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://esm.sh/three@0.175.0",
+    "three/addons/": "https://esm.sh/three@0.175.0/examples/jsm/",
+    "lil-gui": "https://esm.sh/lil-gui@0.20.0"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+import { EffectComposer } from 'three/addons/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
+import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
+import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
+import GUI from 'lil-gui';
+
+// ---------------------------------------------------------------------------
+// Seeded RNG (Mulberry32)
+// ---------------------------------------------------------------------------
+function makeRNG(seed) {
+  let s = seed >>> 0;
+  return function () {
+    s += 0x6d2b79f5;
+    let t = Math.imul(s ^ (s >>> 15), 1 | s);
+    t ^= t + Math.imul(t ^ (t >>> 7), 61 | t);
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+// ---------------------------------------------------------------------------
+// Parameters (all tunable via GUI)
+// ---------------------------------------------------------------------------
+const P = {
+  // Stars
+  count:        2279,
+  seed:         5824,
+  sizeMin:      0.7,
+  sizeMax:      4.7,
+  sizeExponent: 3.5,       // power-law exponent — higher = many more tiny stars
+  // Star shape
+  useGaussian:   false,
+  edgeSoftness:  0.30,
+  gaussianSigma: 0.56,
+  irregularity:  0.52,     // 0 = round, 1 = blobby (trig domain warp)
+  // Placement — 2-layer system (weights are relative, normalised internally)
+  layer_band:     0.55,    // galaxy band — broad stream running across frame
+  band_angle:    -28,      // degrees; direction the band runs (0 = horizontal)
+  band_width:     0.57,    // Gaussian σ perpendicular to band (NDC units)
+  layer_field:    0.15,    // residual uniform field stars
+  // Palette weights
+  w_white:     0.29,
+  w_paleBlue:  0.74,
+  w_red:       0.06,
+  w_cyan:      0.08,
+  w_magenta:   0.00,
+  w_orange:    0.14,
+  w_deepBlue:  0.09,
+  w_yellow:    0.00,
+  w_green:     0.00,
+  // Halation — multi-scale Gaussian bloom (UnrealBloomPass)
+  hal_enabled:   true,
+  hal_strength:  0.47,      // bloom brightness
+  hal_radius:    0.5,      // spread (0–1, not pixels)
+  hal_threshold: 0.0,      // luminance threshold — 0 = all stars glow
+  // Chromatic aberration
+  ca_enabled:  true,
+  ca_angle:    40,
+  ca_strength: 0.2,
+  ca_rMult:    1.14,
+  ca_bMult:    0.74,
+  // Film colour grade (applied after CA)
+  fc_enabled:   true,
+  fc_blackLift: 0.008,     // raise black floor (film base density / fog)
+  fc_gamma:     0.92,      // midtone curve (<1 = darker mids, film-like)
+  fc_warmth:    0.0,      // >0 = push R up / B down (warm stock)
+  fc_saturation: 1.13,      // <1 = slightly desaturated, like aged print
+  // Film grain
+  fg_enabled:    true,
+  fg_intensity:  0.028,    // grain amplitude
+  fg_scale:      2.9,      // grain pixel size
+  fg_colorNoise: 0.25,     // 0 = mono grain, 1 = full colour grain
+};
+
+// ---------------------------------------------------------------------------
+// Presets — loaded from presets/*.json so you can edit files directly.
+// Add or rename entries here; the JSON files are the source of truth.
+// ---------------------------------------------------------------------------
+const PRESET_MANIFEST = [
+  { name: 'Opening', json: 'presets/s2_opening.json', ref: 'refs/gunbuster_ep2_00m11s.png' },
+  { name: 'HyperSpace',  json: 'presets/deep_field.json',  ref: 'refs/gunbuster_ep2_17m39s.png' },
+  { name: 'Encounter',   json: 'presets/encounter.json',   ref: 'refs/gunbuster_ep5_18m38s.png' },
+];
+
+// Top-level await is valid in type="module"
+const PRESETS = await Promise.all(
+  PRESET_MANIFEST.map(async m => ({
+    name:   m.name,
+    ref:    m.ref,
+    params: await fetch(m.json).then(r => r.json()),
+  }))
+);
+
+// Initialise P from the first preset so defaults always match the file
+Object.assign(P, PRESETS[0].params);
+
+// Star palette definitions
+const PALETTE_DEFS = [
+  { key: 'w_white',    color: new THREE.Color(1.00, 0.98, 0.93) },
+  { key: 'w_paleBlue', color: new THREE.Color(0.62, 0.76, 1.00) },
+  { key: 'w_red',      color: new THREE.Color(1.00, 0.18, 0.18) },
+  { key: 'w_cyan',     color: new THREE.Color(0.00, 0.90, 1.00) },
+  { key: 'w_magenta',  color: new THREE.Color(1.00, 0.30, 0.63) },
+  { key: 'w_orange',   color: new THREE.Color(1.00, 0.53, 0.00) },
+  { key: 'w_deepBlue', color: new THREE.Color(0.24, 0.24, 1.00) },
+  { key: 'w_yellow',   color: new THREE.Color(1.00, 0.87, 0.00) },
+  { key: 'w_green',    color: new THREE.Color(0.20, 0.80, 0.30) },
+];
+
+function samplePalette(rng) {
+  const weights = PALETTE_DEFS.map(d => P[d.key]);
+  const total = weights.reduce((a, b) => a + b, 0);
+  let r = rng() * total;
+  for (let i = 0; i < PALETTE_DEFS.length; i++) {
+    r -= weights[i];
+    if (r <= 0) return PALETTE_DEFS[i].color;
+  }
+  return PALETTE_DEFS[0].color;
+}
+
+// ---------------------------------------------------------------------------
+// Scene setup
+// ---------------------------------------------------------------------------
+const canvas = document.getElementById('c');
+
+// Cap internal render resolution to keep the GPU load manageable.
+// CSS still stretches the canvas to fill the window.
+const MAX_RENDER_W = 1920;
+const MAX_RENDER_H = 1080;
+
+function clampedSize() {
+  const dpr   = Math.min(window.devicePixelRatio, 2);
+  const rawW  = window.innerWidth  * dpr;
+  const rawH  = window.innerHeight * dpr;
+  const scale = Math.min(1, MAX_RENDER_W / rawW, MAX_RENDER_H / rawH);
+  return { w: Math.round(rawW * scale), h: Math.round(rawH * scale), dpr: dpr * scale };
+}
+
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: false });
+const initSize = clampedSize();
+renderer.setPixelRatio(initSize.dpr);
+renderer.setSize(window.innerWidth, window.innerHeight);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x000000);
+
+// Orthographic camera covering [-1,1] in both axes (NDC-like)
+const cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+cam.position.z = 1;
+
+// ---------------------------------------------------------------------------
+// Star shaders
+// ---------------------------------------------------------------------------
+const starVert = /* glsl */`
+  attribute float starSize;
+  attribute vec3  starColor;
+  attribute float starSeed;   // per-star random value for organic blob shaping
+  varying   vec3  vColor;
+  varying   float vSeed;
+
+  void main() {
+    vColor       = starColor;
+    vSeed        = starSeed;
+    gl_Position  = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    gl_PointSize = starSize;
+  }
+`;
+
+const starFrag = /* glsl */`
+  uniform float uEdgeSoftness;
+  uniform float uUseGaussian;
+  uniform float uGaussianSigma;
+  uniform float uIrregularity;   // 0 = round, 1 = blobby
+  varying vec3  vColor;
+  varying float vSeed;
+
+  void main() {
+    vec2  pc   = gl_PointCoord - 0.5;
+    float dist = length(pc) * 2.0;
+
+    // Trig domain warp — displaces the effective radius by a sum of harmonics.
+    // Each star gets a unique phase offset (vSeed), producing distinct blob shapes
+    // that evoke uneven gouache brush marks or stipple dots.
+    if (uIrregularity > 0.0 && dist > 0.0) {
+      float angle = atan(pc.y, pc.x);
+      // Independent phase per harmonic via fract-hashing vSeed.
+      // All three offsets are decorrelated, so every star gets a unique blob.
+      float TAU  = 6.28318;
+      float ph0  = fract(vSeed          ) * TAU;
+      float ph1  = fract(vSeed * 13.739 ) * TAU;
+      float ph2  = fract(vSeed * 37.123 ) * TAU;
+      float warp = sin(angle * 2.0 + ph0) * 0.50
+                 + sin(angle * 3.0 + ph1) * 0.30
+                 + sin(angle * 5.0 + ph2) * 0.20;
+      // At irregularity=1, radius varies ±30%
+      dist = dist * (1.0 + warp * uIrregularity * 0.30);
+    }
+
+    float alpha;
+    if (uUseGaussian > 0.5) {
+      float sigma = mix(0.25, 0.95, uGaussianSigma);
+      alpha = exp(-(dist * dist) / (2.0 * sigma * sigma));
+    } else {
+      alpha = 1.0 - smoothstep(1.0 - uEdgeSoftness, 1.0 + uEdgeSoftness * 0.5, dist);
+    }
+
+    if (alpha < 0.01) discard;
+    gl_FragColor = vec4(vColor, alpha);
+  }
+`;
+
+// Box-Muller: two uniform→two independent standard-normal samples
+function gaussianPair(rng) {
+  const u1 = Math.max(rng(), 1e-10);
+  const u2 = rng();
+  const r  = Math.sqrt(-2 * Math.log(u1));
+  const th = 2 * Math.PI * u2;
+  return [r * Math.cos(th), r * Math.sin(th)];
+}
+
+// ---------------------------------------------------------------------------
+// Build star geometry
+// ---------------------------------------------------------------------------
+let starPoints = null;
+
+function buildStars() {
+  if (starPoints) {
+    scene.remove(starPoints);
+    starPoints.geometry.dispose();
+    starPoints.material.dispose();
+  }
+
+  const rng   = makeRNG(P.seed);
+  const count = P.count;
+
+  // --- Placement setup ---
+  const totalLayerW = P.layer_band + P.layer_field;
+  const wBand    = P.layer_band / totalLayerW;
+  // wField = remainder
+
+  // Band basis vectors
+  const bandRad  = P.band_angle * Math.PI / 180;
+  const bandDir  = [ Math.cos(bandRad),  Math.sin(bandRad)];
+  const bandPerp = [-Math.sin(bandRad),  Math.cos(bandRad)];
+
+  const positions = new Float32Array(count * 3);
+  const colors    = new Float32Array(count * 3);
+  const sizes     = new Float32Array(count);
+  // Separate RNG fork for blob seeds — doesn't disturb placement/size/colour sequence
+  const seedRng   = makeRNG(P.seed ^ 0xDEADBEEF);
+  const seeds     = new Float32Array(count);
+  for (let si = 0; si < count; si++) seeds[si] = seedRng();
+
+  for (let i = 0; i < count; i++) {
+    let px, py;
+    const draw = rng();
+    if (draw < wBand) {
+      // Galaxy band star: uniform along band axis, Gaussian perpendicular
+      const t        = rng() * 2 - 1;
+      const [gPerp]  = gaussianPair(rng);
+      px = t       * bandDir[0]  + gPerp * P.band_width * bandPerp[0];
+      py = t       * bandDir[1]  + gPerp * P.band_width * bandPerp[1];
+    } else {
+      // Sparse field star — uniform across entire frame
+      px = rng() * 2 - 1;
+      py = rng() * 2 - 1;
+    }
+    // Skip stars that land outside the view — clamping would pile them up at edges
+    if (px < -1 || px > 1 || py < -1 || py > 1) { i--; continue; }
+    positions[i * 3 + 0] = px;
+    positions[i * 3 + 1] = py;
+    positions[i * 3 + 2] = 0;
+
+    // Size: power-law — draw uniform, raise to exponent → biased toward 0
+    // e.g. exponent=3.5: median star is at (0.5^3.5)=8% of the size range
+    const u = rng();
+    const t = Math.pow(u, P.sizeExponent);
+    const sizeRange = P.sizeMax - P.sizeMin;
+    sizes[i] = (P.sizeMin + t * sizeRange) * renderer.getPixelRatio();
+
+    const c = samplePalette(rng);
+    colors[i * 3 + 0] = c.r;
+    colors[i * 3 + 1] = c.g;
+    colors[i * 3 + 2] = c.b;
+  }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position',  new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('starColor', new THREE.BufferAttribute(colors,    3));
+  geo.setAttribute('starSize',  new THREE.BufferAttribute(sizes,     1));
+  geo.setAttribute('starSeed',  new THREE.BufferAttribute(seeds,     1));
+
+  const mat = new THREE.ShaderMaterial({
+    vertexShader:   starVert,
+    fragmentShader: starFrag,
+    uniforms: {
+      uEdgeSoftness:  { value: P.edgeSoftness },
+      uUseGaussian:   { value: P.useGaussian ? 1.0 : 0.0 },
+      uGaussianSigma: { value: P.gaussianSigma },
+      uIrregularity:  { value: P.irregularity },
+    },
+    transparent: true,
+    depthWrite:  false,
+    blending:    THREE.NormalBlending,
+  });
+
+  starPoints = new THREE.Points(geo, mat);
+  scene.add(starPoints);
+  requestRender();
+}
+
+// ---------------------------------------------------------------------------
+// Chromatic Aberration ShaderPass
+// ---------------------------------------------------------------------------
+const ChromaticAberrationShader = {
+  uniforms: {
+    tDiffuse:  { value: null },
+    uOffset:   { value: new THREE.Vector2(0, 0) },
+    uRMult:    { value: 1.0 },
+    uBMult:    { value: 1.0 },
+    uEnabled:  { value: 1.0 },
+  },
+  vertexShader: /* glsl */`
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+    }
+  `,
+  fragmentShader: /* glsl */`
+    uniform sampler2D tDiffuse;
+    uniform vec2      uOffset;
+    uniform float     uRMult;
+    uniform float     uBMult;
+    uniform float     uEnabled;
+    varying vec2      vUv;
+
+    void main() {
+      if (uEnabled < 0.5) {
+        gl_FragColor = texture2D(tDiffuse, vUv);
+        return;
+      }
+      vec4  base = texture2D(tDiffuse, vUv);
+      float r = texture2D(tDiffuse, vUv + uOffset).r * uRMult;
+      float g = base.g;
+      float b = texture2D(tDiffuse, vUv - uOffset).b * uBMult;
+      float a = max(max(r, g), b);
+      gl_FragColor = vec4(r, g, b, a);
+    }
+  `,
+};
+
+// ---------------------------------------------------------------------------
+// Film Colour Grade ShaderPass
+// Pipeline position: after CA — grades the fully composited image
+// ---------------------------------------------------------------------------
+const FilmColourShader = {
+  uniforms: {
+    tDiffuse:    { value: null },
+    uBlackLift:  { value: 0.016 },  // raise blacks (film fog)
+    uGamma:      { value: 0.92 },   // power applied to midtones
+    uWarmth:     { value: 0.055 },  // R+, B- shift
+    uSaturation: { value: 0.88 },
+    uEnabled:    { value: 1.0 },
+  },
+  vertexShader: /* glsl */`
+    varying vec2 vUv;
+    void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }
+  `,
+  fragmentShader: /* glsl */`
+    uniform sampler2D tDiffuse;
+    uniform float     uBlackLift;
+    uniform float     uGamma;
+    uniform float     uWarmth;
+    uniform float     uSaturation;
+    uniform float     uEnabled;
+    varying vec2      vUv;
+
+    void main() {
+      vec4 src = texture2D(tDiffuse, vUv);
+      if (uEnabled < 0.5) { gl_FragColor = src; return; }
+
+      vec3 c = src.rgb;
+      // Lift blacks (film base density)
+      c = c + uBlackLift;
+      // Warmth: push red up, blue down
+      c.r = c.r + uWarmth * 0.5;
+      c.b = c.b - uWarmth * 0.5;
+      // Gamma on clamped value
+      c = pow(clamp(c, 0.0, 1.0), vec3(uGamma));
+      // Saturation via luminance mix
+      float lum = dot(c, vec3(0.2126, 0.7152, 0.0722));
+      c = mix(vec3(lum), c, uSaturation);
+
+      gl_FragColor = vec4(clamp(c, 0.0, 1.0), src.a);
+    }
+  `,
+};
+
+// ---------------------------------------------------------------------------
+// Film Grain ShaderPass — last in chain so grain isn't blurred by halation
+// ---------------------------------------------------------------------------
+const FilmGrainShader = {
+  uniforms: {
+    tDiffuse:    { value: null },
+    uTime:       { value: 0.0 },
+    uIntensity:  { value: 0.038 },
+    uScale:      { value: 1.0 },
+    uColorNoise: { value: 0.25 },
+    uEnabled:    { value: 1.0 },
+  },
+  vertexShader: /* glsl */`
+    varying vec2 vUv;
+    void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0); }
+  `,
+  fragmentShader: /* glsl */`
+    uniform sampler2D tDiffuse;
+    uniform float     uTime;
+    uniform float     uIntensity;
+    uniform float     uScale;
+    uniform float     uColorNoise;
+    uniform float     uEnabled;
+    varying vec2      vUv;
+
+    // Fast hash — different seeds per channel avoid visible patterns
+    float h(vec3 p) {
+      p = fract(p * vec3(127.1, 311.7, 74.7));
+      p += dot(p, p.yzx + 19.19);
+      return fract((p.x + p.y) * p.z);
+    }
+
+    void main() {
+      vec4 src = texture2D(tDiffuse, vUv);
+      if (uEnabled < 0.5) { gl_FragColor = src; return; }
+
+      vec2 uv = vUv / uScale;
+      float t  = floor(uTime);          // new grain pattern every frame
+      float nr = h(vec3(uv * 500.0, t + 0.0)) * 2.0 - 1.0;
+      float ng = h(vec3(uv * 500.0, t + 0.3)) * 2.0 - 1.0;
+      float nb = h(vec3(uv * 500.0, t + 0.7)) * 2.0 - 1.0;
+      // Blend mono (same value all channels) ↔ colour grain
+      vec3 grain = mix(vec3(nr), vec3(nr, ng, nb), uColorNoise);
+
+      gl_FragColor = vec4(clamp(src.rgb + grain * uIntensity, 0.0, 1.0), src.a);
+    }
+  `,
+};
+
+// ---------------------------------------------------------------------------
+// Post-processing: Render → Bloom → CA → Film Colour → Film Grain
+// ---------------------------------------------------------------------------
+const composer = new EffectComposer(renderer);
+composer.addPass(new RenderPass(scene, cam));
+
+// UnrealBloomPass: multi-scale separable Gaussian pyramid, screens over original
+const bloomPass = new UnrealBloomPass(
+  new THREE.Vector2(window.innerWidth, window.innerHeight),
+  P.hal_strength, P.hal_radius, P.hal_threshold,
+);
+composer.addPass(bloomPass);
+
+const caPass = new ShaderPass(ChromaticAberrationShader);
+composer.addPass(caPass);
+
+const fcPass = new ShaderPass(FilmColourShader);
+composer.addPass(fcPass);
+
+const fgPass = new ShaderPass(FilmGrainShader);
+composer.addPass(fgPass);
+
+function updateHalUniforms() {
+  bloomPass.strength  = P.hal_enabled ? P.hal_strength  : 0;
+  bloomPass.radius    = P.hal_radius;
+  bloomPass.threshold = P.hal_threshold;
+  requestRender();
+}
+
+function updateCAUniforms() {
+  const angleRad = (P.ca_angle * Math.PI) / 180;
+  const w = window.innerWidth;
+  const h = window.innerHeight;
+  const strength = P.ca_enabled ? P.ca_strength : 0;
+  caPass.uniforms.uOffset.value.set(
+    (Math.cos(angleRad) * strength) / w,
+    (Math.sin(angleRad) * strength) / h,
+  );
+  caPass.uniforms.uRMult.value   = P.ca_rMult;
+  caPass.uniforms.uBMult.value   = P.ca_bMult;
+  caPass.uniforms.uEnabled.value = P.ca_enabled ? 1.0 : 0.0;
+  requestRender();
+}
+
+function updateFCUniforms() {
+  fcPass.uniforms.uBlackLift.value  = P.fc_blackLift;
+  fcPass.uniforms.uGamma.value      = P.fc_gamma;
+  fcPass.uniforms.uWarmth.value     = P.fc_warmth;
+  fcPass.uniforms.uSaturation.value = P.fc_saturation;
+  fcPass.uniforms.uEnabled.value    = P.fc_enabled ? 1.0 : 0.0;
+  requestRender();
+}
+
+function updateFGUniforms() {
+  fgPass.uniforms.uEnabled.value    = P.fg_enabled    ? 1.0 : 0.0;
+  fgPass.uniforms.uIntensity.value  = P.fg_intensity;
+  fgPass.uniforms.uScale.value      = P.fg_scale;
+  fgPass.uniforms.uColorNoise.value = P.fg_colorNoise;
+  requestRender();
+}
+
+function applyPreset(name) {
+  const preset = PRESETS.find(p => p.name === name);
+  if (!preset) return;
+  Object.assign(P, preset.params);
+  buildStars();
+  updateHalUniforms();
+  updateCAUniforms();
+  updateFCUniforms();
+  updateFGUniforms();
+  // Sync all GUI slider displays to the new P values
+  gui.controllersRecursive().forEach(c => c.updateDisplay());
+}
+
+// Preset → reference image mapping
+const refWrap  = document.getElementById('ref-wrap');
+const refImg   = document.getElementById('ref-img');
+const refLabel = document.getElementById('ref-label');
+const loadInput = document.getElementById('load-input');
+
+function setRefImage(presetName) {
+  const preset = PRESETS.find(p => p.name === presetName);
+  if (!preset) return;
+  refImg.src = preset.ref;
+  // Extract filename without extension for the label
+  refLabel.textContent = preset.ref.split('/').pop().replace(/\.[^.]+$/, '');
+}
+
+function savePreset() {
+  const json = JSON.stringify(P, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = (presetState.preset.replace(/\s+/g, '_').toLowerCase()) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function loadPresetFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const loaded = JSON.parse(e.target.result);
+      Object.assign(P, loaded);
+      buildStars();
+      updateHalUniforms();
+      updateCAUniforms();
+      updateFCUniforms();
+      updateFGUniforms();
+      gui.controllersRecursive().forEach(c => c.updateDisplay());
+    } catch (err) {
+      console.error('Failed to load preset JSON:', err);
+    }
+  };
+  reader.readAsText(file);
+}
+
+loadInput.addEventListener('change', e => {
+  if (e.target.files[0]) loadPresetFile(e.target.files[0]);
+  e.target.value = '';
+});
+
+// ---------------------------------------------------------------------------
+// lil-gui
+// ---------------------------------------------------------------------------
+const gui = new GUI({ title: 'Startfield parameters : lil-gui 0.21.0' });
+
+const refState = { showRef: true };
+gui.add(refState, 'showRef').name('Show ref').onChange(v => {
+  refWrap.style.display = v ? '' : 'none';
+  requestRender();
+});
+
+const presetState = { preset: PRESETS[0].name };
+gui.add(presetState, 'preset', PRESETS.map(p => p.name))
+  .name('Preset')
+  .onChange(name => { applyPreset(name); setRefImage(name); });
+
+const ioState = {};
+gui.add({ save: savePreset }, 'save').name('Save JSON ↓');
+gui.add({ load: () => loadInput.click() }, 'load').name('Load JSON ↑');
+
+const fStars = gui.addFolder('Stars');
+fStars.add(P, 'count',        100, 3000, 1)   .name('Count')         .onFinishChange(buildStars);
+fStars.add(P, 'seed',         0,   9999, 1)   .name('Seed')          .onFinishChange(buildStars);
+fStars.add(P, 'sizeMin',      0.5, 6,    0.1) .name('Size min (px)') .onFinishChange(buildStars);
+fStars.add(P, 'sizeMax',      1.0, 50,   0.1) .name('Size max (px)') .onFinishChange(buildStars);
+fStars.add(P, 'sizeExponent', 1.0, 8,    0.1) .name('Size exponent') .onFinishChange(buildStars);
+  // ^ 1 = uniform distribution of sizes; higher = increasingly many tiny stars, very few large
+
+const fPlace = gui.addFolder('Placement');
+// Weights are relative — only the ratios matter, not absolute values
+fPlace.add(P, 'layer_band',  0, 1,    0.01).name('Band weight')    .onFinishChange(buildStars);
+fPlace.add(P, 'band_angle', -90, 90,   1)   .name('Band angle (°)') .onFinishChange(buildStars);
+fPlace.add(P, 'band_width', 0.05,0.8,  0.01).name('Band width')     .onFinishChange(buildStars);
+fPlace.add(P, 'layer_field', 0, 1,    0.01).name('Field weight')    .onFinishChange(buildStars);
+
+const fShape = gui.addFolder('Star Shape');
+fShape.add(P, 'useGaussian').name('Gaussian mode (vs opaque)')
+  .onChange(v => { if (starPoints) starPoints.material.uniforms.uUseGaussian.value = v ? 1.0 : 0.0; requestRender(); });
+fShape.add(P, 'edgeSoftness',  0, 0.3, 0.005).name('Edge AA (opaque mode)')
+  .onChange(v => { if (starPoints) starPoints.material.uniforms.uEdgeSoftness.value = v; requestRender(); });
+fShape.add(P, 'gaussianSigma', 0, 1.0, 0.01) .name('σ spread (Gaussian mode)')
+  .onChange(v => { if (starPoints) starPoints.material.uniforms.uGaussianSigma.value = v; requestRender(); });
+fShape.add(P, 'irregularity',  0, 1.0, 0.01) .name('Blob warp')
+  .onChange(v => { if (starPoints) starPoints.material.uniforms.uIrregularity.value = v; requestRender(); });
+
+const fColors = gui.addFolder('Color Weights').close();
+fColors.add(P, 'w_white',    0, 1, 0.01).name('Cream (#FFFBED)').onFinishChange(buildStars);
+fColors.add(P, 'w_paleBlue', 0, 1, 0.01).name('Pale blue')      .onFinishChange(buildStars);
+fColors.add(P, 'w_red',      0, 1, 0.01).name('Red')            .onFinishChange(buildStars);
+fColors.add(P, 'w_cyan',     0, 1, 0.01).name('Cyan')           .onFinishChange(buildStars);
+fColors.add(P, 'w_magenta',  0, 1, 0.01).name('Magenta')        .onFinishChange(buildStars);
+fColors.add(P, 'w_orange',   0, 1, 0.01).name('Orange')         .onFinishChange(buildStars);
+fColors.add(P, 'w_deepBlue', 0, 1, 0.01).name('Deep blue')      .onFinishChange(buildStars);
+fColors.add(P, 'w_yellow',   0, 1, 0.01).name('Yellow')         .onFinishChange(buildStars);
+fColors.add(P, 'w_green',    0, 1, 0.01).name('Green')          .onFinishChange(buildStars);
+
+const fHal = gui.addFolder('Halation (Film Glow)');
+fHal.add(P, 'hal_enabled')                  .name('Enabled')      .onChange(updateHalUniforms);
+fHal.add(P, 'hal_strength',  0, 3.0,  0.01) .name('Strength')     .onChange(updateHalUniforms);
+fHal.add(P, 'hal_radius',    0, 1.0,  0.01) .name('Spread (0–1)') .onChange(updateHalUniforms);
+fHal.add(P, 'hal_threshold', 0, 1.0,  0.01) .name('Threshold')    .onChange(updateHalUniforms);
+
+const fCA = gui.addFolder('Chromatic Aberration');
+fCA.add(P, 'ca_enabled')              .name('Enabled')       .onChange(updateCAUniforms);
+fCA.add(P, 'ca_angle',    0, 360, 1)  .name('Angle (°)')     .onChange(updateCAUniforms);
+fCA.add(P, 'ca_strength', 0, 8,   0.1).name('Strength (px)') .onChange(updateCAUniforms);
+fCA.add(P, 'ca_rMult',   0.5, 2, 0.01).name('Red channel')   .onChange(updateCAUniforms);
+fCA.add(P, 'ca_bMult',   0.5, 2, 0.01).name('Blue channel')  .onChange(updateCAUniforms);
+
+const fFC = gui.addFolder('Film Colour');
+fFC.add(P, 'fc_enabled')                   .name('Enabled')      .onChange(updateFCUniforms);
+fFC.add(P, 'fc_blackLift',  0,   0.1, 0.002).name('Black lift')   .onChange(updateFCUniforms);
+fFC.add(P, 'fc_gamma',      0.5, 1.5, 0.01) .name('Gamma')        .onChange(updateFCUniforms);
+fFC.add(P, 'fc_warmth',    -0.2, 0.2, 0.005).name('Warmth')       .onChange(updateFCUniforms);
+fFC.add(P, 'fc_saturation', 0,   1.5, 0.01) .name('Saturation')   .onChange(updateFCUniforms);
+
+const fFG = gui.addFolder('Film Grain');
+fFG.add(P, 'fg_enabled')                   .name('Enabled')      .onChange(v => { fgPass.uniforms.uEnabled.value = v ? 1 : 0; requestRender(); });
+fFG.add(P, 'fg_intensity', 0, 0.2,  0.002) .name('Intensity')    .onChange(v => { fgPass.uniforms.uIntensity.value = v; requestRender(); });
+fFG.add(P, 'fg_scale',     0.5, 4,  0.05)  .name('Grain size')   .onChange(v => { fgPass.uniforms.uScale.value = v; requestRender(); });
+fFG.add(P, 'fg_colorNoise',0, 1,    0.01)  .name('Colour noise') .onChange(v => { fgPass.uniforms.uColorNoise.value = v; requestRender(); });
+
+// ---------------------------------------------------------------------------
+// On-demand render — nothing redraws unless state actually changes.
+// GPU stays completely idle between interactions.
+// Declared before bootstrap so buildStars() / update*() can call it.
+// ---------------------------------------------------------------------------
+let renderPending = false;
+function requestRender() {
+  if (renderPending) return;
+  renderPending = true;
+  requestAnimationFrame(() => {
+    renderPending = false;
+    composer.render();
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Resize
+// ---------------------------------------------------------------------------
+window.addEventListener('resize', () => {
+  const s = clampedSize();
+  renderer.setPixelRatio(s.dpr);
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  composer.setSize(window.innerWidth, window.innerHeight);
+  updateHalUniforms();
+  updateCAUniforms();
+  requestRender();
+});
+
+// ---------------------------------------------------------------------------
+// Bootstrap
+// ---------------------------------------------------------------------------
+buildStars();
+updateHalUniforms();
+updateCAUniforms();
+updateFCUniforms();
+updateFGUniforms();
+setRefImage(PRESETS[0].name);
+</script>
+</body>
+</html>
