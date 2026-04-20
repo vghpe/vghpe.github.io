@@ -400,8 +400,7 @@ const ChromaticAberrationShader = {
       float r = texture2D(tDiffuse, vUv + uOffset).r * uRMult;
       float g = base.g;
       float b = texture2D(tDiffuse, vUv - uOffset).b * uBMult;
-      float a = max(max(r, g), b);
-      gl_FragColor = vec4(r, g, b, a);
+      gl_FragColor = vec4(r, g, b, 1.0);
     }
   `,
 };
@@ -448,7 +447,7 @@ const FilmColourShader = {
       float lum = dot(c, vec3(0.2126, 0.7152, 0.0722));
       c = mix(vec3(lum), c, uSaturation);
 
-      gl_FragColor = vec4(clamp(c, 0.0, 1.0), src.a);
+      gl_FragColor = vec4(clamp(c, 0.0, 1.0), 1.0);
     }
   `,
 };
@@ -497,7 +496,7 @@ const FilmGrainShader = {
       // Blend mono (same value all channels) ↔ colour grain
       vec3 grain = mix(vec3(nr), vec3(nr, ng, nb), uColorNoise);
 
-      gl_FragColor = vec4(clamp(src.rgb + grain * uIntensity, 0.0, 1.0), src.a);
+      gl_FragColor = vec4(clamp(src.rgb + grain * uIntensity, 0.0, 1.0), 1.0);
     }
   `,
 };
@@ -626,6 +625,163 @@ loadInput.addEventListener('change', e => {
 });
 
 // ---------------------------------------------------------------------------
+// 4K PNG Export
+// ---------------------------------------------------------------------------
+const EXPORT_SIZES = {
+  '16:9  (3840×2160)':  [3840, 2160],
+  '4:3   (3840×2880)':  [3840, 2880],
+  'portrait (2160×3840)': [2160, 3840],
+};
+const exportState = { size: Object.keys(EXPORT_SIZES)[0] };
+
+async function exportPNG() {
+  const [exportW, exportH] = EXPORT_SIZES[exportState.size];
+  // Scale relative to CSS pixel width — star sizes in P are CSS-pixel units,
+  // so we need export_pixels / css_pixels (not export_pixels / render_buffer_pixels).
+  const scaleRatio  = exportW / window.innerWidth;
+
+  const offscreen = document.createElement('canvas');
+  const expRenderer = new THREE.WebGLRenderer({
+    canvas: offscreen,
+    antialias: false,
+    preserveDrawingBuffer: true,
+    alpha: false,
+  });
+  expRenderer.setPixelRatio(1);
+  expRenderer.setSize(exportW, exportH);
+
+  const expScene = new THREE.Scene();
+  expScene.background = new THREE.Color(0x000000);
+
+  const expCam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 10);
+  expCam.position.z = 1;
+
+  // Rebuild stars with sizes scaled to export resolution
+  const rng   = makeRNG(P.seed);
+  const count = P.count;
+
+  const totalLayerW = P.layer_band + P.layer_field;
+  const wBand       = P.layer_band / totalLayerW;
+  const bandRad     = P.band_angle * Math.PI / 180;
+  const bandDir     = [ Math.cos(bandRad),  Math.sin(bandRad)];
+  const bandPerp    = [-Math.sin(bandRad),  Math.cos(bandRad)];
+
+  const positions = new Float32Array(count * 3);
+  const colors    = new Float32Array(count * 3);
+  const sizes     = new Float32Array(count);
+  const seedRng   = makeRNG(P.seed ^ 0xDEADBEEF);
+  const seeds     = new Float32Array(count);
+  for (let si = 0; si < count; si++) seeds[si] = seedRng();
+
+  for (let i = 0; i < count; i++) {
+    let px, py;
+    const draw = rng();
+    if (draw < wBand) {
+      const t      = rng() * 2 - 1;
+      const [gPerp] = gaussianPair(rng);
+      px = t * bandDir[0] + gPerp * P.band_width * bandPerp[0];
+      py = t * bandDir[1] + gPerp * P.band_width * bandPerp[1];
+    } else {
+      px = rng() * 2 - 1;
+      py = rng() * 2 - 1;
+    }
+    if (px < -1 || px > 1 || py < -1 || py > 1) { i--; continue; }
+    positions[i * 3 + 0] = px;
+    positions[i * 3 + 1] = py;
+    positions[i * 3 + 2] = 0;
+
+    const u         = rng();
+    const t         = Math.pow(u, P.sizeExponent);
+    const sizeRange = P.sizeMax - P.sizeMin;
+    sizes[i] = (P.sizeMin + t * sizeRange) * scaleRatio;
+
+    const c = samplePalette(rng);
+    colors[i * 3 + 0] = c.r;
+    colors[i * 3 + 1] = c.g;
+    colors[i * 3 + 2] = c.b;
+  }
+
+  const geo = new THREE.BufferGeometry();
+  geo.setAttribute('position',  new THREE.BufferAttribute(positions, 3));
+  geo.setAttribute('starColor', new THREE.BufferAttribute(colors,    3));
+  geo.setAttribute('starSize',  new THREE.BufferAttribute(sizes,     1));
+  geo.setAttribute('starSeed',  new THREE.BufferAttribute(seeds,     1));
+
+  const mat = new THREE.ShaderMaterial({
+    vertexShader:   starVert,
+    fragmentShader: starFrag,
+    uniforms: {
+      uEdgeSoftness:  { value: P.edgeSoftness },
+      uUseGaussian:   { value: P.useGaussian ? 1.0 : 0.0 },
+      uGaussianSigma: { value: P.gaussianSigma },
+      uIrregularity:  { value: P.irregularity },
+    },
+    transparent: true,
+    depthWrite:  false,
+    blending:    THREE.NormalBlending,
+  });
+  expScene.add(new THREE.Points(geo, mat));
+
+  const expComposer = new EffectComposer(expRenderer);
+  expComposer.addPass(new RenderPass(expScene, expCam));
+
+  const expBloom = new UnrealBloomPass(
+    new THREE.Vector2(exportW, exportH),
+    P.hal_enabled ? P.hal_strength : 0,
+    P.hal_radius,
+    P.hal_threshold,
+  );
+  expComposer.addPass(expBloom);
+
+  const expCA = new ShaderPass(ChromaticAberrationShader);
+  const caAngleRad = (P.ca_angle * Math.PI) / 180;
+  const caStrength = P.ca_enabled ? P.ca_strength * scaleRatio : 0;
+  expCA.uniforms.uOffset.value.set(
+    (Math.cos(caAngleRad) * caStrength) / exportW,
+    (Math.sin(caAngleRad) * caStrength) / exportH,
+  );
+  expCA.uniforms.uRMult.value   = P.ca_rMult;
+  expCA.uniforms.uBMult.value   = P.ca_bMult;
+  expCA.uniforms.uEnabled.value = P.ca_enabled ? 1.0 : 0.0;
+  expComposer.addPass(expCA);
+
+  const expFC = new ShaderPass(FilmColourShader);
+  expFC.uniforms.uBlackLift.value  = P.fc_blackLift;
+  expFC.uniforms.uGamma.value      = P.fc_gamma;
+  expFC.uniforms.uWarmth.value     = P.fc_warmth;
+  expFC.uniforms.uSaturation.value = P.fc_saturation;
+  expFC.uniforms.uEnabled.value    = P.fc_enabled ? 1.0 : 0.0;
+  expComposer.addPass(expFC);
+
+  const expFG = new ShaderPass(FilmGrainShader);
+  expFG.uniforms.uTime.value       = Math.floor(Math.random() * 1000);
+  expFG.uniforms.uIntensity.value  = P.fg_intensity;
+  expFG.uniforms.uScale.value      = P.fg_scale * scaleRatio;
+  expFG.uniforms.uColorNoise.value = P.fg_colorNoise;
+  expFG.uniforms.uEnabled.value    = P.fg_enabled ? 1.0 : 0.0;
+  expComposer.addPass(expFG);
+
+  expComposer.render();
+
+  await new Promise(resolve => {
+    offscreen.toBlob(blob => {
+      const url = URL.createObjectURL(blob);
+      const a   = document.createElement('a');
+      a.href     = url;
+      a.download = 'starfield_4k.png';
+      a.click();
+      URL.revokeObjectURL(url);
+      resolve();
+    }, 'image/png');
+  });
+
+  expComposer.dispose();
+  geo.dispose();
+  mat.dispose();
+  expRenderer.dispose();
+}
+
+// ---------------------------------------------------------------------------
 // lil-gui
 // ---------------------------------------------------------------------------
 const gui = new GUI({ title: 'Startfield parameters : lil-gui 0.21.0' });
@@ -644,6 +800,8 @@ gui.add(presetState, 'preset', PRESETS.map(p => p.name))
 const ioState = {};
 gui.add({ save: savePreset }, 'save').name('Save JSON ↓');
 gui.add({ load: () => loadInput.click() }, 'load').name('Load JSON ↑');
+gui.add(exportState, 'size', Object.keys(EXPORT_SIZES)).name('Export size');
+gui.add({ fn: exportPNG }, 'fn').name('Export PNG ↓');
 
 const fStars = gui.addFolder('Stars');
 fStars.add(P, 'count',        100, 3000, 1)   .name('Count')         .onFinishChange(buildStars);
