@@ -120,10 +120,4 @@
   .navigation a {
     padding: 6px clamp(3px, 1vw, 6px);
   }
-
-  .nav-links {
-    justify-content: space-between;
-    gap: 0;
-    width: 100%;
-  }
 }
