@@ -67,7 +67,7 @@
   .navigation {
     flex-direction: column;
     justify-content: center;
-    align-items: center;
+    align-items: flex-end;
     gap: 0;
     min-height: 50px;
     max-height: none;
@@ -98,7 +98,7 @@
 
   .nav-links {
     margin-left: 0;
-    justify-content: center;
+    justify-content: flex-end;
     gap: clamp(8px, 2.4vw, 14px);
     row-gap: 4px;
     flex-wrap: wrap;
