@@ -1,46 +1,21 @@
 {{ define "main" }}
-<div id="list-page" class="feature-grid">
+<div id="list-page" class="feature-grid minimal-grid">
     <!-- Only include pages from the 'posts' section. -->
     {{ $postsPages := where .Site.RegularPages "Section" "posts" }}
     {{ $paginator := .Paginate $postsPages }}
 
     {{ range $paginator.Pages }}
   <section class="item">
-    <div class="title">
-      <h1>{{ .Title }}</h1>
-    </div>
-    <div class="tags-date-container">
-      {{ with .Params.tags }}
-      <div class="tags">
-          {{ range . }}
-              <a href="{{ "tags/" | absURL }}{{ . | urlize }}" class="tag {{ . | urlize }}">{{ . }}</a>
-          {{ end }}
-      </div>
-      {{ end }}
-      <div class="date">
-        <a href="{{ .RelPermalink }}"><time datetime="{{ .PublishDate }}">{{ .PublishDate.Format "Jan 2, 2006" }}</time></a>
-      </div>
-    </div>
-    <div class="content content-center">
-      {{ if .Params.tweet }}
-      <blockquote class="twitter-tweet">
-        <a href="{{ .Params.tweet }}"></a>
-      </blockquote>
-      <script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
-      {{ else if .Params.image }}
-      <a href="{{ .RelPermalink }}">
-        <img src="{{ .Params.image | absURL }}" alt="{{ .Title }}">
-      </a>
-      {{ end }}
-    </div>
-    <p class="summary-text">
-      {{ .Summary | replaceRE "</p>$" "" | markdownify | safeHTML }}
-    </p>
-    <div class="read-more">
-      <a href="{{ .RelPermalink }}">Read More</a>
-    </div>
+    <a class="card-link" href="{{ .RelPermalink }}">
+      <span class="thumb">
+        {{ with .Params.image }}
+        <img src="{{ . | absURL }}" alt="" loading="lazy">
+        {{ end }}
+      </span>
+      <h2>{{ .Title }}</h2>
+      <time datetime="{{ .PublishDate }}">{{ .PublishDate.Format "Jan 2, 2006" }}</time>
+    </a>
   </section>
-  <hr class="post-divider" />
   {{ end }}
   {{ if or ($paginator.HasPrev) ($paginator.HasNext) }}
   <div class="pagination">

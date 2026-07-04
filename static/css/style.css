@@ -795,96 +795,72 @@ details[open] summary::after { content: " ▲"; }
     margin-block-end: 0em;
 }
 
-/* Feature page grid layout */
+/* Feature page grid layout - minimal visual index */
 #list-page.feature-grid {
-  /* Maximum 3 columns of 350px items with 50px gutter */
-  max-width: 1200px; /* 3 * 350px + 2 * 50px gaps + 16px padding = 1216px, rounded to 1200px */
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 0 8px; /* minimal outer padding to favor 2 columns */
+  padding: 0 24px;
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 350px));
-  column-gap: 50px; /* requested column spacing */
-  row-gap: 30px;    /* some vertical spacing between items */
-  justify-content: center;
-  position: relative;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  column-gap: 32px;
+  row-gap: 48px;
 }
 
 #list-page.feature-grid .item {
-  max-width: 350px; /* clamp item cell to 350px */
-  width: 100%;      /* follow column width (300–350px) */
-  margin: 0; /* grid handles spacing */
-  position: relative;
-}
-
-/* Dot divider between items */
-#list-page.feature-grid .item::after {
-  content: '';
-  position: absolute;
-  width: 148px;
-  height: 1px;
-  background-color: #bbb;
-  border-radius: 50%;
-  bottom: -15px;
-  left: 50%;
-  transform: translateX(-50%);
-}
-
-/* Hide the post divider in grid layout */
-#list-page.feature-grid .post-divider {
-  display: none;
-}
-
-/* In grid, use width-based constraint and keep aspect ratio */
-#list-page.feature-grid .content-center img {
-  width: 100%;       /* fill the item column width */
-  height: auto;      /* maintain aspect ratio */
-  max-width: 350px;  /* width cap instead of height */
-}
-
-/* Title styling in grid - fixed 2 lines with ellipsis */
-#list-page.feature-grid .item .title {
-  margin-bottom: 10px;
-  height: calc(1.2rem * 1.4 * 2); /* 2 lines */
-  display: flex;
-  align-items: center;
-}
-
-#list-page.feature-grid .item .title h1 {
-  font-size: 1.2rem;
-  font-weight: normal;
   margin: 0;
+  min-width: 0;
+}
+
+/* Whole card is one link */
+#list-page.feature-grid .card-link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Uniform thumbnail: fixed aspect ratio, cropped to fill */
+#list-page.feature-grid .thumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  border-radius: 8px;
+  background-color: #f0f0f0;
+}
+
+#list-page.feature-grid .thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.25s ease;
+}
+
+#list-page.feature-grid .card-link:hover .thumb img {
+  transform: scale(1.03);
+}
+
+#list-page.feature-grid .card-link h2 {
+  font-size: 1rem;
+  font-weight: 600;
   line-height: 1.4;
+  margin: 12px 0 4px 0;
+  text-align: left;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
-  text-overflow: ellipsis;
-  width: 100%;
 }
 
-/* Summary text alignment within grid items */
-#list-page.feature-grid .summary-text {
-  text-align: left;
-  margin-top: 10px;
-}
-
-/* Tags and date container below title - tags left, date right */
-#list-page.feature-grid .tags-date-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 15px;
-  min-height: 24px;
-}
-
-#list-page.feature-grid .tags-date-container .date a {
-  color: #bbb;
-  text-decoration: none;
-  font-size: 0.9rem;
-}
-
-#list-page.feature-grid .tags-date-container .date a:hover {
+#list-page.feature-grid .card-link:hover h2 {
   color: #0366d6;
+}
+
+#list-page.feature-grid .card-link time {
+  color: #bbb;
+  font-size: 0.85rem;
 }
 
 /* Pagination styling for grid */
