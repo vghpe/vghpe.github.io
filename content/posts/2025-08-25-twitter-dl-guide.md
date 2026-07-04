@@ -108,7 +108,7 @@ To do this we use a browser extension called **Get cookies.txt LOCALLY**.
 2. While on the website, open the "Get cookies.txt LOCALLY" extension. Set export format to *Netscape*, Press Export As, navigate to our *TwitterDownloader* folder on the desktop and save it as: `x.com_cookies.txt`
 
 
-![Export Window of the extension](/images/posts/twitter-dl-guide/get_cookies_locally.png)
+![Export Window of the extension](/images/posts/twitter-dl-guide/get-cookies-locally.png)
 
 After this step, your folder should look like this:
 
@@ -178,7 +178,7 @@ cd
 
 Hit **space** then drag-and-drop the TwitterDownloader folder into the window. That will print out it's path. Hit **enter**
 
-![This works both on Windows and MacOS](/images/posts/twitter-dl-guide/twitter_path.png)
+![This works both on Windows and MacOS](/images/posts/twitter-dl-guide/twitter-path.png)
 
 
 We're ready to transfer! Run these commands one at a time. Make sure to replace `<your-username>` with your own username and remove the brackets '<>'. 

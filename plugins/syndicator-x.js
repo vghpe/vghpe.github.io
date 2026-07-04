@@ -228,8 +228,8 @@ class XSyndicator {
         const ghBranch = process.env.GITHUB_BRANCH || 'main';
 
         if (ghUser && ghRepo) {
-          // The media path in JF2 is like "notes/img-5376.jpg"
-          // which maps to "static/notes/img-5376.jpg" in the repo
+          // The media path in JF2 is like "images/sketchbook/img-5376.jpg"
+          // which maps to "static/images/sketchbook/img-5376.jpg" in the repo
           const relativePath = url.startsWith('http')
             ? new URL(url).pathname.replace(/^\//, '')
             : url;

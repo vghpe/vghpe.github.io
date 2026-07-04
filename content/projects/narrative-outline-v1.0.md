@@ -8,7 +8,7 @@ revision: v1.0
 aliases:
 tags:
   - narrative
-image: /images/projects/narrative-outline/nine-platfoms-town_1.gif
+image: /images/projects/narrative-outline/nine-platfoms-town-1.gif
 description: A basic outline of the acts and events
 ---
 

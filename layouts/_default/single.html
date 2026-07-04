@@ -1,7 +1,7 @@
 {{ define "main" }}
 
 <section id="single">
-    {{ if ne .Section "notes" }}
+    {{ if ne .Section "sketchbook" }}
       {{ with .Params.title }}
         <h1 class="title">{{ . }}</h1>
       {{ else }}

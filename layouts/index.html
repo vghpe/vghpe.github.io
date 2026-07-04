@@ -59,7 +59,7 @@
   {{ $allPages := .Site.RegularPages }}
   {{ $recentPosts := slice }}
   {{ range $allPages }}
-    {{ if and (ne .Section "notes") (ne .Section "unlisted") (ne .Section "docs") (ne .Section "projects") }}
+    {{ if and (ne .Section "sketchbook") (ne .Section "projects") }}
       {{/* Exclude articles from recent posts */}}
       {{ $isArticle := false }}
       {{ with .Params.tags }}
@@ -115,7 +115,7 @@
   
 
   {{/* ==================== SKETCHBOOK PREVIEW ==================== */}}
-  {{ $sketches := where .Site.RegularPages "Section" "notes" }}
+  {{ $sketches := where .Site.RegularPages "Section" "sketchbook" }}
   {{/* Filter to only those with images */}}
   {{ $sketchesWithImages := slice }}
   {{ range $sketches }}
@@ -145,7 +145,7 @@
   {{ end }}
 
   {{/* See all posts link */}}
-  <div style="text-align: center; margin: 50px 0 60px;">
+  <div class="see-all">
     <a href="{{ "/archive/" | relURL }}">See more posts →</a>
   </div>
 
@@ -154,8 +154,8 @@
 {{/* Preload atlas image */}}
 <link rel="preload" href="{{ "fonts/futura-sdf-size48-pxrange8.png" | relURL }}" as="image">
 
-{{/* SDF title warp animation */}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/regl/2.1.0/regl.min.js"></script>
+{{/* SDF title warp animation (regl vendored locally, v2.1.0) */}}
+<script src="{{ "tools/scripts/regl.min.js" | relURL }}"></script>
 <script src="{{ "tools/scripts/title-warp.js" | relURL }}"></script>
 
 {{ end }}

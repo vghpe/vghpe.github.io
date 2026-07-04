@@ -8,7 +8,7 @@ draft: false
 tags:
   - article
   - design
-image: /images/posts/kojima-diary-study/img_article_kojima-diary-closed.png
+image: /images/posts/kojima-diary-study/img-article-kojima-diary-closed.png
 summary: I break open Hideo Kojima's diary from the turn of the century and examine the work and processes of the famous director
 description: I break open Hideo Kojima's diary from the turn of the century and examine the work and processes of the famous director
 ---
@@ -39,7 +39,7 @@ I get the sense that he really celebrates the media he consumes, breaking down w
 
 In his diary, Kojima refers to his writing work as "scriptments," a term originally coined by filmmaker James Cameron. A scriptment combines elements of both a script and a treatment, making it more structural than a traditional screenplay. Cameron used this method when writing *Terminator 2*.
 
-![](/images/posts/kojima-diary-study/img_article_kojima-t2.png)
+![](/images/posts/kojima-diary-study/img-article-kojima-t2.png)
 
 By studying filmmakers he admired, Kojima learned about Cameron's process and adapted it as his own writing style for games. His co-writer, Tomokazu Fukushima, defines a Kojima scriptment as "an overly detailed game design document that covers all sorts of aspects such as plot outline, game features, level designs, specifications, etc."
 
@@ -57,7 +57,7 @@ It’s a playfulness that’s characteristic of Japanese media and common in man
 
 I think this flexibility translates well into games and game making. When your audience controls pace and camera in a virtual world that’s barely held together, things will get goofy. So let them be a goof and let the story match that goofiness, (then occasionally hit them with something raw and provoking).
 
-![The Luden Mask is a wearable item in Kojima Productions’ Death Stranding. Its description has a nod to the player (or maybe to the game’s creators); it reads: Designed with Homo Ludens in mind, their form encourages the wearer to never forget their playful side.](/images/posts/kojima-diary-study/img_article_kojima-luden.png)
+![The Luden Mask is a wearable item in Kojima Productions’ Death Stranding. Its description has a nod to the player (or maybe to the game’s creators); it reads: Designed with Homo Ludens in mind, their form encourages the wearer to never forget their playful side.](/images/posts/kojima-diary-study/img-article-kojima-luden.png)
 
 To contrast, a game like *The Last of Us* goes to extreme lengths grounding the player and controlling the experience. Objects and actors don't clip into each other, animations blend seamlessly, and the camera faces the action. It’s all extremely skillfully done, and I admire them both, but maybe with a preference for the goof.
 
@@ -65,7 +65,7 @@ To contrast, a game like *The Last of Us* goes to extreme lengths grounding the 
 
 When I told my peers about this research project and asked them to define what they liked about Kojima's writing, “the charismatic characters” came up a few times, which I thought was pretty apt. The characters are all quite charming, even the bad ones. Maybe especially the bad ones.
 
-![Dead Cell, the villains of MGS2, From the left: Vamp, Fatman, Fortune and Solidus.](/images/posts/kojima-diary-study/img_article_kojima-deadcell.png)
+![Dead Cell, the villains of MGS2, From the left: Vamp, Fatman, Fortune and Solidus.](/images/posts/kojima-diary-study/img-article-kojima-deadcell.png)
 
 One of the intended villains for *Metal Gear Solid 2*, Old Man (or Old Boy), was cut late in production. He would later resurface as fan favorite The End in the sequel. The diary captures the moment of his conceptualization and gives us some great insight into Kojima’s character creation process:
 
@@ -105,7 +105,7 @@ While a large part of the team was still wrapping up the EU versions of *MGS1*, 
 
 What stands out is how impressively close this Grand Game Plan is to the final product. That’s not something I typically see with early Game Design Documents as development tends to drift from that initial vision. I'm also a big fan of the document's format and structure—it’s a template I’ll definitely use for future design and pitch documents.
 
-![The Big Shell - The location where the majority of Metal Gear Solid 2 takes place.](/images/posts/kojima-diary-study/img_article_kojima-bigshell.png)
+![The Big Shell - The location where the majority of Metal Gear Solid 2 takes place.](/images/posts/kojima-diary-study/img-article-kojima-bigshell.png)
 
 Secondly, *MGS2* is designed and laid out in two contained locations: the boat (The Tanker) and the offshore platform (Big Shell). Contained locations provide grounding and serve as anchors for the spectacular events to take place. Big Shell, in particular, with its hexagonal layout, is a level designer's dream—a great space to lay out story events and gameplay.
 
@@ -117,7 +117,7 @@ By not allowing *MGS2* to balloon out with complex locations, the team could sav
 
 My preconceived notion was that Kojima is a bit of an armchair director/writer who thinks a lot about marketing. That was (mostly) wrong. He is very much a hands-on developer with vast knowledge in tech, design, and art. He understands rendering techniques, level design, and texture work. He writes both large-scale story structures and detailed design briefs.
 
-![](/images/posts/kojima-diary-study/img_article_kojima-juggling.png)
+![](/images/posts/kojima-diary-study/img-article-kojima-juggling.png)
 
 Predictably, he comes across as a perfectionist, offering very detailed feedback on specifics. In particular, for *MGS2*, the rain and underwater effects are frequently mentioned and discussed.
 
@@ -143,7 +143,7 @@ This following entry is a telling reflection he shared after watching an intervi
 
 What really blows my mind, though, is the absurd number of projects he juggles simultaneously. While developing *MGS2*, he’s also working on the European version of *MGS1* and *MGS1: Integral*. On top of that, he’s producing an entirely different game, *Zone of the Enders*, and writing movie reviews for a magazine. And if that wasn’t enough, he’s out drinking with colleagues and has a seven-year-old child at home! Somehow, he also finds time to write this dev diary, watch movies, and read books.
 
-![](/images/posts/kojima-diary-study/img_article_kojima-bigjuggle.png)
+![](/images/posts/kojima-diary-study/img-article-kojima-bigjuggle.png)
 
 Predictably, his work-life balance seems busted. Many work entries are written on weekends. The toll the project has on his mental and physical well-being is apparent with vivid descriptions of health issues and frequent visits to doctors and hospitals. It all seems stress-induced:
 
@@ -169,7 +169,7 @@ I didn’t find much insight into the development of emergent gameplay and syste
 
 Something that did surprise me was how enjoyable it was to peek back at the turn of the century—the insane hype for the PlayStation 2. Classic movies hit theaters, like *The Matrix*, *Austin Powers*, and *Eyes Wide Shut*. It was particularly satisfying to read about Kojima’s jealousy of *Zelda* and his envy of Western productions like *Half-Life*.
 
-![My first time playing MGS2 in Sweden somewhere 2002](/images/posts/kojima-diary-study/img_article_kojima-sweroom.png)
+![My first time playing MGS2 in Sweden somewhere 2002](/images/posts/kojima-diary-study/img-article-kojima-sweroom.png)
 
 
 I often wonder if doing these studies and writing these essays actually help me as a creative… or if I should put all that effort into actually… making stuff. It gives me comfort then to see that enjoying and understanding entertainment—and the people who create it—is something Kojima so openly embraces.

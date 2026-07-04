@@ -9,7 +9,7 @@ weight: 2
 aliases:
 tags:
   - narrative
-image: /images/projects/characters/IMG_5639.jpg
+image: /images/projects/characters/img-5639.jpg
 description: Details on the characters
 ---
 

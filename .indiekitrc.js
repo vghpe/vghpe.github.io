@@ -1,8 +1,8 @@
 // .indiekitrc.js
 
-// Path to custom plugin for routing Photo posts into the Notes section
+// Path to custom plugin for routing Note and Photo posts into the Sketchbook section
 const path = require('path');
-const photoToNotesPlugin = path.join(__dirname, 'plugins', 'photo-to-notes.js');
+const postToSketchbookPlugin = path.join(__dirname, 'plugins', 'post-to-sketchbook.js');
 const syndicatorX = path.join(__dirname, 'plugins', 'syndicator-x.js');
 
 module.exports = {
@@ -26,14 +26,16 @@ module.exports = {
     syndicatorX,
     '@indiekit/post-type-note',
     '@indiekit/post-type-photo',
-    photoToNotesPlugin
+    postToSketchbookPlugin
   ],
 
   '@indiekit/store-github': {
     user:  process.env.GITHUB_USER,         // vghpe
     repo:  process.env.GITHUB_REPO,         // vghpe.github.io
     branch: process.env.GITHUB_BRANCH || 'main',
-    path:   process.env.GITHUB_PATH   || 'content/notes',
+    // NOTE: if GITHUB_PATH is set in the deployment environment it overrides
+    // this default and must be updated to content/sketchbook there too.
+    path:   process.env.GITHUB_PATH   || 'content/sketchbook',
     token:  process.env.GITHUB_TOKEN        // PAT with “public_repo” or “repo” scope
   },
 

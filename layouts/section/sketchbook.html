@@ -3,9 +3,7 @@
 <div id="notes-page">
   <div id="list-page" class="sketchbook-grid">
 
-  {{/* Aggregate pages from the notes section and present as Sketchbook */}}
-  {{ $notePages := where .Site.RegularPages "Section" "notes" }}
-  {{ $paginator := .Paginate $notePages }}
+  {{ $paginator := .Paginate .Pages }}
   {{ range $paginator.Pages }}
   
   <section class="item">

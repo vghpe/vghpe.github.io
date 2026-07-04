@@ -7,7 +7,7 @@ aliases:
   - /posts/mgs2-revisit-/
 tags:
   - journal
-image: /images/posts/mgs2-revisit/IMG_2703.jpeg
+image: /images/posts/mgs2-revisit/img-2703.jpeg
 ---
 Finished MGS2 again for the first time in I think 20 years. Still so much fun, I did a whole lot of a research on how it was made and I hope to share more in the future. 
 

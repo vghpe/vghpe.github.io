@@ -8,26 +8,18 @@
 <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{if .IsPage}}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
 
 <!-- Open Graph meta tags for social sharing -->
-<meta property="og:type" content="article">
+<meta property="og:type" content="{{ if .IsPage }}article{{ else }}website{{ end }}">
 <meta property="og:title" content="{{ .Title }}">
 <meta property="og:description" content="{{ with .Description }}{{ . }}{{ else }}{{ if .IsPage }}{{ .Summary }}{{ else }}{{ with .Site.Params.description }}{{ . }}{{ end }}{{ end }}{{ end }}">
 <meta property="og:url" content="{{ .Permalink }}">
 {{ with .Params.image }}
   <meta property="og:image" content="{{ $.Site.BaseURL }}{{ . }}">
   <meta name="twitter:card" content="summary_large_image">
-{{ else }}
-  <meta property="og:image" content="{{ $.Site.BaseURL }}/images/default-image.jpg">
 {{ end }}
-
-
 
 {{ hugo.Generator }}
-{{/* NOTE: For Production make sure you add `HUGO_ENV="production"` before your build command */}}
-{{ if eq (getenv "HUGO_ENV") "production" | or (eq .Site.Params.env "production")  }}
-  <META NAME="ROBOTS" CONTENT="INDEX, FOLLOW">
-{{ else }}
-  <META NAME="ROBOTS" CONTENT="NOINDEX, NOFOLLOW">
-{{ end }}
+{{/* Intentionally NOINDEX: this site is kept out of search engines. */}}
+<meta name="robots" content="noindex, nofollow">
 
 
 

@@ -3,16 +3,16 @@
   {{ if not .IsHome }}
     <div class="nav-breadcrumb-group">
       <a href="{{ "/" | relURL }}" class="nav-branding">henrik docs</a>
-      {{ if or (eq .Section "projects") (eq .Section "Projects") }}
+      {{ if eq .Section "projects" }}
         <span class="nav-separator">·</span>
         <span class="nav-breadcrumb">9 Platforms</span>
-      {{ else if or (eq .Section "posts") (eq .Section "archive") (eq .Section "Archive") }}
+      {{ else if or (eq .Section "posts") (eq .Section "archive") }}
         <span class="nav-separator">·</span>
         <span class="nav-breadcrumb">Blog</span>
-      {{ else if or (eq .Section "notes") (eq .Section "sketchbook") (eq .Section "Sketchbook") }}
+      {{ else if eq .Section "sketchbook" }}
         <span class="nav-separator">·</span>
         <span class="nav-breadcrumb">Sketchbook</span>
-      {{ else if or (eq .Section "about") (eq .Section "About") }}
+      {{ else if eq .Section "about" }}
         <span class="nav-separator">·</span>
         <span class="nav-breadcrumb">About</span>
       {{ end }}

@@ -25,7 +25,7 @@ When recreating this this art digitally, the challenge isn’t covering a canvas
 
 Zooming into a high-resolution capture and compressing the tonal range reveals some of these optical characteristics. Blues tend to shift right, reds bleed outward. There’s also a noticeable amount of film grain and haloing.
 
-![Even with digital artifacts, we can deduce a lot about the analogue pipeline.](/images/posts/gunbuster/buster_levels.png)
+![Even with digital artifacts, we can deduce a lot about the analogue pipeline.](/images/posts/gunbuster/buster-levels.png)
 
 Using blurs, chromatic aberration, a fake noise grain, some film filters we can get pretty close. 
 
@@ -33,17 +33,3 @@ Three.js was used for rendering, lil-gui for the control panel and Claude helped
 
 - [Open the starfield toy](/tools/starfield/)
 - [Check out the repo](https://github.com/vghpe/gunbuster-stars)
-
-
-<!-- 
-IMAGE GUIDE
-  Recommended: 1200×800px landscape JPEG → save to static/images/posts/{slug}/
-  Set image: /images/posts/{slug}/filename.jpg in frontmatter
-  Works across home page, blog listing, and post header (object-fit: cover crops to fit)
-  Full guide: docs/image-guide.md
-
-SHORTCODES
-  Video:  {{< video src="/videos/foo.mp4" type="video/mp4" width="640" height="360" caption="Optional caption" >}}
-  Audio:  {{< audio src="/audio/foo.mp3" type="audio/mpeg" caption="Optional caption" >}}
-  Iframe: {{< iframe src="/path/to/page" allowfullscreen="true" >}}
--->

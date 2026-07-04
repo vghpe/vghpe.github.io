@@ -14,13 +14,15 @@
   margin-bottom: 48px;
 }
 
-.nav-branding {
-  font-size: 20px !important;
+/* Scoped under .navigation so the rules win over the generic `.navigation a`
+   sizing in the mobile media query without needing !important. */
+.navigation .nav-branding {
+  font-size: 20px;
   font-weight: 600;
-  color: #ff3838 !important;
-  font-family: Futura;
+  color: var(--color-brand);
+  font-family: var(--font-brand);
   text-decoration: none;
-  line-height: 1 !important;
+  line-height: 1;
 }
 
 .nav-breadcrumb {
@@ -86,9 +88,9 @@
     white-space: nowrap;
   }
 
-  .nav-branding {
-    font-size: 20px !important;
-    line-height: 1 !important;
+  .navigation .nav-branding {
+    font-size: 20px;
+    line-height: 1;
     margin: 0;
   }
 

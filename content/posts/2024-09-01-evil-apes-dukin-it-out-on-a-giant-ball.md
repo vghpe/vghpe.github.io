@@ -7,7 +7,7 @@ aliases:
   - /posts/evil-apes-dukin-it-out-on-a-giant-ball/
 tags:
   - narrative
-image: /images/posts/evil-apes/IMG_2718.jpeg
+image: /images/posts/evil-apes/img-2718.jpeg
 caption: Official Concept art, published in Disco Elysium Digital Artbook
 ---
 

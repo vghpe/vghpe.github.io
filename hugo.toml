@@ -16,7 +16,6 @@ bio = "Game Design · Systems · Narrative · Art"
 hiddenPostSummaryInHomePage = false
 enableRSS = true
 subscribe = "RSS"
-copyright = "© 2024 Henrik Pettersson. All rights reserved."
 showPowerBy = false
 author = "Henrik Pettersson"
 
@@ -29,11 +28,8 @@ author = "Henrik Pettersson"
     lineNumbersInTable = false
     lineNos = false
 
-[[menu.main]]
-  name = "Sketchbook"
-  url = "/sketchbook/"
-  weight = 2
-
 [permalinks]
-  # Render pages from the `notes` section under /sketchbook/:slug/
-  notes = "/sketchbook/:slug/"
+  # slug when set (titled posts), else filename (IndieKit hash-named posts).
+  # The filename is the slug IndieKit generates, so /sketchbook/<hash>/ matches
+  # the URL IndieKit reports when publishing.
+  sketchbook = "/sketchbook/:slugorfilename/"

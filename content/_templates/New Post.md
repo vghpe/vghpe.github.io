@@ -25,8 +25,8 @@ IMAGE GUIDE
   Full guide: docs/image-guide.md
 
 SHORTCODES
-  Video:  {{< video src="/videos/foo.mp4" type="video/mp4" width="640" height="360" caption="Optional caption" >}}
-  Audio:  {{< audio src="/audio/foo.mp3" type="audio/mpeg" caption="Optional caption" >}}
-  Iframe: {{< iframe src="/path/to/page" allowfullscreen="true" >}}
+  Video:  {{</* video src="/videos/foo.mp4" type="video/mp4" width="640" height="360" caption="Optional caption" */>}}
+  Audio:  {{</* audio src="/audio/foo.mp3" type="audio/mpeg" caption="Optional caption" */>}}
+  Iframe: {{</* iframe src="/path/to/page" allowfullscreen="true" */>}}
 -->
 

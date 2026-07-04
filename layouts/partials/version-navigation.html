@@ -1,24 +1,24 @@
 {{ if and .Params.document .Params.revision }}
-<div style="max-width: 680px; margin: 60px auto 0; padding: 0 24px; border-top: 1px solid #eee; padding-top: 30px;">
-  <div style="display: flex; justify-content: space-between; align-items: center;">
-    
+<div class="version-nav">
+  <div class="version-nav-row">
+
     {{/* Find all versions of this document */}}
     {{ $currentDoc := .Params.document }}
     {{ $currentRev := .Params.revision }}
     {{ $allVersions := slice }}
-    
+
     {{ range where .Site.RegularPages "Params.document" $currentDoc }}
       {{ $allVersions = $allVersions | append . }}
     {{ end }}
-    
+
     {{/* Sort by revision string */}}
     {{ $allVersions = sort $allVersions ".Params.revision" }}
-    
+
     {{/* Find prev and next */}}
     {{ .Scratch.Set "prevPage" false }}
     {{ .Scratch.Set "nextPage" false }}
     {{ .Scratch.Set "foundCurrent" false }}
-    
+
     {{ range $allVersions }}
       {{ if eq .Params.revision $currentRev }}
         {{ $.Scratch.Set "foundCurrent" true }}
@@ -30,34 +30,34 @@
         {{ $.Scratch.Set "prevPage" . }}
       {{ end }}
     {{ end }}
-    
+
     {{ $prev := .Scratch.Get "prevPage" }}
     {{ $next := .Scratch.Get "nextPage" }}
-    
+
     <div>
       {{ if $prev }}
-        <a href="{{ $prev.RelPermalink }}" style="color: #4a9eff; text-decoration: none;">
+        <a href="{{ $prev.RelPermalink }}">
           ← {{ $prev.Params.revision }}
         </a>
       {{ else }}
-        <span style="color: #ccc;">← Older version</span>
+        <span class="version-disabled">← Older version</span>
       {{ end }}
     </div>
-    
-    <div style="color: #666;">
+
+    <div class="version-current">
       {{ $currentRev }}
     </div>
-    
+
     <div>
       {{ if $next }}
-        <a href="{{ $next.RelPermalink }}" style="color: #4a9eff; text-decoration: none;">
+        <a href="{{ $next.RelPermalink }}">
           {{ $next.Params.revision }} →
         </a>
       {{ else }}
-        <span style="color: #ccc;">Newer version →</span>
+        <span class="version-disabled">Newer version →</span>
       {{ end }}
     </div>
-    
+
   </div>
 </div>
 {{ end }}

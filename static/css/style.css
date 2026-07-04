@@ -1,21 +1,44 @@
+/* ---- Design tokens ----
+   Single source of truth for the palette. All four stylesheets use these. */
+:root {
+  --font-brand: Futura, sans-serif;
+
+  --color-text: #404040;
+  --color-text-muted: #757575;
+  --color-text-soft: #999;
+  --color-text-faint: #bbb;
+
+  --color-link: #5badf0;
+  --color-link-hover: #0366d6;
+  --color-link-alt: #c45a00;   /* landing article links */
+  --color-heading: #364e4a;    /* profile / landing titles */
+  --color-brand: #ff3838;      /* site name */
+
+  --color-accent: #619cd7;     /* playable tag */
+  --color-accent-hover: #507fb8;
+
+  --color-tag-bg: #f2f2f2;
+  --color-border: #eee;
+}
+
 html[theme='dark-mode'] {
   filter: invert(1) hue-rotate(180deg);
 }
 
 body {
   font: normal 15px/1.5em 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: #404040;
+  color: var(--color-text);
   line-height: 1.5;
   letter-spacing: 0.008em;
 }
 
 a {
   text-decoration: none;
-  color: #5badf0;
+  color: var(--color-link);
 }
 
 a:hover {
-  color: #0366d6;
+  color: var(--color-link-hover);
 }
 
 html {
@@ -74,12 +97,12 @@ html {
 }
 
 .read-more a {
-    color: #5badf0;
+    color: var(--color-link);
     text-decoration: none;
 }
 
 .read-more a:hover {
-    color: #0366d6;
+    color: var(--color-link-hover);
     text-decoration: underline;
 }
 
@@ -90,40 +113,14 @@ html {
     margin: 10px 0;
 }
 
-/* Tags and Date Container Styling */
-.tags-date-container {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 20px;
-}
-
-.tags a {
-    background-color: #f0f0f0;
-    color: #333;
-    padding: 5px 10px;
-    text-decoration: none;
-    margin-right: 5px;
-    border-radius: 5px;
-    font-size: 0.9rem;
-}
-
-.date a {
-    color: #999;
-    text-decoration: none;
-    font-size: 0.9rem;
-}
-
-
-
 /* markdown content styles */
 blockquote {
   margin-top: 5px;
   margin-bottom: 5px;
   padding-left: 1em;
   margin-left: 0px;
-  border-left: 3px solid #eee;
-  color: #757575;
+  border-left: 3px solid var(--color-border);
+  color: var(--color-text-muted);
 }
 
 hr {
@@ -200,15 +197,15 @@ pre {
 .markdown-image img {
   max-width: 100%;
 }
-.anchor { 
-  font-size: 100%; 
-  visibility: hidden; 
+.anchor {
+  font-size: 100%;
+  visibility: hidden;
   color:silver;
 }
 /*h1:hover a, */
 h2:hover a,
 h3:hover a,
-h4:hover a { 
+h4:hover a {
   visibility: visible
 }
 .highlight pre {
@@ -241,7 +238,7 @@ mark {
 }
 
 .text-blue {
-  color: #0366d6;
+  color: var(--color-link-hover);
   font-weight: 500;
 }
 
@@ -283,7 +280,7 @@ pre code {
   margin-top: 100px;
   margin-bottom: 100px;
   text-align: center;
-  color: #bbbbbb;
+  color: var(--color-text-faint);
   font-size: 14px;
 }
 #footer .copyright {
@@ -320,6 +317,13 @@ pre code {
   text-align: center;
 }
 
+/* Left-aligned page-header variant (used by list pages) */
+.profile--page {
+  text-align: left;
+  max-width: 580px;
+  padding: 0 24px;
+}
+
 .profile .avatar {
   display: inline-block;
   width: 80px;
@@ -327,19 +331,60 @@ pre code {
   border-radius: 50%;
 }
 
+.profile h1 {
+  font-weight: 400;
+  letter-spacing: 0px;
+  font-size: 20px;
+  color: var(--color-heading);
+  margin-bottom: 8px;
+  margin-top: 0;
+}
 
-.tags a {
-    background: #f2f2f2; /* Default background color */
+.profile p {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--color-text-muted);
+  margin-top: 0;
+  margin-bottom: 0;
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Brand title: the site name. Same style wherever it appears.
+   (Nav-bar variant lives in navigation.css at a smaller size.) */
+h1.brand-title {
+  font-family: var(--font-brand);
+  font-size: 42px;
+  font-weight: 600;
+  color: var(--color-brand);
+  margin: 0;
+  text-align: left;
+}
+
+/* ---- Tag pills (shared) ---- */
+.tags a,
+#tags .tag a {
+    background: var(--color-tag-bg);
     padding: 4px 7px;
-    color: #757575; /* Default text color */
+    color: var(--color-text-muted);
     font-size: 14px;
     margin-right: 3px;
     text-decoration: none;
     border-radius: 3px;
 }
 
-.tags a:hover {
-    color: #0366d6; /* Hover color */
+.tags a:hover,
+#tags .tag a:hover {
+    color: var(--color-link-hover);
+}
+
+/* Context overrides */
+#tags .tag a {
+    color: var(--color-text);
+}
+
+#archive .group .value .tags a {
+    color: var(--color-text-soft);
 }
 
 /* Specific tag styles with very light colors */
@@ -383,13 +428,13 @@ pre code {
 }
 
 .tags a.playable {
-    background-color: #619cd7;
+    background-color: var(--color-accent);
     color: #fbfbfb !important;
     font-weight: 500;
 }
 
 .tags a.playable:hover {
-    background-color: #507fb8;
+    background-color: var(--color-accent-hover);
     color: #fbfbfb !important;
 }
 
@@ -408,28 +453,14 @@ pre code {
 
 .date {
     margin-left: auto;
-    color: #bbb;
+    color: var(--color-text-faint);
     text-align: right;
 }
 
-
-.profile h1 {
-  font-weight: 400;
-  letter-spacing: 0px;
-  font-size: 20px;
-  color: #364e4a;
-  margin-bottom: 8px;
-  margin-top: 0;
-}
-
-.profile p {
-  font-size: 14px;
-  font-weight: 300;
-  color: #757575;
-  margin-top: 0;
-  margin-bottom: 0;
-  line-height: 1.5;
-  text-align: center;
+.date a {
+    color: var(--color-text-soft);
+    text-decoration: none;
+    font-size: 0.9rem;
 }
 
 /* index post list */
@@ -445,7 +476,7 @@ pre code {
 
 #list-page .title {
   display: inline-block;
-  color: #404040;
+  color: var(--color-text);
   font-size: 20px;
   font-weight: 400;
   margin-bottom: 10px;
@@ -453,12 +484,12 @@ pre code {
 }
 
 #list-page .title a {
-  color: #404040;
+  color: var(--color-text);
   display: block;
 }
 
 #list-page .title a:hover {
-  color: #0366d6;
+  color: var(--color-link-hover);
 }
 
 #list-page .date {
@@ -467,11 +498,11 @@ pre code {
   text-align: right;
   position: relative;
   top: 1px;
-  color: #bbb;
+  color: var(--color-text-faint);
 }
 
 #list-page .summary {
-  color: #757575;
+  color: var(--color-text-muted);
   margin-top: 12px;
   word-break: normal;
   overflow-wrap: anywhere;
@@ -507,7 +538,7 @@ pre code {
   margin-top: 30px; /* adjust as needed */
 }
 
-/* Sketchbook (formerly Notes) grid layout */
+/* Sketchbook grid layout */
 #notes-page #list-page.sketchbook-grid {
   /* Maximum 3 columns of 350px items with 50px gutter */
   max-width: 1200px; /* 3 * 350px + 2 * 50px gaps + 16px padding = 1216px, rounded to 1200px */
@@ -537,7 +568,7 @@ pre code {
 /* Date at top of each item, tight to image */
 #notes-page #list-page.sketchbook-grid .date-top {
   text-align: right;
-  color: #bbb;
+  color: var(--color-text-faint);
   font-size: 0.9rem;
   margin: 0; /* no margins as requested */
 }
@@ -545,25 +576,6 @@ pre code {
 /* Summary text alignment within grid items */
 #notes-page #list-page.sketchbook-grid .summary-text {
   text-align: left;
-}
-
-/* Pagination styling for sketchbook grid */
-#notes-page #list-page.sketchbook-grid .pagination {
-  grid-column: 1 / -1; /* span all columns */
-  margin-top: 30px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-#notes-page #list-page.sketchbook-grid .pagination .prev {
-  text-align: left;
-}
-
-#notes-page #list-page.sketchbook-grid .pagination .next {
-  text-align: right;
-  margin-left: auto;
 }
 
 /* single page */
@@ -608,16 +620,6 @@ pre code {
 #single .tags {
   margin-top: 24px;
 }
-#single .tags a {
-  background: #f2f2f2;
-  padding: 4px 7px;
-  color: #757575;
-  font-size: 14px;
-  margin-right: 3px;
-}
-#single .tags a:hover {
-  color: #0366d6;
-}
 
 
 #archive {
@@ -631,7 +633,7 @@ pre code {
 }
 
 #archive .group {
-  margin: 24px auto; 
+  margin: 24px auto;
 }
 #archive .group .key {
   font-size: 20px;
@@ -644,7 +646,7 @@ pre code {
 }
 #archive .group .value .date {
   display: inline-block;
-  color: #999;
+  color: var(--color-text-soft);
   min-width: 60px;
   margin-right: 10px;
 }
@@ -652,24 +654,14 @@ pre code {
   display: inline;
 }
 #archive .group .value .title a {
-  color:#404040;
+  color: var(--color-text);
 }
 #archive .group .value .title a:hover {
-  color: #0366d6;
+  color: var(--color-link-hover);
 }
 #archive .group .value .tags {
   display: inline;
   margin-left: 7px;
-}
-#archive .group .value .tags a {
-  background: #f2f2f2;
-  padding: 4px 7px;
-  color: #999;
-  font-size: 14px;
-  margin-right: 3px;
-}
-#archive .group .value .tags a:hover {
-  color: #0366d6;
 }
 
 /* taxonomy */
@@ -691,17 +683,6 @@ pre code {
     display: inline-block;
     margin: 4px 5px;
   }
-}
-
-#tags .tag a {
-  background: #f2f2f2;
-  padding: 4px 7px;
-  color: #404040;
-  font-size: 14px;
-  margin-right: 3px;
-}
-#tags .tag a:hover {
-  color: #0366d6;
 }
 
 /* section page */
@@ -730,7 +711,7 @@ pre code {
 
 #page-404 .title {
   display: inline-block;
-  color: #404040;
+  color: var(--color-text);
   font-size: 15px;
   font-weight: 400;
   margin: 0;
@@ -755,7 +736,7 @@ pre code {
   text-align: right;
   position: relative;
   top: 1px;
-  color: #bbb;
+  color: var(--color-text-faint);
 }
 
 /* ---- Shortcodes styling ---- */
@@ -855,15 +836,16 @@ details[open] summary::after { content: " ▲"; }
 }
 
 #list-page.feature-grid .card-link:hover h2 {
-  color: #0366d6;
+  color: var(--color-link-hover);
 }
 
 #list-page.feature-grid .card-link time {
-  color: #bbb;
+  color: var(--color-text-faint);
   font-size: 0.85rem;
 }
 
-/* Pagination styling for grid */
+/* ---- Pagination (grid layouts, shared) ---- */
+#list-page.sketchbook-grid .pagination,
 #list-page.feature-grid .pagination {
   grid-column: 1 / -1; /* span all columns */
   margin-top: 30px;
@@ -873,11 +855,40 @@ details[open] summary::after { content: " ▲"; }
   align-items: center;
 }
 
+#list-page.sketchbook-grid .pagination .prev,
 #list-page.feature-grid .pagination .prev {
   text-align: left;
 }
 
+#list-page.sketchbook-grid .pagination .next,
 #list-page.feature-grid .pagination .next {
   text-align: right;
   margin-left: auto;
+}
+
+/* ---- Document version navigation (projects, design docs) ---- */
+.version-nav {
+  max-width: 680px;
+  margin: 60px auto 0;
+  padding: 30px 24px 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.version-nav-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.version-nav a {
+  color: var(--color-link);
+  text-decoration: none;
+}
+
+.version-nav .version-disabled {
+  color: #ccc;
+}
+
+.version-nav .version-current {
+  color: #666;
 }
