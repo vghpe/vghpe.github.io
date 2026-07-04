@@ -1,9 +1,22 @@
 ---
 date: {{ .Date }}
-syndication: ""
-photo: ""
+publishDate: {{ .Date }}
+images:
+  - notes/example.jpg
+photo:
+  - url: notes/example.jpg
+    alt: ""
+category: []
+syndication: []
 ---
 
-# Optional front matter:
-# syndication: URL to original post (for cross-posting)
-# photo: path or URL to an image
+<!--
+Notes are normally created by IndieKit (photo posts land here via
+plugins/photo-to-notes.js). This archetype mirrors that shape for
+hand-authored notes:
+  images:      list of image paths under static/notes/
+  photo:       list of { url, alt } objects
+  category:    list of tags, e.g. [sketch, fineliner]
+  syndication: list of cross-post URLs (Bluesky, X)
+Remove images/photo for text-only notes.
+-->
