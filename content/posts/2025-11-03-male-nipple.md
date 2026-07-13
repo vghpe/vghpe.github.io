@@ -1,5 +1,5 @@
 ---
-title: "Prototype: How to touch the male nipple"
+title: Do you know how to touch the male nipple?
 date: 2025-11-03T00:00:00
 draft: false
 slug: nipps-proto

@@ -1,5 +1,5 @@
 ---
-title: FLCL — A dive into the creative process that shaped the cult anime
+title: Deed Dive - The creative process that shaped FLCL
 date: 2025-07-17
 draft: false
 slug: flcl-creative-process

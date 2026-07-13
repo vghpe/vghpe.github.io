@@ -1,5 +1,5 @@
 ---
-title: Is It the Words, the Voice, or the Mood?
+title: What makes a narrative work? Is It the Words, the VO, or the Mood?
 date: 2024-09-01T17:56:48-07:00
 draft: false
 slug: evil-apes-dukin-it-out-on-a-giant-ball

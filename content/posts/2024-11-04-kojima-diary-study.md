@@ -1,5 +1,5 @@
 ---
-title: "Peeking into Kojima's Diary: Lessons in Creativity and Process"
+title: Deep Dive - Reading Kojima's Diary - Creative lessons
 date: 2024-11-04
 slug: kojima-diary-study
 aliases:

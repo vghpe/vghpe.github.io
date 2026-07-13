@@ -1,5 +1,5 @@
 ---
-title: Recreating the starfield background art from the 1988 anime Gunbuster
+title: Starfield - Recreating Gunbuster space Backgrounds
 date: 2026-04-17T15:53:18+02:00
 draft: false
 slug: gunbuster

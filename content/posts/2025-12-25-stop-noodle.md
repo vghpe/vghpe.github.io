@@ -1,5 +1,5 @@
 ---
-title: Don't be precious and practice lots
+title: Stop Noodeling - A self hosted drawing-reference app using Eagle
 date: 2025-12-25T00:00:00
 draft: false
 slug: stop-noodle

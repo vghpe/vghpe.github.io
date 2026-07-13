@@ -1,9 +1,9 @@
 ---
-title: Testing Unity Web Project Export
+title: A test of Unity's web export in 2025
 date: 2025-01-22T15:30:00-07:00
 image: /images/posts/first-unity-export-test/jumproad-export.gif
 tags:
-  - design 
+  - design
   - playable
 slug: first-unity-export-test
 aliases:

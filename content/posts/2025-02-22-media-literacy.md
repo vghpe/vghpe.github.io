@@ -1,5 +1,5 @@
 ---
-title: Automated Media Literacy and Rhetorical Analysis of YouTube Videos
+title: Tool - Automated Media Literacy and Rhetorical Analysis
 date: 2025-02-22T15:09:56
 slug: media-literacy
 aliases:

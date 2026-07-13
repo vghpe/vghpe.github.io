@@ -1,5 +1,5 @@
 ---
-title: Batch download all media you've liked or bookmarked on X/Twitter
+title: Guide - Batch download all media you've liked or bookmarked on X/Twitter
 date: 2025-08-25T13:17:00
 draft: false
 slug: twitter-dl-guide
