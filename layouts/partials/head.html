@@ -30,6 +30,12 @@
   <link rel="stylesheet" href="{{ "/css/projects.css" | relURL }}">
 {{ end }}
 
+{{ if .IsHome }}
+  <link rel="stylesheet" href="{{ "/css/landing.css" | relURL }}">
+  {{/* Atlas for the SDF title warp; preloaded here so it is in flight before the scripts run */}}
+  <link rel="preload" href="{{ "/fonts/futura-sdf-size48-pxrange8.png" | relURL }}" as="image">
+{{ end }}
+
 {{ range .Site.Params.customCSS }}
   {{ if ( or ( hasPrefix . "http://" ) ( hasPrefix . "https://" ) ) }}
     <!-- remote css -->

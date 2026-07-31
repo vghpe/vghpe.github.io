@@ -1,7 +1,6 @@
 {{ define "main" }}
 
-{{/* Include landing page CSS */}}
-<link rel="stylesheet" href="{{ "css/landing.css" | relURL }}">
+{{/* landing.css and the SDF atlas preload live in head.html, behind {{ if .IsHome }} */}}
 
 <div class="landing-container">
   
@@ -150,9 +149,6 @@
   </div>
 
 </div>
-
-{{/* Preload atlas image */}}
-<link rel="preload" href="{{ "fonts/futura-sdf-size48-pxrange8.png" | relURL }}" as="image">
 
 {{/* SDF title warp animation (regl vendored locally, v2.1.0) */}}
 <script src="{{ "tools/scripts/regl.min.js" | relURL }}"></script>

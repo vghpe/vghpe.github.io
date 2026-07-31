@@ -146,7 +146,7 @@ th, td {
 }
 
 table td, td {
-  border-spacing: none;
+  border-spacing: 0;
   border-style: solid;
   padding: 10px 15px;
   border-width: 1px 0 0 0;
