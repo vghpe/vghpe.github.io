@@ -44,7 +44,7 @@
       <div class="info">
         <div class="date">{{ .Date.Format "Jan 2, 2006" }}</div>
         <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-        <p class="summary">{{ .Summary | plainify | truncate 160 }}</p>
+        <p class="summary">{{ .Summary | plainify | htmlUnescape | truncate 160 }}</p>
       </div>
     </div>
     {{ end }}
@@ -90,7 +90,7 @@
         {{ end }}
         <div class="date">{{ $page.Date.Format "Jan 2, 2006" }}</div>
         <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
-        <p class="summary">{{ $page.Summary | plainify | truncate 200 }}</p>
+        <p class="summary">{{ $page.Summary | plainify | htmlUnescape | truncate 200 }}</p>
       </div>
       {{ else }}
       {{/* Stacked right */}}
@@ -103,7 +103,7 @@
         <div class="info">
           <div class="date">{{ $page.Date.Format "Jan 2, 2006" }}</div>
           <h3><a href="{{ $page.RelPermalink }}">{{ $page.Title }}</a></h3>
-          <p class="summary">{{ $page.Summary | plainify | truncate 150 }}</p>
+          <p class="summary">{{ $page.Summary | plainify | htmlUnescape | truncate 150 }}</p>
         </div>
       </div>
       {{ end }}
