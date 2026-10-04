@@ -8,9 +8,19 @@
 # Posts:    static/images/posts/{slug}/      (directory must exist — run Setup Post first)
 # Projects: static/images/projects/{document}/  (directory is auto-created)
 #
+# Moved images are stripped of metadata (GPS, camera, dates) since this repo is
+# public; orientation and colour profile are kept. Requires exiftool.
+#
 # Usage: bash scripts/fix-post-images.sh /absolute/path/to/file.md
 
 set -euo pipefail
+
+# Templater runs without the shell profile, so Homebrew may not be on PATH
+PATH="/opt/homebrew/bin:/usr/local/bin:$PATH"
+if ! command -v exiftool >/dev/null; then
+  echo "ERROR: exiftool not found (brew install exiftool). No images moved."
+  exit 1
+fi
 
 POST_FILE="$1"
 REPO_ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -57,6 +67,7 @@ while IFS= read -r image_name; do
   fi
 
   mv "$src" "$dest"
+  exiftool -q -q -all= -tagsfromfile @ -Orientation -icc_profile -overwrite_original "$dest"
 
   hugo_path="$HUGO_BASE/$image_name"
   python3 -c "
