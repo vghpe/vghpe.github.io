@@ -32,3 +32,83 @@ index 6acc38e..d7852fb 100644
 +})();
 +</script>
 \ No newline at end of file
+diff --git a/node_modules/@indiekit/endpoint-posts/includes/post-types/content-field.njk b/node_modules/@indiekit/endpoint-posts/includes/post-types/content-field.njk
+index 4960e2e..9ccdc88 100644
+--- a/node_modules/@indiekit/endpoint-posts/includes/post-types/content-field.njk
++++ b/node_modules/@indiekit/endpoint-posts/includes/post-types/content-field.njk
+@@ -1,11 +1,14 @@
++{# Patched: notes and photos get a plain textarea; EasyMDE (CodeMirror 5) fights the iOS keyboard #}
++{% set plainText = postType == "note" or postType == "photo" %}
+ {{ textarea({
+   name: "content",
+   value: properties.content.text or fieldData("content").value,
+   label: __("posts.form.content.label"),
+   optional: not field.required,
+   errorMessage: fieldData("content").errorMessage,
++  rows: 6 if plainText,
+   field: {
+-    attributes: {
++    attributes: {} if plainText else {
+       editor: true,
+       "editor-endpoint": application.mediaEndpoint,
+       "editor-id": (properties.uid or ("new-" + postType)) + "-content",
+diff --git a/node_modules/@indiekit/endpoint-posts/lib/controllers/form.js b/node_modules/@indiekit/endpoint-posts/lib/controllers/form.js
+index 2ddd944..c7ca587 100644
+--- a/node_modules/@indiekit/endpoint-posts/lib/controllers/form.js
++++ b/node_modules/@indiekit/endpoint-posts/lib/controllers/form.js
+@@ -104,9 +104,36 @@ export const formController = {
+         accessToken,
+         jsonBody,
+       );
+-      const message = encodeURIComponent(micropubResponse.success_description);
++      let message = micropubResponse.success_description;
++
++      // Patched: ticking a syndication target is enough; syndicate right
++      // away instead of needing the Syndicate button on the post afterwards.
++      // On failure the post keeps `mp-syndicate-to`, so the button still works.
++      const { _syndicationEndpointPath } = request.app.locals.application;
++      if (
++        action === "create" &&
++        values["mp-syndicate-to"] &&
++        micropubResponse.location &&
++        _syndicationEndpointPath
++      ) {
++        try {
++          const syndicationResponse = await endpoint.post(
++            new URL(_syndicationEndpointPath, micropubEndpoint).href,
++            accessToken,
++            {
++              access_token: accessToken,
++              syndication: { source_url: micropubResponse.location },
++            },
++          );
++          message += `. ${syndicationResponse.success_description}`;
++        } catch (error) {
++          message += `. Syndication failed (${error.message}), use the Syndicate button on the post to retry`;
++        }
++      }
+ 
+-      response.redirect(`${request.baseUrl}?success=${message}`);
++      response.redirect(
++        `${request.baseUrl}?success=${encodeURIComponent(message)}`,
++      );
+     } catch (error) {
+       response.status(error.status || 500);
+       response.render("post-form", {
+diff --git a/node_modules/@indiekit/endpoint-posts/lib/endpoint.js b/node_modules/@indiekit/endpoint-posts/lib/endpoint.js
+index eaafaa2..938506a 100644
+--- a/node_modules/@indiekit/endpoint-posts/lib/endpoint.js
++++ b/node_modules/@indiekit/endpoint-posts/lib/endpoint.js
+@@ -46,8 +46,10 @@ export const endpoint = {
+       throw await IndiekitError.fromFetch(endpointResponse);
+     }
+ 
++    // Patched: also return `location`, so the form can syndicate a new post
++    const location = endpointResponse.headers.get("location");
+     return endpointResponse.status === 204
+-      ? { success_description: endpointResponse.headers.get("location") }
+-      : await endpointResponse.json();
++      ? { success_description: location }
++      : { location, ...(await endpointResponse.json()) };
+   },
+ };

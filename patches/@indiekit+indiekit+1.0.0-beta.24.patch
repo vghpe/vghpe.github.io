@@ -1,0 +1,14 @@
+diff --git a/node_modules/@indiekit/indiekit/config/express.js b/node_modules/@indiekit/indiekit/config/express.js
+index 33cd6a8..caf4151 100644
+--- a/node_modules/@indiekit/indiekit/config/express.js
++++ b/node_modules/@indiekit/indiekit/config/express.js
+@@ -45,7 +45,8 @@ export const expressConfig = (Indiekit) => {
+     cookieSession({
+       name: Indiekit.config.application.name,
+       secret: process.env.SECRET || crypto.randomUUID(),
+-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days,
++      // Patched: match the 90-day IndieAuth token so the phone stays signed in
++      maxAge: 90 * 24 * 60 * 60 * 1000, // 90 days,
+     }),
+   );
+ 

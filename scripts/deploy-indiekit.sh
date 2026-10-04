@@ -28,7 +28,10 @@ if [[ "${1:-}" == "--check" ]]; then
   echo "── Drift check (dry run, no changes) ──"
 fi
 
-LOCK_BEFORE=$(ssh "$PI" "md5sum $DEST/package-lock.json | cut -d' ' -f1")
+# Fingerprint of lockfile + patches: npm ci is needed when either changes,
+# since patch-package only applies patches to a fresh install
+deps_hash() { ssh "$PI" "cat $DEST/package-lock.json $DEST/patches/* 2>/dev/null | md5sum | cut -d' ' -f1"; }
+DEPS_BEFORE=$(deps_hash)
 
 rsync "${FLAGS[@]}" .indiekitrc.js package.json package-lock.json "$PI:$DEST/"
 rsync "${FLAGS[@]}" --delete plugins/ "$PI:$DEST/plugins/"
@@ -39,9 +42,8 @@ if $CHECK; then
   exit 0
 fi
 
-LOCK_AFTER=$(ssh "$PI" "md5sum $DEST/package-lock.json | cut -d' ' -f1")
-if [[ "$LOCK_BEFORE" != "$LOCK_AFTER" ]]; then
-  echo "── Lockfile changed: running npm ci (postinstall applies patches) ──"
+if [[ "$DEPS_BEFORE" != "$(deps_hash)" ]]; then
+  echo "── Lockfile or patches changed: running npm ci (postinstall applies patches) ──"
   ssh "$PI" "cd $DEST && npm ci"
 fi
 
