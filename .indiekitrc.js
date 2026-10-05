@@ -4,6 +4,7 @@
 const path = require('path');
 const postToSketchbookPlugin = path.join(__dirname, 'plugins', 'post-to-sketchbook.js');
 const syndicatorX = path.join(__dirname, 'plugins', 'syndicator-x.js');
+const photoCrop = path.join(__dirname, 'plugins', 'photo-crop', 'index.js');
 
 module.exports = {
   /* Mongo cache / token store (Atlas) */
@@ -26,7 +27,8 @@ module.exports = {
     syndicatorX,
     '@indiekit/post-type-note',
     '@indiekit/post-type-photo',
-    postToSketchbookPlugin
+    postToSketchbookPlugin,
+    photoCrop
   ],
 
   '@indiekit/store-github': {

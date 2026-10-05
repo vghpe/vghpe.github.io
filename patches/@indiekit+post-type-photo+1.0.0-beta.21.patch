@@ -1,0 +1,13 @@
+diff --git a/node_modules/@indiekit/post-type-photo/includes/post-types/photo-field.njk b/node_modules/@indiekit/post-type-photo/includes/post-types/photo-field.njk
+index 4c3fab5..186d6dc 100644
+--- a/node_modules/@indiekit/post-type-photo/includes/post-types/photo-field.njk
++++ b/node_modules/@indiekit/post-type-photo/includes/post-types/photo-field.njk
+@@ -44,4 +44,6 @@
+   </li>
+   {% endfor %}
+ </ol>
+-{% endcall %}
+\ No newline at end of file
++{% endcall %}
++{# Patched: square cropper before upload, served by plugins/photo-crop #}
++<script src="/photo-crop/photo-crop.js" defer></script>
