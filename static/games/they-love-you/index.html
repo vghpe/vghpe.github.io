@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>They Love You</title>
+    <style>
+      html, body { height: 100%; margin: 0; background: #fff; overflow: hidden; }
+      #game { position: absolute; inset: 0; margin: auto; width: min(100vw, 100vh); height: min(100vw, 100vh); }
+      canvas { display: block; width: 100%; height: 100%; outline: none; }
+      #bar { position: absolute; left: 20%; right: 20%; top: 50%; height: 6px; background: rgba(0, 0, 0, 0.35); }
+      #fill { height: 100%; width: 0; background: #f19ba3; }
+      #message { position: absolute; left: 0; right: 0; bottom: 12%; text-align: center; color: #fff; font: 600 clamp(14px, 4vmin, 22px) system-ui, sans-serif;
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8); display: none; }
+    </style>
+  </head>
+  <body>
+    <div id="game">
+      <canvas id="unity-canvas" width="720" height="720" tabindex="-1"></canvas>
+      <div id="bar"><div id="fill"></div></div>
+      <div id="message"></div>
+    </div>
+    <script>
+      // With ?stats: times every shader program link (Firefox blocks on it, about 200 ms each)
+      // and logs the uniforms and attributes of slow ones, which tell which shader and
+      // lighting variant it was.
+      if (/stats/.test(location.search)) (function () {
+        var P = WebGL2RenderingContext.prototype, get = P.getProgramParameter, links = 0, t0 = performance.now();
+        P.getProgramParameter = function (program, pname) {
+          var start = performance.now(), result = get.call(this, program, pname), ms = performance.now() - start;
+          if (pname !== this.LINK_STATUS) return result;
+          links++;
+          var at = ((start - t0) / 1000).toFixed(2) + " s";
+          if (ms < 20) { console.log("[gl] link #" + links + " " + ms.toFixed(0) + " ms at " + at); return result; }
+          var names = function (count, info) { var out = []; for (var i = 0; i < count; i++) { var a = info(i); if (a) out.push(a.name); } return out.join(" "); };
+          var gl = this;
+          var uniforms = names(get.call(gl, program, gl.ACTIVE_UNIFORMS), function (i) { return gl.getActiveUniform(program, i); });
+          var attributes = names(get.call(gl, program, gl.ACTIVE_ATTRIBUTES), function (i) { return gl.getActiveAttrib(program, i); });
+          console.log("[gl] SLOW link #" + links + " " + ms.toFixed(0) + " ms at " + at + "\n  uniforms: " + uniforms + "\n  attributes: " + attributes);
+          return result;
+        };
+      })();
+    </script>
+    <script src="Build/e760b5fc4c4ebc6790c2dfd4d4943e7c.loader.js"></script>
+    <script>
+      var canvas = document.querySelector("#unity-canvas");
+      var message = document.querySelector("#message");
+      var instance = null, sent = null;
+      // Focus: a click on the game gives it the keyboard, a click anywhere else (on this page,
+      // or on the blog page around the iframe) takes it away. The game dims and pauses out of
+      // focus, and its music starts on the first focus (GameFocus.cs, MusicSweep.cs).
+      function report() {
+        var focused = document.hasFocus() && document.activeElement === canvas && !document.hidden;
+        canvas.style.cursor = focused ? "" : "pointer";
+        if (instance && focused !== sent) {
+          sent = focused;
+          instance.SendMessage("GameFocus", "SetFocused", focused ? "1" : "0");
+        }
+      }
+      document.addEventListener("pointerdown", function (e) {
+        if (e.target === canvas) canvas.focus(); else canvas.blur();
+        report();
+      });
+      canvas.addEventListener("focus", report);
+      canvas.addEventListener("blur", report);
+      window.addEventListener("focus", report);
+      window.addEventListener("blur", report);
+      document.addEventListener("visibilitychange", report);
+      report();
+      createUnityInstance(canvas, {
+        arguments: [],
+        dataUrl: "Build/1b0d80d72e73e13c84519c4d6f6c0f6c.data.unityweb",
+        frameworkUrl: "Build/f57bc01cbaa80a77ee6cdfc89741b32e.framework.js.unityweb",
+        codeUrl: "Build/123aa301b8bbeb416c9601ad2b00bbc1.wasm.unityweb",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "Henrik Pettersson, Paul Annesley, Zac Duff",
+        productName: "They Love You",
+        productVersion: "2.122+bf54f5c",
+      }, function (progress) {
+        document.querySelector("#fill").style.width = (100 * progress) + "%";
+      }).then(function (unity) {
+        document.querySelector("#bar").style.display = "none";
+        instance = unity;
+        report();
+      }).catch(function (error) {
+        document.querySelector("#bar").style.display = "none";
+        message.style.display = "block";
+        message.textContent = "This browser couldn't start the game: " + error;
+      });
+    </script>
+  </body>
+</html>
