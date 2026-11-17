@@ -6,14 +6,14 @@ slug: they-love-you
 tags:
   - design
   - playable
-image: ""
+image: /images/posts/love-you/header.gif
 caption: ""
 description: A small top-down game from 2012, back in the browser.
 aliases: []
 ---
-They Love You is a small top-down game. It was made by Paul Annesley and Zac Duff and myself for TigJam Australia 2012. This version re-design several elements and make is web  friendly (again). 
+They Love You is a small top-down arcade game. It was made by Paul Annesley, Zac Duff and me for TIGJam Australia 2012. This version re-designs several elements and makes it web-friendly (again). 
 
-If you're on front of a keyboard **GIVE IT A PLAY!**
+If you're in front of a keyboard, **GIVE IT A PLAY!**
 
 <!--more-->
 
@@ -22,50 +22,45 @@ If you're on front of a keyboard **GIVE IT A PLAY!**
           style="width: 100%; height: 100%; border: 0; display: block;"></iframe>
 </div>
 
-### Why I revived the old game
+## Why I revived the old game
 
-I was recently repairing a home-made arcade machine for a cafe in Gothenburg. As I was getting high of the soldering fumes I was wondering if it would be possible to port They Love You to the machine. 
+I was recently repairing a homemade arcade machine for a cafe in Gothenburg. As I was getting high on the soldering fumes, I pondered if it would be possible to port They Love You to the machine. 
 
-The game was original written in an arcane language called UnityScript. Zac and I did some years ago make a C# version but never published it and this was before unity did webgl exports. 
+They Love You was originally written in an arcane language called UnityScript. Some years ago, Zac and I made a C# version but never published it, and this was before Unity did WebGL exports. 
 
-But updating the game to a new unity version wouldn't be hard. The challenge was going to be in the redesign. The original The Love You used Directional stick + Action Button + Reset Button. However this arcade machine only had a directional stick. 
+ Updating the game to a new Unity version wouldn't be hard. The challenge was going to be in the re-design. The original They Love You used a DIRECTIONAL stick, an ACTION button and a RESET button. However, this arcade machine only had a directional stick. 
 
-### The re-design
+## The re-design
 
-The original version gave the player a finite number of freeze-bombs per level. Dropping the freeze-bomb at the right moment was key or you had to reset. Several level were pure resource puzzles. 
+The original version gave the player a finite number of freeze-bombs per level. Dropping the freeze-bomb at the right moment was key, or you had to reset. Several levels were pure resource puzzles. 
 
-For the redesign 
-- Removed all the puzzle levels 
-- Bombs an infinite resource.  
-- Player have to stop, let it charge, then move to drop a bomb
+For the re-design I removed all the puzzle levels, made the bombs an infinite resource and added a bomb-charge that's activated by stopping.
 
-It works pretty well. Finding the right place to stop makes add a different strategy element, and the puzzle levels, honestly, were never that good.  
+It works pretty well. Finding the right place to stop adds a different strategy element.
 
 <figure style="margin: 1.5em auto;">
   <video src="/videos/love-you/bomb-comparison.mp4" autoplay loop muted playsinline preload="auto"
          width="1296" height="792" style="width: 100%; height: auto; display: block;"></video>
-  <figcaption class="image-caption">Same level, same route. Left: the original, the bomb drops on SPACE. Right: the re-design, stand still to charge and the bomb goes off when you move on.</figcaption>
+  <figcaption class="image-caption">Same level, same route. Left: the original, where the bomb drops on SPACE. Right: the re-design.</figcaption>
 </figure>
+The auto reset got more complicated, and for this I had to get AI assistance. My initial idea was to use an 8-directional raycast to test for collisions. But it wasn't reliable; instead, a "physics test drive" gave the best result. 
 
-The auto reset got more complicated and for this, i had to get AI assist, my initial idea was to use a 8 directional raycast to test against collision. But it didn't it wasn't reliable instead a "physics test drive" gave the best result. 
+It kinda works like this:
 
-It works like this: Every 0.1 s (in FixedUpdate), checks whether the player can get two player sizes away from it's current position.
+- Every 0.1 s before drawing the frame, take control of the playercontroller and steer it in 8 direction till it's two player sizes away from its current position.
+- As soon as 1 test drive clears. Teleport the player back and draw the frame. 
+- If we can't get out, use the best attempt and try to turn out. 
+- Still stuck? Start the ==stuck countdown==
 
-- Freeze Monster physics. 
-- Take direct control of the PlayerController.
-- Try up to 8 directions, one physics step at a time using Player movement parameters
-- As soon as test passes, the check stops:. Player is teleported back.
-- If none does, it tries one turn from the best attempts. If that fails too, the stuck countdown starts (or keeps running.)
+Again, this all happens before the frame renders, and it's cheaper than I expected. 
 
-This all happens before the frame renders, and it's cheaper than I expected. 
+![Pushing South West let the player escape! There is still time to survive!](/images/posts/love-you/escape-example.png)
 
-![Pushing South East let the player escape! There is still time to survive!](/images/posts/love-you/escape-example.png)
+## Sounds
 
-### Sounds
+The original had three sounds: music, bombs and a goal fanfare. 
 
-The original had 3 sounds, Music, Bombs, Goal fanfare. 
-
-This version adds a lot more. I took this opportunity to get a more familiar with noise and tone generation. Almost all all the new additions has been build from those basics blocks. In addition I added more texture to the originals. The song also get's a wavy lowpass that opens and closes over 25s. 
+This version adds a lot more. I took this opportunity to get more familiar with noise and tone generation. Almost all the new additions have been built from those basic blocks. In addition I added more texture to the originals. The song also gets a wavy low-pass filter that opens and closes over 25 s. 
 
 
 
