@@ -1,7 +1,7 @@
 ---
 title: They Love You
 date: 2026-11-15T21:00:00+01:00
-draft: true
+draft: false
 slug: they-love-you
 tags:
   - design
@@ -11,28 +11,30 @@ caption: ""
 description: A small top-down game from 2012, back in the browser.
 aliases: []
 ---
-They Love You is a small top-down arcade game. It was made by Paul Annesley, Zac Duff and me for TIGJam Australia 2012. This version re-designs several elements and makes it web-friendly (again). 
-
-If you're in front of a keyboard, **GIVE IT A PLAY!**
+They Love You is a small top-down arcade game. It was made by Paul Annesley, Zac Duff and myself for TIGJam Australia 2012. This new version re-designs several elements and makes it web-friendly (again). 
 
 <!--more-->
+
+If you're in front of a keyboard, **GIVE IT A PLAY!**
 
 <div class="they-love-you" style="width: 100%; aspect-ratio: 1; margin: 1.5em auto;">
   <iframe src="/games/they-love-you/" title="They Love You" scrolling="no" allowfullscreen
           style="width: 100%; height: 100%; border: 0; display: block;"></iframe>
 </div>
 
-## Why I revived the old game
+## Reviving the game
 
-I was recently repairing a homemade arcade machine for a cafe in Gothenburg. As I was getting high on the soldering fumes, I pondered if it would be possible to port They Love You to the machine. 
+I was recently repairing a homemade arcade for a cafe in Gothenburg. As I was getting high off the soldering fumes, I pondered: Would be possible to port our 15yr game to this machine? 
 
-They Love You was originally written in an arcane language called UnityScript. Some years ago, Zac and I made a C# version but never published it, and this was before Unity did WebGL exports. 
+They Love You was originally written in an arcane language called UnityScript. Some years ago, Zac and I made a C# version but this was before Unity did WebGL exports. 
 
- Updating the game to a new Unity version wouldn't be hard. The challenge was going to be in the re-design. The original They Love You used a DIRECTIONAL stick, an ACTION button and a RESET button. However, this arcade machine only had a directional stick. 
+ Updating the game to a new Unity version wouldn't be hard. The challenge was going to be in the re-design. The original game used 8-directional input, an ACTION and, a RESET button. However, this arcade machine ONLY had a directional stick. 
 
 ## The re-design
 
 The original version gave the player a finite number of freeze-bombs per level. Dropping the freeze-bomb at the right moment was key, or you had to reset. Several levels were pure resource puzzles. 
+
+[Here you can play the game with the original rules](/unlisted/they-love-you-2012-rules/)
 
 For the re-design I removed all the puzzle levels, made the bombs an infinite resource and added a bomb-charge that's activated by stopping.
 
@@ -64,3 +66,8 @@ This version adds a lot more. I took this opportunity to get more familiar with 
 
 
 
+## What about the arcade machine?
+
+Unfortunately, Unity does not build to linux ARM and the arcade runs a Raspberry Pi 4. If I wanted to make a fast native build I would first need to port the game to Godot. In the day of AI, this is very doable. But my good friend and owner of the arcade has a strict no AI policy. I respect that. 
+
+In the end I got a cool new web build, and The Love You is alive again. 
