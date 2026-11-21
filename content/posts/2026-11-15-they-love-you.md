@@ -1,5 +1,5 @@
 ---
-title: They Love You
+title: They Love You - A great arcade game
 date: 2026-11-15T21:00:00+01:00
 draft: false
 slug: they-love-you
