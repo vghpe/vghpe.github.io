@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>They Love You</title>
+<meta name="description" content="A small top-down arcade game from 2012, back in the browser.">
+<meta property="og:title" content="They Love You">
+<meta property="og:description" content="A small top-down arcade game from 2012, back in the browser.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://vghpe.github.io/they-love-you/">
+<meta property="og:image" content="https://vghpe.github.io/images/posts/love-you/header.gif">
+<meta name="twitter:card" content="summary_large_image">
+<style>
+  /* The game's own font (the in-game HUD uses it too). */
+  @font-face { font-family: "C64"; src: url("C64.ttf") format("truetype"); font-display: swap; }
+
+  :root {
+    /* The game is square: as big as fits between the title and the links. */
+    --game: clamp(280px, min(100vw - 32px, 100vh - 240px), 960px);
+
+    /* The stripes, as in the margin around the map in the game: the floor's dark stripe
+       layer (floor_tex_lines.png, rgb 22,45,45 on black), four per map width, each 28% of
+       its period, scrolling sideways; here darker, thicker and slower. --stripe-scale sizes
+       them against the game's own (1 = continuous with the game's margin); --stripe-width is
+       the band's share of its period (the game's: 0.28); --stripe-seconds is the time to
+       scroll one stripe along (the game takes 5 s). */
+    --stripe-scale: 1.5;
+    --stripe-width: 0.45;
+    --stripe-seconds: 40s;
+    --stripe-color: rgb(13, 27, 27);
+    --period: calc(var(--game) * 512 / 576 / 4 * var(--stripe-scale));  /* along a row */
+    --across: calc(var(--period) * 0.7071);  /* square to the stripes, at 45 degrees */
+  }
+  @supports (height: 100dvh) {
+    :root { --game: clamp(280px, min(100vw - 32px, 100dvh - 240px), 960px); }
+  }
+
+  html { background: #000; }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    padding: 16px 16px 20px;
+    box-sizing: border-box;
+    color: #fff;
+    font: 12px/1.6 "C64", ui-monospace, monospace;
+    letter-spacing: 0.5px;
+  }
+
+  /* One period wider than the screen, slid left by one period and around again: seamless. */
+  body::before {
+    content: "";
+    position: fixed;
+    top: 0; bottom: 0; left: 0;
+    right: calc(-1 * var(--period));
+    z-index: -1;
+    pointer-events: none;
+    background: repeating-linear-gradient(45deg,
+      var(--stripe-color) 0, var(--stripe-color) calc(var(--across) * var(--stripe-width)),
+      transparent calc(var(--across) * var(--stripe-width)), transparent var(--across));
+    animation: scroll var(--stripe-seconds) linear infinite;
+  }
+  @keyframes scroll {
+    to { transform: translateX(calc(-1 * var(--period))); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    body::before { animation: none; }
+  }
+  html.shader body::before { display: none; }
+
+  /* The EarthBound-style backgrounds: a WebGL canvas drawn at about 224 lines, like the
+     SNES, and scaled up with hard pixel edges. */
+  #bg {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    display: none;
+  }
+  html.shader #bg { display: block; }
+
+  h1 { margin: 0; line-height: 0; }
+  h1 img { width: min(var(--game), 420px); height: auto; }
+
+  #game {
+    width: var(--game);
+    height: var(--game);
+    background: #000;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.8);
+  }
+  #game iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  #game iframe.ready { opacity: 1; }
+
+  .links { text-align: center; }
+  .sep { color: rgba(255, 255, 255, 0.35); margin: 0 0.6em; }
+  a { color: #f19ba3; text-decoration: none; }
+  a:hover, a:focus-visible { text-decoration: underline; }
+
+  footer { color: rgba(255, 255, 255, 0.45); font-size: 10px; text-align: center; }
+  footer a { color: rgba(255, 255, 255, 0.7); }
+
+  /* Background picker (for trying them out). */
+  #picker { font-size: 10px; text-align: center; color: rgba(255, 255, 255, 0.45); }
+  #picker button {
+    font: inherit;
+    color: rgba(255, 255, 255, 0.6);
+    background: none;
+    border: 0;
+    padding: 0 0.4em;
+    cursor: pointer;
+  }
+  #picker button:hover { color: #fff; }
+  #picker button[aria-pressed="true"] { color: #ffd23f; }
+</style>
+</head>
+<body>
+  <canvas id="bg"></canvas>
+  <h1><img src="logo.png" width="680" height="219" alt="They Love You"></h1>
+
+  <div id="game">
+    <iframe id="frame" title="They Love You" scrolling="no" allowfullscreen></iframe>
+  </div>
+
+  <div class="links">
+    <a href="/posts/they-love-you/">About the game</a>
+    <span class="sep">·</span>
+    <a id="rules" href="?design=classic">Play with the 2012 rules</a>
+  </div>
+
+  <footer>
+    © 2012, 2026 Henrik Pettersson, Paul Annesley, Zac Duff ·
+    <a href="https://vghpe.github.io/">vghpe.github.io</a>
+  </footer>
+
+
+<script>
+  // The game itself is the same build the blog post embeds (/games/they-love-you/, published
+  // by tools/publish-web.sh in the game's repo). This page's query passes on to it, so
+  // ?design=classic plays the 2012 rules here too.
+  var frame = document.getElementById("frame");
+  var classic = /(^|[?&])design=classic(&|$)/.test(location.search);
+
+  // The game's page is white until the game draws; show it once loaded, see-through, so the
+  // loading bar sits on black here instead of flashing white (same origin, so this is allowed).
+  frame.addEventListener("load", function () {
+    try {
+      var doc = frame.contentDocument;
+      doc.documentElement.style.background = doc.body.style.background = "transparent";
+    } catch (e) {}
+    frame.classList.add("ready");
+  });
+  // Everything but this page's own ?bg= goes on to the game.
+  var params = new URLSearchParams(location.search);
+  var gameParams = new URLSearchParams(location.search);
+  gameParams.delete("bg");
+  gameParams.set("logo", "off");  // the title is on this page already
+  frame.src = "/games/they-love-you/" + (gameParams.toString() ? "?" + gameParams : "");
+
+  var rules = document.getElementById("rules");
+  function updateRulesLink() {
+    var p = new URLSearchParams(location.search);
+    if (classic) p.delete("design"); else p.set("design", "classic");
+    rules.href = p.toString() ? "?" + p : "./";
+  }
+  if (classic) {
+    rules.textContent = "Play the new version";
+    document.title = "They Love You (2012 rules)";
+  }
+  updateRulesLink();
+</script>
+
+<script>
+  // Backgrounds. "stripes" is the CSS one above; the rest are EarthBound-style battle
+  // backgrounds: one fragment shader each, a stepped palette that cycles over time, and the
+  // SNES scanline tricks: horizontal wave (each line shifted by a sine of its height),
+  // interlaced wave (odd and even lines shifted opposite ways), vertical wave (lines pulled
+  // up and down), and two layers mixed half and half. Waves is the one in use; ?bg=NAME picks
+  // another, and the picker (hidden) keeps the address up to date without reloading the game.
+  (function () {
+    var LINES = 224;  // the canvas's height in pixels (SNES: 224)
+
+    var COMMON = [
+      "#ifdef GL_FRAGMENT_PRECISION_HIGH",
+      "precision highp float;",
+      "#else",
+      "precision mediump float;",
+      "#endif",
+      "uniform vec2 res;",
+      "uniform float t;",
+      "vec3 rgb(int r, int g, int b) { return vec3(float(r), float(g), float(b)) / 255.0; }",
+      // Four colours as equal steps, repeating every 1.0 of x: palette cycling is x + time.
+      "vec3 pick4(float x, vec3 a, vec3 b, vec3 c, vec3 d) {",
+      "  x = fract(x) * 4.0;",
+      "  return x < 1.0 ? a : x < 2.0 ? b : x < 3.0 ? c : d;",
+      "}",
+      // Pixel position, y down, whole pixels.
+      "vec2 pix() { return floor(vec2(gl_FragCoord.x, res.y - gl_FragCoord.y)); }",
+      ""
+    ].join("\n");
+
+    var BACKGROUNDS = [
+      { name: "stripes", label: "Stripes" },
+
+      // The game's diagonal stripes, in teal steps, swaying with a horizontal wave.
+      { name: "waves", label: "Waves", glsl: [
+        "void main() {",
+        "  vec2 p = pix();",
+        "  float sway = 10.0 * sin(p.y * 0.045 + t * 1.1) + 4.0 * sin(p.y * 0.11 - t * 0.7);",
+        "  float s = (p.x + sway + p.y) / 48.0 - t * 0.08;",
+        "  gl_FragColor = vec4(pick4(s, rgb(6, 16, 18), rgb(11, 32, 35), rgb(20, 54, 60), rgb(11, 32, 35)), 1.0);",
+        "}"
+      ] },
+
+      // Concentric diamonds in purple and pink, odd and even lines waving opposite ways.
+      { name: "interlace", label: "Interlace", glsl: [
+        "void main() {",
+        "  vec2 p = pix();",
+        "  float odd = mod(p.y, 2.0) * 2.0 - 1.0;",
+        "  vec2 q = vec2(p.x + odd * 14.0 * sin(p.y * 0.035 + t * 1.4) + t * 6.0, p.y + t * 4.0);",
+        "  vec2 d = abs(fract(q / 28.0) - 0.5);",
+        "  float v = (d.x + d.y) * 1.5 - t * 0.35;",
+        "  gl_FragColor = vec4(pick4(v, rgb(24, 8, 34), rgb(58, 16, 68), rgb(118, 34, 96), rgb(58, 16, 68)), 1.0);",
+        "}"
+      ] },
+
+      // Pink hearts drifting over dark red, swaying, each cell cycling its own shade.
+      { name: "hearts", label: "Hearts", glsl: [
+        "void main() {",
+        "  vec2 p = pix();",
+        "  float size = 26.0;",
+        "  vec2 q = p + vec2(t * 10.0, -t * 6.0);",
+        "  q.x += 6.0 * sin(q.y * 0.06 + t * 1.3);",
+        "  q.x += mod(floor(q.y / size), 2.0) * size * 0.5;",
+        "  vec2 cell = floor(q / size);",
+        "  vec2 h = (fract(q / size) - 0.5) * vec2(2.9, -2.9) + vec2(0.0, 0.3);",
+        "  float a = h.x * h.x + h.y * h.y - 1.0;",
+        "  bool heart = a * a * a - h.x * h.x * h.y * h.y * h.y < 0.0;",
+        "  vec3 ground = pick4((p.x + p.y) / 160.0 + t * 0.05, rgb(22, 5, 14), rgb(34, 8, 22), rgb(46, 10, 30), rgb(34, 8, 22));",
+        "  vec3 pink = pick4(cell.x * 0.25 + cell.y * 0.5 + t * 0.4, rgb(110, 30, 64), rgb(170, 52, 98), rgb(230, 110, 140), rgb(170, 52, 98));",
+        "  gl_FragColor = vec4(heart ? pink : ground, 1.0);",
+        "}"
+      ] },
+
+      // Rings from the middle in teal and gold, rippled, with a vertical wave.
+      { name: "rings", label: "Rings", glsl: [
+        "void main() {",
+        "  vec2 p = pix();",
+        "  vec2 c = p - res * 0.5;",
+        "  c.y += 8.0 * sin(p.y * 0.07 + t * 1.6);",
+        "  float v = length(c) / 18.0 + 0.35 * sin(atan(c.y, c.x) * 5.0 + t * 0.6) - t * 0.6;",
+        "  gl_FragColor = vec4(pick4(v, rgb(8, 30, 34), rgb(20, 66, 72), rgb(112, 92, 24), rgb(20, 66, 72)), 1.0);",
+        "}"
+      ] },
+
+      // Two layers at half strength: a swaying purple checkerboard over green bands that
+      // wave up and down.
+      { name: "plasma", label: "Plasma", glsl: [
+        "void main() {",
+        "  vec2 p = pix();",
+        "  vec2 a = p + vec2(t * 8.0);",
+        "  a.x += 10.0 * sin(a.y * 0.05 + t);",
+        "  float check = mod(floor(a.x / 32.0) + floor(a.y / 32.0), 2.0);",
+        "  vec3 top = check > 0.5 ? rgb(46, 22, 78) : rgb(18, 8, 36);",
+        "  vec2 b = p;",
+        "  b.y += 12.0 * sin(b.x * 0.04 - t * 1.3);",
+        "  vec3 under = pick4(b.y / 80.0 + t * 0.2, rgb(8, 44, 26), rgb(18, 80, 44), rgb(56, 124, 52), rgb(18, 80, 44));",
+        "  gl_FragColor = vec4(mix(top, under, 0.5), 1.0);",
+        "}"
+      ] }
+    ];
+
+    var canvas = document.getElementById("bg");
+    var gl = canvas.getContext("webgl", { antialias: false, alpha: false, depth: false, preserveDrawingBuffer: false });
+    var programs = {};  // compiled on first use, so only the chosen ones cost anything
+    var current = null, raf = 0;
+    var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    function compile(bg) {
+      if (programs[bg.name]) return programs[bg.name];
+      function shader(type, source) {
+        var s = gl.createShader(type);
+        gl.shaderSource(s, source);
+        gl.compileShader(s);
+        if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(bg.name + ": " + gl.getShaderInfoLog(s));
+        return s;
+      }
+      var program = gl.createProgram();
+      gl.attachShader(program, shader(gl.VERTEX_SHADER,
+        "attribute vec2 pos; void main() { gl_Position = vec4(pos, 0.0, 1.0); }"));
+      gl.attachShader(program, shader(gl.FRAGMENT_SHADER, COMMON + bg.glsl.join("\n")));
+      gl.bindAttribLocation(program, 0, "pos");
+      gl.linkProgram(program);
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(bg.name + ": " + gl.getProgramInfoLog(program));
+      return programs[bg.name] = { program: program, res: gl.getUniformLocation(program, "res"), t: gl.getUniformLocation(program, "t") };
+    }
+
+    if (gl) {
+      // One triangle that covers the screen.
+      gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+      gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+      gl.enableVertexAttribArray(0);
+      gl.vertexAttribPointer(0, 2, gl.FLOAT, false, 0, 0);
+    }
+
+    function resize() {
+      var scale = Math.max(1, window.innerHeight / LINES);
+      canvas.width = Math.ceil(window.innerWidth / scale);
+      canvas.height = Math.ceil(window.innerHeight / scale);
+    }
+
+    function draw(now) {
+      var p = programs[current.name];
+      gl.viewport(0, 0, canvas.width, canvas.height);
+      gl.useProgram(p.program);
+      gl.uniform2f(p.res, canvas.width, canvas.height);
+      gl.uniform1f(p.t, still ? 0 : (now / 1000) % 3600);
+      gl.drawArrays(gl.TRIANGLES, 0, 3);
+      if (!still) raf = requestAnimationFrame(draw);
+    }
+
+    var picker = document.getElementById("picker");
+    var buttons = {};
+
+    function choose(name, remember) {
+      var bg = BACKGROUNDS.filter(function (b) { return b.name === name; })[0] || BACKGROUNDS[0];
+      if (bg.glsl && gl) {
+        try { compile(bg); } catch (e) { console.error(e); bg = BACKGROUNDS[0]; }
+      } else if (bg.glsl) {
+        bg = BACKGROUNDS[0];  // no WebGL
+      }
+      current = bg;
+      cancelAnimationFrame(raf);
+      document.documentElement.classList.toggle("shader", !!bg.glsl);
+      if (bg.glsl) { resize(); draw(performance.now()); }
+      for (var key in buttons) buttons[key].setAttribute("aria-pressed", key === bg.name ? "true" : "false");
+      if (remember) {
+        var p = new URLSearchParams(location.search);
+        if (bg.name === "waves") p.delete("bg"); else p.set("bg", bg.name);
+        history.replaceState(null, "", p.toString() ? "?" + p : location.pathname);
+        updateRulesLink();
+      }
+    }
+
+    // The picker row is hidden (Waves won); add <div id="picker">Background:</div> under the
+    // footer to bring it back. ?bg=NAME still picks one.
+    if (picker) BACKGROUNDS.forEach(function (bg) {
+      var b = document.createElement("button");
+      b.type = "button";
+      b.textContent = bg.label;
+      b.addEventListener("click", function () { choose(bg.name, true); });
+      picker.appendChild(b);
+      buttons[bg.name] = b;
+    });
+
+    window.addEventListener("resize", function () {
+      if (current && current.glsl) { resize(); if (still) draw(performance.now()); }
+    });
+
+    choose(params.get("bg") || "waves", false);
+  })();
+</script>
+</body>
+</html>
