@@ -109,8 +109,10 @@
 
   .links { text-align: center; }
   .sep { color: rgba(255, 255, 255, 0.35); margin: 0 0.6em; }
-  a { color: #f19ba3; text-decoration: none; }
-  a:hover, a:focus-visible { text-decoration: underline; }
+  a, button.link { color: #f19ba3; text-decoration: none; }
+  a:hover, a:focus-visible, button.link:hover, button.link:focus-visible { text-decoration: underline; }
+  button.link { font: inherit; letter-spacing: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+  html.still body::before { animation-play-state: paused; }
 
   footer { color: rgba(255, 255, 255, 0.45); font-size: 10px; text-align: center; }
   footer a { color: rgba(255, 255, 255, 0.7); }
@@ -160,7 +162,9 @@
   <div class="links">
     <a href="/posts/they-love-you/">About the game</a>
     <span class="sep">·</span>
-    <a id="rules" href="?design=classic">Play with the 2012 rules</a>
+    <a id="rules" href="?design=classic">Play the original version</a>
+    <span class="sep">·</span>
+    <button id="dynamic" type="button" class="link">Disable dynamic background</button>
   </div>
 
   <footer>
@@ -320,7 +324,11 @@
     var gl = canvas.getContext("webgl", { antialias: false, alpha: false, depth: false, preserveDrawingBuffer: false });
     var programs = {};  // compiled on first use, so only the chosen ones cost anything
     var current = null, raf = 0;
-    var still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    // Frozen waves ("Disable dynamic background", remembered in this browser; at first, frozen
+    // for people whose system asks for reduced motion): no motion, no bomb reaction.
+    var dynamicChoice = null;
+    try { dynamicChoice = localStorage.getItem("tly-bg-dynamic"); } catch (e) {}
+    var still = dynamicChoice ? dynamicChoice === "off" : window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
     function compile(bg) {
       if (programs[bg.name]) return programs[bg.name];
@@ -363,15 +371,16 @@
       canvas.height = Math.ceil(window.innerHeight / scale);
     }
 
-    var lastNow = 0;
+    var lastNow = 0, clock = 0;
     function draw(now) {
       var p = programs[current.name];
       var dt = still ? 0 : Math.min(0.1, Math.max(0, (now - lastNow) / 1000));
       lastNow = now;
+      clock = (clock + dt) % 3600;
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.useProgram(p.program);
       gl.uniform2f(p.res, canvas.width, canvas.height);
-      gl.uniform1f(p.t, still ? 0 : (now / 1000) % 3600);
+      gl.uniform1f(p.t, clock);
       if (current.update) current.update(p, dt);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       if (!still) raf = requestAnimationFrame(draw);
@@ -416,12 +425,13 @@
       bright: 1
     };
 
-    // The preset: ?preset=b, else (with ?debug) the last one picked in the panel, else A.
+    // The preset: ?preset=a, else (with ?debug) the last one picked in the panel, else B.
     // With ?debug, each preset's tweaks are kept in this browser too.
     var debug = params.has("debug");
     var preset = (params.get("preset") || "").toLowerCase();
     if (!PRESETS[preset] && debug) preset = localStorage.getItem("tly-bg-preset") || "";
-    if (!PRESETS[preset]) preset = "a";
+    var DEFAULT_PRESET = "b";
+    if (!PRESETS[preset]) preset = DEFAULT_PRESET;
     var WAVES = {};
     function loadPreset(name) {
       preset = name;
@@ -558,7 +568,7 @@
           loadPreset(name);
           localStorage.setItem("tly-bg-preset", name);
           var q = new URLSearchParams(location.search);
-          if (name === "a") q.delete("preset"); else q.set("preset", name);
+          if (name === DEFAULT_PRESET) q.delete("preset"); else q.set("preset", name);
           history.replaceState(null, "", q.toString() ? "?" + q : location.pathname);
           updateRulesLink();
           for (var key in inputs) inputs[key]();
@@ -695,11 +705,28 @@
       buttons[bg.name] = b;
     });
 
+    var dynamicButton = document.getElementById("dynamic");
+    function setStill(on, remember) {
+      still = on;
+      document.documentElement.classList.toggle("still", on);
+      dynamicButton.textContent = on ? "Enable dynamic background" : "Disable dynamic background";
+      if (remember) {
+        try { localStorage.setItem("tly-bg-dynamic", on ? "off" : "on"); } catch (e) {}
+      }
+      if (!current || !current.glsl) return;
+      cancelAnimationFrame(raf);
+      if (on) bombs = [];  // the shudder stops too
+      lastNow = performance.now();
+      draw(lastNow);  // frozen: draws this frame once; moving: starts the loop again
+    }
+    dynamicButton.addEventListener("click", function () { setStill(!still, true); });
+
     window.addEventListener("resize", function () {
       if (current && current.glsl) { resize(); if (still) draw(performance.now()); }
     });
 
     choose(params.get("bg") || "waves", false);
+    setStill(still, false);
   })();
 </script>
 </body>
