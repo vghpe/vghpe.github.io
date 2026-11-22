@@ -393,8 +393,9 @@
       swayBAmp: 4, swayBFreq: 0.11, swayBSpeed: -0.7,
       interAmp: 0, interFreq: 0.101, interSpeed: 0,
       // A bomb: the interlace amount rises to bombPeak over bombRise seconds (easing out),
-      // then falls back over bombFall seconds (easing in and out)
-      bombPeak: 5, bombRise: 0.25, bombFall: 1.0,
+      // then falls back over bombFall seconds (easing in and out); on the same curve the two
+      // sways gain bombSwayA and bombSwayB
+      bombPeak: 5, bombRise: 0.25, bombFall: 1.0, bombSwayA: 5, bombSwayB: 3,
       vertAmp: 0, vertFreq: 0.07, vertSpeed: 1.6,
       c0: "#061012", c1: "#0b2023", c2: "#14363c", c3: "#0b2023",
       bright: 1
@@ -421,7 +422,7 @@
         }
         level = Math.max(level, v);
       });
-      return level * W.bombPeak;
+      return level;  // 0 to 1
     }
 
     // Phases add up speed x time, so changing a speed never makes the pattern jump.
@@ -447,11 +448,12 @@
       gl.uniform1f(p.loc("lineStep"), Math.max(1, W.lineStep));
       gl.uniform1f(p.loc("bright"), W.bright);
       gl.uniform2f(p.loc("drift"), phase.driftX, phase.driftY);
-      gl.uniform3f(p.loc("swayA"), W.swayAAmp, W.swayAFreq, phase.swayA);
-      gl.uniform3f(p.loc("swayB"), W.swayBAmp, W.swayBFreq, phase.swayB);
       bombs = bombs.map(function (age) { return age + dt; })
         .filter(function (age) { return age < W.bombRise + W.bombFall; });
-      gl.uniform3f(p.loc("inter"), W.interAmp + bombPulse(), W.interFreq, phase.inter);
+      var shudder = bombPulse();
+      gl.uniform3f(p.loc("swayA"), W.swayAAmp + shudder * W.bombSwayA, W.swayAFreq, phase.swayA);
+      gl.uniform3f(p.loc("swayB"), W.swayBAmp + shudder * W.bombSwayB, W.swayBFreq, phase.swayB);
+      gl.uniform3f(p.loc("inter"), W.interAmp + shudder * W.bombPeak, W.interFreq, phase.inter);
       gl.uniform3f(p.loc("vert"), W.vertAmp, W.vertFreq, phase.vert);
       gl.uniform3fv(p.loc("c0"), hexColor(W.c0));
       gl.uniform3fv(p.loc("c1"), hexColor(W.c1));
@@ -477,8 +479,10 @@
 
     function buildPanel() {
       var SLIDERS = [
-        ["Bomb (interlace amount up and back)"],
-        ["bombPeak", "peak", 0, 40, 0.5],
+        ["Bomb (amounts up and back)"],
+        ["bombPeak", "interlace +", 0, 40, 0.5],
+        ["bombSwayA", "sway A +", -30, 30, 0.5],
+        ["bombSwayB", "sway B +", -30, 30, 0.5],
         ["bombRise", "rise s", 0.02, 2, 0.01],
         ["bombFall", "fall s", 0.05, 4, 0.05],
         ["Overall"],
