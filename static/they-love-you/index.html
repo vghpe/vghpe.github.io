@@ -124,8 +124,9 @@
     font: 11px/1.4 ui-monospace, Menlo, monospace; letter-spacing: 0; color: #ddd;
   }
   #debug small { color: #888; }
+  #debug > small { display: block; margin-top: 6px; }
   #debug .head { margin: 10px 0 4px; color: #ffd23f; }
-  #debug label { display: grid; grid-template-columns: 76px 1fr 48px; align-items: center; gap: 6px; }
+  #debug label { display: grid; grid-template-columns: 76px 1fr 56px; align-items: center; gap: 6px; }
   #debug input[type=range] { width: 100%; }
   #debug input[type=color] { width: 100%; height: 18px; padding: 0; border: 0; background: none; }
   #debug label span { text-align: right; color: #aaa; }
@@ -211,7 +212,7 @@
   // up and down), and two layers mixed half and half. Waves is the one in use; ?bg=NAME picks
   // another, and the picker (hidden) keeps the address up to date without reloading the game.
   (function () {
-    var LINES = 224;  // the canvas's height in pixels (SNES: 224)
+    var LINES = 224;  // the canvas's height in pixels (SNES: 224); Waves sets its own
 
     var COMMON = [
       "#ifdef GL_FRAGMENT_PRECISION_HIGH",
@@ -235,35 +236,23 @@
     var BACKGROUNDS = [
       { name: "stripes", label: "Stripes" },
 
-      // The game's diagonal stripes, in teal steps, swaying with a horizontal wave (two sines),
-      // and rippling out from each bomb the game reports. Its settings are uniforms (WAVES
-      // below), so the debug panel can tune them live.
+      // The game's diagonal stripes in four palette steps, bent by the SNES scanline tricks:
+      // two horizontal sways, an interlaced sway (odd and even lines opposite ways) and a
+      // vertical wave. Every setting is a uniform (WAVES below), tunable with ?debug.
       { name: "waves", label: "Waves", update: updateWaves, glsl: [
-        "uniform float swayAmp, swayFreq, swayPhase, scrollPhase, band;",
-        "uniform vec3 c0, c1, c2;",
-        "uniform vec4 rip[4];  // x, y (canvas pixels), radius, strength (0 = none)",
-        "uniform float rWidth, rPush, rFlash;",
+        "uniform float band, angle, pal, lineStep, bright;",
+        "uniform vec2 drift;",
+        "uniform vec3 swayA, swayB, inter, vert;  // amplitude, frequency, phase",
+        "uniform vec3 c0, c1, c2, c3;",
         "void main() {",
         "  vec2 p = pix();",
-        // Each ripple is a ring: the pattern inside it is pulled from nearer the bomb, so the
-        // stripes bulge outward as it passes, and it brightens by whole palette steps.
-        "  vec2 q = p;",
-        "  float flash = 0.0;",
-        "  for (int i = 0; i < 4; i++) {",
-        "    vec4 r = rip[i];",
-        "    if (r.w <= 0.0) continue;",
-        "    vec2 d = p - r.xy;",
-        "    float dist = length(d);",
-        "    float x = (dist - r.z) / rWidth;",
-        "    float ring = exp(-x * x) * r.w;",
-        "    if (dist > 0.0) q -= d / dist * rPush * ring;",
-        "    flash += ring;",
-        "  }",
-        "  float sway = swayAmp * (sin(q.y * swayFreq + swayPhase) + 0.4 * sin(q.y * swayFreq * 2.44 - swayPhase * 0.64));",
-        "  float s = (q.x + sway + q.y) / band - scrollPhase;",
-        "  vec3 col = pick4(s, c0, c1, c2, c1);",
-        "  col += (c2 - c0) * 0.5 * floor(flash * rFlash + 0.5);",
-        "  gl_FragColor = vec4(col, 1.0);",
+        "  float ly = floor(p.y / lineStep) * lineStep;  // lines move in groups of lineStep",
+        "  float dx = swayA.x * sin(ly * swayA.y + swayA.z) + swayB.x * sin(ly * swayB.y + swayB.z);",
+        "  dx += (mod(p.y, 2.0) * 2.0 - 1.0) * inter.x * sin(ly * inter.y + inter.z);",
+        "  float dy = vert.x * sin(ly * vert.y + vert.z);",
+        "  vec2 q = p + vec2(dx, dy) + drift;",
+        "  float s = dot(q, vec2(cos(angle), sin(angle))) / band - pal;",
+        "  gl_FragColor = vec4(pick4(s, c0, c1, c2, c3) * bright, 1.0);",
         "}"
       ] },
 
@@ -386,33 +375,36 @@
       if (!still) raf = requestAnimationFrame(draw);
     }
 
-    // ---- Waves: settings, bomb ripples, debug panel ----
+    // ---- Waves: settings and the ?debug panel ----
 
     // The settings. With ?debug a panel tunes them live (kept in this browser between
-    // reloads, only with ?debug); "Copy values" copies them as JSON to paste here as the
-    // new defaults. Distances are in canvas pixels (the canvas is LINES high), times in s.
+    // reloads, only with ?debug); "Copy values" copies them as JSON to paste back as new
+    // defaults. Distances are in canvas pixels (the canvas is `lines` high), speeds per
+    // second, frequencies in radians per pixel of height.
     var WAVES = {
-      swayAmp: 10,        // side-to-side sway, pixels
-      swayFreq: 0.045,    // sway waves per pixel of height (x 2 pi)
-      swaySpeed: 1.1,     // sway phase per second
-      band: 48,           // pixels per stripe cycle (four palette steps)
-      scroll: 0.08,       // stripe cycles per second
-      c0: "#061012", c1: "#0b2023", c2: "#14363c",  // dark, middle, light
-      rSpeed: 220,        // ripple: starting speed, pixels per second
-      rSlow: 1.2,         // how fast it slows (0 = constant speed)
-      rWidth: 10,         // ring width, pixels
-      rPush: 8,           // how far the ring pushes the stripes, pixels (negative pulls)
-      rFlash: 1.5,        // brightening at the ring, in palette half-steps
-      rLife: 2.0          // seconds until it has faded out
+      speed: 1,                 // all motion
+      lines: 224,               // canvas height in pixels (SNES: 224)
+      lineStep: 1,              // lines that move together (bigger = blockier waves)
+      band: 33.9,               // pixels across one cycle of four stripes
+      angle: 45,                // stripe direction, degrees
+      palSpeed: 0.08,           // palette cycles per second (the stripes' flow)
+      driftX: 0, driftY: 0,     // pattern drift, pixels per second
+      swayAAmp: 10, swayAFreq: 0.045, swayASpeed: 1.1,
+      swayBAmp: 4, swayBFreq: 0.11, swayBSpeed: -0.7,
+      interAmp: 0, interFreq: 0.035, interSpeed: 1.4,
+      vertAmp: 0, vertFreq: 0.07, vertSpeed: 1.6,
+      c0: "#061012", c1: "#0b2023", c2: "#14363c", c3: "#0b2023",
+      bright: 1
     };
     var WAVES_DEFAULTS = JSON.parse(JSON.stringify(WAVES));
     var debug = params.has("debug");
     if (debug) {
-      try { Object.assign(WAVES, JSON.parse(localStorage.getItem("tly-waves") || "{}")); } catch (e) {}
+      try { Object.assign(WAVES, JSON.parse(localStorage.getItem("tly-bg") || "{}")); } catch (e) {}
     }
+    LINES = WAVES.lines;
 
-    var swayPhase = 0, scrollPhase = 0;
-    var ripples = [];  // { x, y } in canvas pixels, age in seconds
+    // Phases add up speed x time, so changing a speed never makes the pattern jump.
+    var phase = { pal: 0, driftX: 0, driftY: 0, swayA: 0, swayB: 0, inter: 0, vert: 0 };
 
     function hexColor(hex) {
       var n = parseInt(hex.slice(1), 16);
@@ -420,71 +412,92 @@
     }
 
     function updateWaves(p, dt) {
-      swayPhase = (swayPhase + dt * WAVES.swaySpeed) % (Math.PI * 2000);
-      scrollPhase = (scrollPhase + dt * WAVES.scroll) % 1000;
-      gl.uniform1f(p.loc("swayAmp"), WAVES.swayAmp);
-      gl.uniform1f(p.loc("swayFreq"), WAVES.swayFreq);
-      gl.uniform1f(p.loc("swayPhase"), swayPhase);
-      gl.uniform1f(p.loc("scrollPhase"), scrollPhase);
-      gl.uniform1f(p.loc("band"), WAVES.band);
-      gl.uniform3fv(p.loc("c0"), hexColor(WAVES.c0));
-      gl.uniform3fv(p.loc("c1"), hexColor(WAVES.c1));
-      gl.uniform3fv(p.loc("c2"), hexColor(WAVES.c2));
-      gl.uniform1f(p.loc("rWidth"), WAVES.rWidth);
-      gl.uniform1f(p.loc("rPush"), WAVES.rPush);
-      gl.uniform1f(p.loc("rFlash"), WAVES.rFlash);
-      // The ring's radius: starts at rSpeed and slows exponentially; strength fades to 0
-      // over rLife, quickly at first.
-      var rip = new Float32Array(16);
-      ripples = ripples.filter(function (r) { r.age += dt; return r.age < WAVES.rLife; });
-      ripples.slice(-4).forEach(function (r, i) {
-        var k = WAVES.rSlow;
-        var radius = k > 0.001 ? WAVES.rSpeed * (1 - Math.exp(-k * r.age)) / k : WAVES.rSpeed * r.age;
-        var fade = 1 - r.age / WAVES.rLife;
-        rip.set([r.x, r.y, radius, fade * fade], i * 4);
-      });
-      gl.uniform4fv(p.loc("rip"), rip);
-    }
-
-    // A ripple from this spot on the page (CSS pixels).
-    function ripple(pageX, pageY) {
-      if (!current || current.name !== "waves" || still) return;
-      ripples.push({ x: pageX * canvas.width / window.innerWidth, y: pageY * canvas.height / window.innerHeight, age: 0 });
+      var W = WAVES, k = dt * W.speed, TAU = Math.PI * 2;
+      phase.pal = (phase.pal + k * W.palSpeed) % 1000;
+      phase.driftX = (phase.driftX + k * W.driftX) % 100000;
+      phase.driftY = (phase.driftY + k * W.driftY) % 100000;
+      phase.swayA = (phase.swayA + k * W.swayASpeed) % (TAU * 1000);
+      phase.swayB = (phase.swayB + k * W.swayBSpeed) % (TAU * 1000);
+      phase.inter = (phase.inter + k * W.interSpeed) % (TAU * 1000);
+      phase.vert = (phase.vert + k * W.vertSpeed) % (TAU * 1000);
+      gl.uniform1f(p.loc("band"), W.band);
+      gl.uniform1f(p.loc("angle"), W.angle * Math.PI / 180);
+      gl.uniform1f(p.loc("pal"), phase.pal);
+      gl.uniform1f(p.loc("lineStep"), Math.max(1, W.lineStep));
+      gl.uniform1f(p.loc("bright"), W.bright);
+      gl.uniform2f(p.loc("drift"), phase.driftX, phase.driftY);
+      gl.uniform3f(p.loc("swayA"), W.swayAAmp, W.swayAFreq, phase.swayA);
+      gl.uniform3f(p.loc("swayB"), W.swayBAmp, W.swayBFreq, phase.swayB);
+      gl.uniform3f(p.loc("inter"), W.interAmp, W.interFreq, phase.inter);
+      gl.uniform3f(p.loc("vert"), W.vertAmp, W.vertFreq, phase.vert);
+      gl.uniform3fv(p.loc("c0"), hexColor(W.c0));
+      gl.uniform3fv(p.loc("c1"), hexColor(W.c1));
+      gl.uniform3fv(p.loc("c2"), hexColor(W.c2));
+      gl.uniform3fv(p.loc("c3"), hexColor(W.c3));
     }
 
     // The game reports each bomb with its spot in the game's picture, 0 to 1 from the top
-    // left (PageEvents.cs in the game).
+    // left (PageEvents.cs in the game). Nothing reacts yet: onBomb is where the effect goes.
+    // The debug panel counts them.
+    var onBomb = function (x, y) {};
     window.addEventListener("message", function (e) {
       var d = e.data;
       if (e.source !== frame.contentWindow || !d || d.type !== "tly-bomb") return;
-      var rect = frame.getBoundingClientRect();
-      ripple(rect.left + d.x * rect.width, rect.top + d.y * rect.height);
+      onBomb(d.x, d.y);
     });
 
     if (debug) buildPanel();
 
     function buildPanel() {
       var SLIDERS = [
-        ["Waves"],
-        ["swayAmp", "sway", 0, 40, 0.5],
-        ["swayFreq", "sway freq", 0, 0.2, 0.001],
-        ["swaySpeed", "sway speed", 0, 5, 0.05],
-        ["band", "band size", 8, 160, 1],
-        ["scroll", "scroll", -0.5, 0.5, 0.005],
-        ["c0", "dark"], ["c1", "middle"], ["c2", "light"],
-        ["Ripple"],
-        ["rSpeed", "speed", 20, 600, 5],
-        ["rSlow", "slowing", 0, 5, 0.05],
-        ["rWidth", "width", 1, 60, 0.5],
-        ["rPush", "push", -40, 40, 0.5],
-        ["rFlash", "flash", 0, 4, 0.1],
-        ["rLife", "life", 0.2, 6, 0.1]
+        ["Overall"],
+        ["speed", "speed", 0, 4, 0.05],
+        ["lines", "lines", 56, 720, 4],
+        ["lineStep", "line groups", 1, 16, 1],
+        ["bright", "brightness", 0, 3, 0.05],
+        ["Stripes"],
+        ["band", "band", 4, 200, 0.1],
+        ["angle", "angle", -90, 90, 1],
+        ["palSpeed", "flow", -1, 1, 0.005],
+        ["driftX", "drift x", -100, 100, 1],
+        ["driftY", "drift y", -100, 100, 1],
+        ["Sway A"],
+        ["swayAAmp", "amount", 0, 60, 0.5],
+        ["swayAFreq", "frequency", 0, 0.3, 0.001],
+        ["swayASpeed", "speed", -6, 6, 0.05],
+        ["Sway B"],
+        ["swayBAmp", "amount", 0, 60, 0.5],
+        ["swayBFreq", "frequency", 0, 0.3, 0.001],
+        ["swayBSpeed", "speed", -6, 6, 0.05],
+        ["Interlace (odd/even lines opposite)"],
+        ["interAmp", "amount", 0, 60, 0.5],
+        ["interFreq", "frequency", 0, 0.3, 0.001],
+        ["interSpeed", "speed", -6, 6, 0.05],
+        ["Vertical wave"],
+        ["vertAmp", "amount", 0, 60, 0.5],
+        ["vertFreq", "frequency", 0, 0.3, 0.001],
+        ["vertSpeed", "speed", -6, 6, 0.05],
+        ["Palette (four steps)"],
+        ["c0", "1"], ["c1", "2"], ["c2", "3"], ["c3", "4"]
       ];
       var panel = document.createElement("div");
       panel.id = "debug";
-      panel.innerHTML = "<b>Background</b> <small>click the background to ripple</small>";
+      var title = document.createElement("div");
+      title.innerHTML = "<b>Background</b> <small id=\"bombs\">bombs: 0</small>";
+      panel.appendChild(title);
+      var bombs = 0, bombLabel = title.querySelector("#bombs");
+      onBomb = function (x, y) {
+        bombs++;
+        bombLabel.textContent = "bombs: " + bombs + " (last at " + x.toFixed(2) + ", " + y.toFixed(2) + ")";
+        bombLabel.style.color = "#ffd23f";
+        clearTimeout(onBomb.timer);
+        onBomb.timer = setTimeout(function () { bombLabel.style.color = ""; }, 400);
+      };
       var inputs = {};
-      function save() { localStorage.setItem("tly-waves", JSON.stringify(WAVES)); }
+      function save() { localStorage.setItem("tly-bg", JSON.stringify(WAVES)); }
+      function apply(key) {
+        if (key === "lines") { LINES = WAVES.lines; resize(); }
+      }
       SLIDERS.forEach(function (row) {
         if (row.length === 1) {
           var h = document.createElement("div");
@@ -504,11 +517,17 @@
         label.appendChild(document.createTextNode(row[1]));
         label.appendChild(input);
         label.appendChild(value);
-        function show() { input.value = WAVES[key]; value.textContent = input.type === "range" ? WAVES[key] : ""; }
+        function show() { input.value = WAVES[key]; value.textContent = input.type === "range" ? WAVES[key] : WAVES[key]; }
         input.addEventListener("input", function () {
           WAVES[key] = input.type === "range" ? parseFloat(input.value) : input.value;
-          value.textContent = input.type === "range" ? WAVES[key] : "";
+          value.textContent = WAVES[key];
+          apply(key);
           save();
+        });
+        // Double-click a row: back to its default
+        label.addEventListener("dblclick", function () {
+          WAVES[key] = WAVES_DEFAULTS[key];
+          show(); apply(key); save();
         });
         inputs[key] = show;
         show();
@@ -523,10 +542,6 @@
         b.addEventListener("click", function () { onClick(b); });
         buttons.appendChild(b);
       }
-      button("Test ripple", function () {
-        var rect = frame.getBoundingClientRect();
-        ripple(rect.left + rect.width / 2, rect.top + rect.height / 2);
-      });
       button("Copy values", function (b) {
         var text = JSON.stringify(WAVES, null, 2);
         console.log(text);
@@ -534,18 +549,17 @@
         if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () { b.textContent = "See console"; });
         else b.textContent = "See console";
       });
-      button("Reset", function () {
+      button("Reset all", function () {
         Object.assign(WAVES, WAVES_DEFAULTS);
-        localStorage.removeItem("tly-waves");
+        localStorage.removeItem("tly-bg");
         for (var key in inputs) inputs[key]();
+        apply("lines");
       });
       panel.appendChild(buttons);
+      var hint = document.createElement("small");
+      hint.textContent = "Double-click a row to reset it.";
+      panel.appendChild(hint);
       document.body.appendChild(panel);
-
-      // A click on the background (not the game, links or panel) ripples from there.
-      document.addEventListener("pointerdown", function (e) {
-        if (e.target === document.body || e.target === document.documentElement) ripple(e.clientX, e.clientY);
-      });
     }
 
     var picker = document.getElementById("picker");
