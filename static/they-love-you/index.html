@@ -133,6 +133,7 @@
   #debug .buttons { display: flex; gap: 6px; margin-top: 10px; }
   #debug button { flex: 1; font: inherit; color: #fff; background: #333; border: 1px solid #555; padding: 4px 0; cursor: pointer; }
   #debug button:hover { background: #444; }
+  #debug button[aria-pressed="true"] { background: #5a4a12; border-color: #ffd23f; color: #ffd23f; }
 
   /* Background picker (for trying them out). */
   #picker { font-size: 10px; text-align: center; color: rgba(255, 255, 255, 0.45); }
@@ -188,6 +189,7 @@
   var params = new URLSearchParams(location.search);
   var gameParams = new URLSearchParams(location.search);
   gameParams.delete("bg");
+  gameParams.delete("preset");
   gameParams.set("logo", "off");  // the title is on this page already
   frame.src = "/games/they-love-you/" + (gameParams.toString() ? "?" + gameParams : "");
 
@@ -381,7 +383,8 @@
     // reloads, only with ?debug); "Copy values" copies them as JSON to paste back as new
     // defaults. Distances are in canvas pixels (the canvas is `lines` high), speeds per
     // second, frequencies in radians per pixel of height.
-    var WAVES = {
+    var PRESETS = {};
+    PRESETS.a = {
       speed: 1,                 // all motion
       lines: 224,               // canvas height in pixels (SNES: 224)
       lineStep: 1,              // lines that move together (bigger = blockier waves)
@@ -400,12 +403,36 @@
       c0: "#061012", c1: "#0b2023", c2: "#14363c", c3: "#0b2023",
       bright: 1
     };
-    var WAVES_DEFAULTS = JSON.parse(JSON.stringify(WAVES));
+    // B: slower, no sway A, and bombs swell the sways without interlace
+    PRESETS.b = {
+      speed: 0.15, lines: 224, lineStep: 1, band: 33.9, angle: 45, palSpeed: 0.08,
+      driftX: 0, driftY: 0,
+      swayAAmp: 0, swayAFreq: 0.045, swayASpeed: 1.1,
+      swayBAmp: 4, swayBFreq: 0.11, swayBSpeed: -0.7,
+      interAmp: 0, interFreq: 0.101, interSpeed: 0,
+      bombPeak: 0, bombRise: 0.25, bombFall: 1, bombSwayA: 1.25, bombSwayB: 2.5,
+      vertAmp: 0, vertFreq: 0.07, vertSpeed: 1.6,
+      c0: "#061012", c1: "#0b2023", c2: "#14363c", c3: "#0b2023",
+      bright: 1
+    };
+
+    // The preset: ?preset=b, else (with ?debug) the last one picked in the panel, else A.
+    // With ?debug, each preset's tweaks are kept in this browser too.
     var debug = params.has("debug");
-    if (debug) {
-      try { Object.assign(WAVES, JSON.parse(localStorage.getItem("tly-bg") || "{}")); } catch (e) {}
+    var preset = (params.get("preset") || "").toLowerCase();
+    if (!PRESETS[preset] && debug) preset = localStorage.getItem("tly-bg-preset") || "";
+    if (!PRESETS[preset]) preset = "a";
+    var WAVES = {};
+    function loadPreset(name) {
+      preset = name;
+      for (var key in WAVES) delete WAVES[key];
+      Object.assign(WAVES, PRESETS[name]);
+      if (debug) {
+        try { Object.assign(WAVES, JSON.parse(localStorage.getItem("tly-bg-" + name) || "{}")); } catch (e) {}
+      }
+      LINES = WAVES.lines;
     }
-    LINES = WAVES.lines;
+    loadPreset(preset);
 
     // Bombs going on, as their ages in seconds; the strongest sets the interlace.
     var bombs = [];
@@ -520,6 +547,37 @@
       var title = document.createElement("div");
       title.innerHTML = "<b>Background</b> <small id=\"bombs\">bombs: 0</small>";
       panel.appendChild(title);
+      // Preset buttons: switching keeps each one's tweaks; * marks a tweaked one.
+      var presetRow = document.createElement("div");
+      presetRow.className = "buttons presets";
+      var presetButtons = {};
+      Object.keys(PRESETS).forEach(function (name) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.addEventListener("click", function () {
+          loadPreset(name);
+          localStorage.setItem("tly-bg-preset", name);
+          var q = new URLSearchParams(location.search);
+          if (name === "a") q.delete("preset"); else q.set("preset", name);
+          history.replaceState(null, "", q.toString() ? "?" + q : location.pathname);
+          updateRulesLink();
+          for (var key in inputs) inputs[key]();
+          apply("lines");
+          markPresets();
+        });
+        presetRow.appendChild(b);
+        presetButtons[name] = b;
+      });
+      function markPresets() {
+        for (var name in presetButtons) {
+          var saved = localStorage.getItem("tly-bg-" + name);
+          var tweaked = saved && saved !== JSON.stringify(PRESETS[name]);
+          presetButtons[name].textContent = "Preset " + name.toUpperCase() + (tweaked ? " *" : "");
+          presetButtons[name].setAttribute("aria-pressed", name === preset ? "true" : "false");
+        }
+      }
+      panel.appendChild(presetRow);
+
       var bombCount = 0, bombLabel = title.querySelector("#bombs"), timer = 0;
       onBombDebug = function (x, y) {
         bombCount++;
@@ -529,7 +587,10 @@
         timer = setTimeout(function () { bombLabel.style.color = ""; }, 400);
       };
       var inputs = {};
-      function save() { localStorage.setItem("tly-bg", JSON.stringify(WAVES)); }
+      function save() {
+        localStorage.setItem("tly-bg-" + preset, JSON.stringify(WAVES));
+        markPresets();
+      }
       function apply(key) {
         if (key === "lines") { LINES = WAVES.lines; resize(); }
       }
@@ -561,7 +622,7 @@
         });
         // Double-click a row: back to its default
         label.addEventListener("dblclick", function () {
-          WAVES[key] = WAVES_DEFAULTS[key];
+          WAVES[key] = PRESETS[preset][key];
           show(); apply(key); save();
         });
         inputs[key] = show;
@@ -586,12 +647,14 @@
         else b.textContent = "See console";
       });
       button("Reset all", function () {
-        Object.assign(WAVES, WAVES_DEFAULTS);
-        localStorage.removeItem("tly-bg");
+        localStorage.removeItem("tly-bg-" + preset);
+        loadPreset(preset);
         for (var key in inputs) inputs[key]();
         apply("lines");
+        markPresets();
       });
       panel.appendChild(buttons);
+      markPresets();
       var hint = document.createElement("small");
       hint.textContent = "Double-click a row to reset it.";
       panel.appendChild(hint);
