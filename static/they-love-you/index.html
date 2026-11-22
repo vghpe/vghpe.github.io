@@ -448,9 +448,14 @@
       // then falls back over bombFall seconds (easing in and out); on the same curve the two
       // sways gain bombSwayA and bombSwayB
       bombPeak: 1.5, bombRise: 0.25, bombFall: 1.0, bombSwayA: 1.25, bombSwayB: 0.75,
-      // A cleared level: the waves blend over patternBlend seconds to a new random pattern
-      // around these settings, patternVariety x PATTERN_SPREAD away at most
-      patternVariety: 1, patternBlend: 1.5,
+      // A cleared level: the waves can blend over patternBlend seconds to a new random pattern
+      // around these settings, at most PATTERN_SPREAD x patternMotion (the sways and the
+      // flow) or x patternShape (stripe width and angle: these stretch) away
+      patternMotion: 0, patternShape: 0, patternBlend: 1.5,
+      // and all the waves race up the screen and settle: on a curve like the bomb's
+      // (levelRise s up, levelFall s back), both sways gain levelSpeed radians per second
+      // (upwards, whatever the preset's speed) and sway A and B gain levelSwayA/B pixels
+      levelSpeed: 9, levelSwayA: -5.5, levelSwayB: 2, levelRise: 0.5, levelFall: 1.35,
       vertAmp: 0, vertFreq: 0.07, vertSpeed: 1.6,
       c0: "#061012", c1: "#0b2023", c2: "#14363c", c3: "#0b2023",
       bright: 1
@@ -463,7 +468,8 @@
       swayBAmp: 4, swayBFreq: 0.11, swayBSpeed: -0.7,
       interAmp: 0, interFreq: 0.101, interSpeed: 0,
       bombPeak: 0, bombRise: 0.25, bombFall: 1, bombSwayA: 1.25, bombSwayB: 2.5,
-      patternVariety: 1, patternBlend: 1.5,
+      patternMotion: 0, patternShape: 0, patternBlend: 1.5,
+      levelSpeed: 9, levelSwayA: -5.5, levelSwayB: 2, levelRise: 0.5, levelFall: 1.35,
       vertAmp: 0, vertFreq: 0.07, vertSpeed: 1.6,
       c0: "#061012", c1: "#0b2023", c2: "#14363c", c3: "#0b2023",
       bright: 1
@@ -488,17 +494,20 @@
     }
     loadPreset(preset);
 
-    // Bombs going on, as their ages in seconds; the strongest sets the interlace.
-    var bombs = [];
-    function bombPulse() {
-      var W = WAVES, level = 0;
-      bombs.forEach(function (age) {
+    // Bombs (and cleared levels) going on, as their ages in seconds; the strongest sets
+    // the pulse: up to 1 over rise seconds (easing out), back to 0 over fall seconds.
+    var bombs = [], levels = [];
+    function bombPulse() { return pulse(bombs, WAVES.bombRise, WAVES.bombFall); }
+    function levelPulse() { return pulse(levels, WAVES.levelRise, WAVES.levelFall); }
+    function pulse(ages, rise, fall) {
+      var level = 0;
+      ages.forEach(function (age) {
         var v;
-        if (age < W.bombRise) {
-          var u = age / W.bombRise;
+        if (age < rise) {
+          var u = age / rise;
           v = 1 - (1 - u) * (1 - u) * (1 - u);
         } else {
-          var f = (age - W.bombRise) / W.bombFall;
+          var f = (age - rise) / fall;
           v = f >= 1 ? 0 : 0.5 + 0.5 * Math.cos(Math.PI * f);
         }
         level = Math.max(level, v);
@@ -514,13 +523,18 @@
       return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255];
     }
 
-    // Level patterns: how far each setting may move from the preset at patternVariety 1.
+    // Level patterns: how far each setting may move from the preset at a variety of 1, and
+    // which variety scales it: "motion" (the sways and the flow; a sway frequency blending
+    // to another is what sends quick waves rolling down the screen) or "shape" (stripe
+    // width and angle, which scale or turn the stripes around one corner, so while they
+    // blend the far side sweeps a long way: the stretch). Shape is off by default.
     // The pattern is an offset on top of the preset (and panel tweaks), blended from the
     // last one; the bomb shudder adds on top of that.
     var PATTERN_SPREAD = {
-      swayAAmp: 6, swayAFreq: 0.03, swayASpeed: 1,
-      swayBAmp: 3, swayBFreq: 0.05, swayBSpeed: 1,
-      band: 10, angle: 12, palSpeed: 0.04
+      swayAAmp: [6, "motion"], swayASpeed: [1, "motion"],
+      swayBAmp: [3, "motion"], swayBSpeed: [1, "motion"], palSpeed: [0.04, "motion"],
+      swayAFreq: [0.03, "motion"], swayBFreq: [0.05, "motion"],
+      band: [10, "shape"], angle: [12, "shape"]
     };
     var patternFrom = {}, patternTo = {}, patternAge = 0;
     function patternOffset(key) {
@@ -534,10 +548,18 @@
       for (var key in PATTERN_SPREAD) from[key] = patternOffset(key);
       patternFrom = from;
       patternTo = {};
-      for (key in PATTERN_SPREAD) patternTo[key] = (Math.random() * 2 - 1) * PATTERN_SPREAD[key] * WAVES.patternVariety;
+      for (key in PATTERN_SPREAD) {
+        var spread = PATTERN_SPREAD[key];
+        var variety = spread[1] === "motion" ? WAVES.patternMotion : WAVES.patternShape;
+        patternTo[key] = (Math.random() * 2 - 1) * spread[0] * variety;
+      }
       patternAge = 0;
     }
     var effective = {};  // WAVES plus the pattern offset, rebuilt each frame
+    function levelCleared() {
+      newPattern();
+      if (current && current.name === "waves" && !still) levels.push(0);
+    }
 
     function updateWaves(p, dt) {
       patternAge += dt;
@@ -548,8 +570,12 @@
       phase.pal = (phase.pal + k * W.palSpeed) % 1000;
       phase.driftX = (phase.driftX + k * W.driftX) % 100000;
       phase.driftY = (phase.driftY + k * W.driftY) % 100000;
-      phase.swayA = (phase.swayA + k * W.swayASpeed) % (TAU * 1000);
-      phase.swayB = (phase.swayB + k * W.swayBSpeed) % (TAU * 1000);
+      // A cleared level: the sways' phases race (growing phase = crests moving up)
+      levels = levels.map(function (age) { return age + dt; })
+        .filter(function (age) { return age < W.levelRise + W.levelFall; });
+      var race = levelPulse();
+      phase.swayA = (phase.swayA + k * W.swayASpeed + dt * race * W.levelSpeed) % (TAU * 1000);
+      phase.swayB = (phase.swayB + k * W.swayBSpeed + dt * race * W.levelSpeed) % (TAU * 1000);
       phase.inter = (phase.inter + k * W.interSpeed) % (TAU * 1000);
       phase.vert = (phase.vert + k * W.vertSpeed) % (TAU * 1000);
       gl.uniform1f(p.loc("band"), W.band);
@@ -561,8 +587,8 @@
       bombs = bombs.map(function (age) { return age + dt; })
         .filter(function (age) { return age < W.bombRise + W.bombFall; });
       var shudder = bombPulse();
-      gl.uniform3f(p.loc("swayA"), W.swayAAmp + shudder * W.bombSwayA, W.swayAFreq, phase.swayA);
-      gl.uniform3f(p.loc("swayB"), W.swayBAmp + shudder * W.bombSwayB, W.swayBFreq, phase.swayB);
+      gl.uniform3f(p.loc("swayA"), W.swayAAmp + shudder * W.bombSwayA + race * W.levelSwayA, W.swayAFreq, phase.swayA);
+      gl.uniform3f(p.loc("swayB"), W.swayBAmp + shudder * W.bombSwayB + race * W.levelSwayB, W.swayBFreq, phase.swayB);
       gl.uniform3f(p.loc("inter"), W.interAmp + shudder * W.bombPeak, W.interFreq, phase.inter);
       gl.uniform3f(p.loc("vert"), W.vertAmp, W.vertFreq, phase.vert);
       gl.uniform3fv(p.loc("c0"), hexColor(W.c0));
@@ -578,12 +604,12 @@
       if (current && current.name === "waves" && !still) bombs.push(0);
     }
     var onBombDebug = function (x, y) {}, onLevelDebug = function () {};
-    // A cleared level (not a restart): a new pattern (newPattern).
+    // A cleared level (not a restart): a jiggle up the screen (levelCleared).
     window.addEventListener("message", function (e) {
       var d = e.data;
       if (e.source !== frame.contentWindow || !d) return;
       if (d.type === "tly-bomb") { bomb(); onBombDebug(d.x, d.y); }
-      if (d.type === "tly-level") { newPattern(); onLevelDebug(); }
+      if (d.type === "tly-level") { levelCleared(); onLevelDebug(); }
     });
 
     if (debug) buildPanel();
@@ -596,8 +622,15 @@
         ["bombSwayB", "sway B +", -30, 30, 0.5],
         ["bombRise", "rise s", 0.02, 2, 0.01],
         ["bombFall", "fall s", 0.05, 4, 0.05],
+        ["New level (the waves race up)"],
+        ["levelSpeed", "speed +", -60, 60, 0.5],
+        ["levelSwayA", "sway A +", -30, 30, 0.5],
+        ["levelSwayB", "sway B +", -30, 30, 0.5],
+        ["levelRise", "rise s", 0.02, 2, 0.01],
+        ["levelFall", "fall s", 0.05, 4, 0.05],
         ["New level (random pattern)"],
-        ["patternVariety", "variety", 0, 3, 0.05],
+        ["patternMotion", "motion", 0, 3, 0.05],
+        ["patternShape", "shape", 0, 3, 0.05],
         ["patternBlend", "blend s", 0, 5, 0.05],
         ["Overall"],
         ["speed", "speed", 0, 4, 0.05],
@@ -731,7 +764,7 @@
         buttons.appendChild(b);
       }
       button("Test bomb", function () { bomb(); });
-      button("Test level", function () { newPattern(); onLevelDebug(); });
+      button("Test level", function () { levelCleared(); onLevelDebug(); });
       button("Copy values", function (b) {
         var text = JSON.stringify(WAVES, null, 2);
         console.log(text);
@@ -798,7 +831,7 @@
       }
       if (!current || !current.glsl) return;
       cancelAnimationFrame(raf);
-      if (on) { bombs = []; return; }  // hidden (CSS): no drawing at all
+      if (on) { bombs = []; levels = []; return; }  // hidden (CSS): no drawing at all
       lastNow = performance.now();
       draw(lastNow);  // starts the loop again
     }
