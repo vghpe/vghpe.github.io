@@ -391,7 +391,10 @@
       driftX: 0, driftY: 0,     // pattern drift, pixels per second
       swayAAmp: 10, swayAFreq: 0.045, swayASpeed: 1.1,
       swayBAmp: 4, swayBFreq: 0.11, swayBSpeed: -0.7,
-      interAmp: 0, interFreq: 0.035, interSpeed: 1.4,
+      interAmp: 0, interFreq: 0.101, interSpeed: 0,
+      // A bomb: the interlace amount rises to bombPeak over bombRise seconds (easing out),
+      // then falls back over bombFall seconds (easing in and out)
+      bombPeak: 5, bombRise: 0.25, bombFall: 1.0,
       vertAmp: 0, vertFreq: 0.07, vertSpeed: 1.6,
       c0: "#061012", c1: "#0b2023", c2: "#14363c", c3: "#0b2023",
       bright: 1
@@ -402,6 +405,24 @@
       try { Object.assign(WAVES, JSON.parse(localStorage.getItem("tly-bg") || "{}")); } catch (e) {}
     }
     LINES = WAVES.lines;
+
+    // Bombs going on, as their ages in seconds; the strongest sets the interlace.
+    var bombs = [];
+    function bombPulse() {
+      var W = WAVES, level = 0;
+      bombs.forEach(function (age) {
+        var v;
+        if (age < W.bombRise) {
+          var u = age / W.bombRise;
+          v = 1 - (1 - u) * (1 - u) * (1 - u);
+        } else {
+          var f = (age - W.bombRise) / W.bombFall;
+          v = f >= 1 ? 0 : 0.5 + 0.5 * Math.cos(Math.PI * f);
+        }
+        level = Math.max(level, v);
+      });
+      return level * W.bombPeak;
+    }
 
     // Phases add up speed x time, so changing a speed never makes the pattern jump.
     var phase = { pal: 0, driftX: 0, driftY: 0, swayA: 0, swayB: 0, inter: 0, vert: 0 };
@@ -428,7 +449,9 @@
       gl.uniform2f(p.loc("drift"), phase.driftX, phase.driftY);
       gl.uniform3f(p.loc("swayA"), W.swayAAmp, W.swayAFreq, phase.swayA);
       gl.uniform3f(p.loc("swayB"), W.swayBAmp, W.swayBFreq, phase.swayB);
-      gl.uniform3f(p.loc("inter"), W.interAmp, W.interFreq, phase.inter);
+      bombs = bombs.map(function (age) { return age + dt; })
+        .filter(function (age) { return age < W.bombRise + W.bombFall; });
+      gl.uniform3f(p.loc("inter"), W.interAmp + bombPulse(), W.interFreq, phase.inter);
       gl.uniform3f(p.loc("vert"), W.vertAmp, W.vertFreq, phase.vert);
       gl.uniform3fv(p.loc("c0"), hexColor(W.c0));
       gl.uniform3fv(p.loc("c1"), hexColor(W.c1));
@@ -437,19 +460,27 @@
     }
 
     // The game reports each bomb with its spot in the game's picture, 0 to 1 from the top
-    // left (PageEvents.cs in the game). Nothing reacts yet: onBomb is where the effect goes.
-    // The debug panel counts them.
-    var onBomb = function (x, y) {};
+    // left (PageEvents.cs in the game): the waves shudder (bombPulse). The debug panel also
+    // counts them.
+    function bomb() {
+      if (current && current.name === "waves" && !still) bombs.push(0);
+    }
+    var onBombDebug = function (x, y) {};
     window.addEventListener("message", function (e) {
       var d = e.data;
       if (e.source !== frame.contentWindow || !d || d.type !== "tly-bomb") return;
-      onBomb(d.x, d.y);
+      bomb();
+      onBombDebug(d.x, d.y);
     });
 
     if (debug) buildPanel();
 
     function buildPanel() {
       var SLIDERS = [
+        ["Bomb (interlace amount up and back)"],
+        ["bombPeak", "peak", 0, 40, 0.5],
+        ["bombRise", "rise s", 0.02, 2, 0.01],
+        ["bombFall", "fall s", 0.05, 4, 0.05],
         ["Overall"],
         ["speed", "speed", 0, 4, 0.05],
         ["lines", "lines", 56, 720, 4],
@@ -485,13 +516,13 @@
       var title = document.createElement("div");
       title.innerHTML = "<b>Background</b> <small id=\"bombs\">bombs: 0</small>";
       panel.appendChild(title);
-      var bombs = 0, bombLabel = title.querySelector("#bombs");
-      onBomb = function (x, y) {
-        bombs++;
-        bombLabel.textContent = "bombs: " + bombs + " (last at " + x.toFixed(2) + ", " + y.toFixed(2) + ")";
+      var bombCount = 0, bombLabel = title.querySelector("#bombs"), timer = 0;
+      onBombDebug = function (x, y) {
+        bombCount++;
+        bombLabel.textContent = "bombs: " + bombCount + " (last at " + x.toFixed(2) + ", " + y.toFixed(2) + ")";
         bombLabel.style.color = "#ffd23f";
-        clearTimeout(onBomb.timer);
-        onBomb.timer = setTimeout(function () { bombLabel.style.color = ""; }, 400);
+        clearTimeout(timer);
+        timer = setTimeout(function () { bombLabel.style.color = ""; }, 400);
       };
       var inputs = {};
       function save() { localStorage.setItem("tly-bg", JSON.stringify(WAVES)); }
@@ -542,6 +573,7 @@
         b.addEventListener("click", function () { onClick(b); });
         buttons.appendChild(b);
       }
+      button("Test bomb", function () { bomb(); });
       button("Copy values", function (b) {
         var text = JSON.stringify(WAVES, null, 2);
         console.log(text);
