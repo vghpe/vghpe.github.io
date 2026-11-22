@@ -115,6 +115,24 @@
   footer { color: rgba(255, 255, 255, 0.45); font-size: 10px; text-align: center; }
   footer a { color: rgba(255, 255, 255, 0.7); }
 
+  /* The ?debug panel for the Waves background. */
+  #debug {
+    position: fixed; top: 10px; right: 10px; z-index: 10;
+    width: 270px; max-height: calc(100vh - 20px); overflow-y: auto;
+    padding: 10px 12px; box-sizing: border-box;
+    background: rgba(0, 0, 0, 0.85); border: 1px solid rgba(255, 255, 255, 0.2);
+    font: 11px/1.4 ui-monospace, Menlo, monospace; letter-spacing: 0; color: #ddd;
+  }
+  #debug small { color: #888; }
+  #debug .head { margin: 10px 0 4px; color: #ffd23f; }
+  #debug label { display: grid; grid-template-columns: 76px 1fr 48px; align-items: center; gap: 6px; }
+  #debug input[type=range] { width: 100%; }
+  #debug input[type=color] { width: 100%; height: 18px; padding: 0; border: 0; background: none; }
+  #debug label span { text-align: right; color: #aaa; }
+  #debug .buttons { display: flex; gap: 6px; margin-top: 10px; }
+  #debug button { flex: 1; font: inherit; color: #fff; background: #333; border: 1px solid #555; padding: 4px 0; cursor: pointer; }
+  #debug button:hover { background: #444; }
+
   /* Background picker (for trying them out). */
   #picker { font-size: 10px; text-align: center; color: rgba(255, 255, 255, 0.45); }
   #picker button {
@@ -217,13 +235,35 @@
     var BACKGROUNDS = [
       { name: "stripes", label: "Stripes" },
 
-      // The game's diagonal stripes, in teal steps, swaying with a horizontal wave.
-      { name: "waves", label: "Waves", glsl: [
+      // The game's diagonal stripes, in teal steps, swaying with a horizontal wave (two sines),
+      // and rippling out from each bomb the game reports. Its settings are uniforms (WAVES
+      // below), so the debug panel can tune them live.
+      { name: "waves", label: "Waves", update: updateWaves, glsl: [
+        "uniform float swayAmp, swayFreq, swayPhase, scrollPhase, band;",
+        "uniform vec3 c0, c1, c2;",
+        "uniform vec4 rip[4];  // x, y (canvas pixels), radius, strength (0 = none)",
+        "uniform float rWidth, rPush, rFlash;",
         "void main() {",
         "  vec2 p = pix();",
-        "  float sway = 10.0 * sin(p.y * 0.045 + t * 1.1) + 4.0 * sin(p.y * 0.11 - t * 0.7);",
-        "  float s = (p.x + sway + p.y) / 48.0 - t * 0.08;",
-        "  gl_FragColor = vec4(pick4(s, rgb(6, 16, 18), rgb(11, 32, 35), rgb(20, 54, 60), rgb(11, 32, 35)), 1.0);",
+        // Each ripple is a ring: the pattern inside it is pulled from nearer the bomb, so the
+        // stripes bulge outward as it passes, and it brightens by whole palette steps.
+        "  vec2 q = p;",
+        "  float flash = 0.0;",
+        "  for (int i = 0; i < 4; i++) {",
+        "    vec4 r = rip[i];",
+        "    if (r.w <= 0.0) continue;",
+        "    vec2 d = p - r.xy;",
+        "    float dist = length(d);",
+        "    float x = (dist - r.z) / rWidth;",
+        "    float ring = exp(-x * x) * r.w;",
+        "    if (dist > 0.0) q -= d / dist * rPush * ring;",
+        "    flash += ring;",
+        "  }",
+        "  float sway = swayAmp * (sin(q.y * swayFreq + swayPhase) + 0.4 * sin(q.y * swayFreq * 2.44 - swayPhase * 0.64));",
+        "  float s = (q.x + sway + q.y) / band - scrollPhase;",
+        "  vec3 col = pick4(s, c0, c1, c2, c1);",
+        "  col += (c2 - c0) * 0.5 * floor(flash * rFlash + 0.5);",
+        "  gl_FragColor = vec4(col, 1.0);",
         "}"
       ] },
 
@@ -307,7 +347,15 @@
       gl.bindAttribLocation(program, 0, "pos");
       gl.linkProgram(program);
       if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(bg.name + ": " + gl.getProgramInfoLog(program));
-      return programs[bg.name] = { program: program, res: gl.getUniformLocation(program, "res"), t: gl.getUniformLocation(program, "t") };
+      var locations = {};
+      return programs[bg.name] = {
+        program: program,
+        res: gl.getUniformLocation(program, "res"),
+        t: gl.getUniformLocation(program, "t"),
+        loc: function (name) {
+          return name in locations ? locations[name] : (locations[name] = gl.getUniformLocation(program, name));
+        }
+      };
     }
 
     if (gl) {
@@ -324,14 +372,180 @@
       canvas.height = Math.ceil(window.innerHeight / scale);
     }
 
+    var lastNow = 0;
     function draw(now) {
       var p = programs[current.name];
+      var dt = still ? 0 : Math.min(0.1, Math.max(0, (now - lastNow) / 1000));
+      lastNow = now;
       gl.viewport(0, 0, canvas.width, canvas.height);
       gl.useProgram(p.program);
       gl.uniform2f(p.res, canvas.width, canvas.height);
       gl.uniform1f(p.t, still ? 0 : (now / 1000) % 3600);
+      if (current.update) current.update(p, dt);
       gl.drawArrays(gl.TRIANGLES, 0, 3);
       if (!still) raf = requestAnimationFrame(draw);
+    }
+
+    // ---- Waves: settings, bomb ripples, debug panel ----
+
+    // The settings. With ?debug a panel tunes them live (kept in this browser between
+    // reloads, only with ?debug); "Copy values" copies them as JSON to paste here as the
+    // new defaults. Distances are in canvas pixels (the canvas is LINES high), times in s.
+    var WAVES = {
+      swayAmp: 10,        // side-to-side sway, pixels
+      swayFreq: 0.045,    // sway waves per pixel of height (x 2 pi)
+      swaySpeed: 1.1,     // sway phase per second
+      band: 48,           // pixels per stripe cycle (four palette steps)
+      scroll: 0.08,       // stripe cycles per second
+      c0: "#061012", c1: "#0b2023", c2: "#14363c",  // dark, middle, light
+      rSpeed: 220,        // ripple: starting speed, pixels per second
+      rSlow: 1.2,         // how fast it slows (0 = constant speed)
+      rWidth: 10,         // ring width, pixels
+      rPush: 8,           // how far the ring pushes the stripes, pixels (negative pulls)
+      rFlash: 1.5,        // brightening at the ring, in palette half-steps
+      rLife: 2.0          // seconds until it has faded out
+    };
+    var WAVES_DEFAULTS = JSON.parse(JSON.stringify(WAVES));
+    var debug = params.has("debug");
+    if (debug) {
+      try { Object.assign(WAVES, JSON.parse(localStorage.getItem("tly-waves") || "{}")); } catch (e) {}
+    }
+
+    var swayPhase = 0, scrollPhase = 0;
+    var ripples = [];  // { x, y } in canvas pixels, age in seconds
+
+    function hexColor(hex) {
+      var n = parseInt(hex.slice(1), 16);
+      return [(n >> 16 & 255) / 255, (n >> 8 & 255) / 255, (n & 255) / 255];
+    }
+
+    function updateWaves(p, dt) {
+      swayPhase = (swayPhase + dt * WAVES.swaySpeed) % (Math.PI * 2000);
+      scrollPhase = (scrollPhase + dt * WAVES.scroll) % 1000;
+      gl.uniform1f(p.loc("swayAmp"), WAVES.swayAmp);
+      gl.uniform1f(p.loc("swayFreq"), WAVES.swayFreq);
+      gl.uniform1f(p.loc("swayPhase"), swayPhase);
+      gl.uniform1f(p.loc("scrollPhase"), scrollPhase);
+      gl.uniform1f(p.loc("band"), WAVES.band);
+      gl.uniform3fv(p.loc("c0"), hexColor(WAVES.c0));
+      gl.uniform3fv(p.loc("c1"), hexColor(WAVES.c1));
+      gl.uniform3fv(p.loc("c2"), hexColor(WAVES.c2));
+      gl.uniform1f(p.loc("rWidth"), WAVES.rWidth);
+      gl.uniform1f(p.loc("rPush"), WAVES.rPush);
+      gl.uniform1f(p.loc("rFlash"), WAVES.rFlash);
+      // The ring's radius: starts at rSpeed and slows exponentially; strength fades to 0
+      // over rLife, quickly at first.
+      var rip = new Float32Array(16);
+      ripples = ripples.filter(function (r) { r.age += dt; return r.age < WAVES.rLife; });
+      ripples.slice(-4).forEach(function (r, i) {
+        var k = WAVES.rSlow;
+        var radius = k > 0.001 ? WAVES.rSpeed * (1 - Math.exp(-k * r.age)) / k : WAVES.rSpeed * r.age;
+        var fade = 1 - r.age / WAVES.rLife;
+        rip.set([r.x, r.y, radius, fade * fade], i * 4);
+      });
+      gl.uniform4fv(p.loc("rip"), rip);
+    }
+
+    // A ripple from this spot on the page (CSS pixels).
+    function ripple(pageX, pageY) {
+      if (!current || current.name !== "waves" || still) return;
+      ripples.push({ x: pageX * canvas.width / window.innerWidth, y: pageY * canvas.height / window.innerHeight, age: 0 });
+    }
+
+    // The game reports each bomb with its spot in the game's picture, 0 to 1 from the top
+    // left (PageEvents.cs in the game).
+    window.addEventListener("message", function (e) {
+      var d = e.data;
+      if (e.source !== frame.contentWindow || !d || d.type !== "tly-bomb") return;
+      var rect = frame.getBoundingClientRect();
+      ripple(rect.left + d.x * rect.width, rect.top + d.y * rect.height);
+    });
+
+    if (debug) buildPanel();
+
+    function buildPanel() {
+      var SLIDERS = [
+        ["Waves"],
+        ["swayAmp", "sway", 0, 40, 0.5],
+        ["swayFreq", "sway freq", 0, 0.2, 0.001],
+        ["swaySpeed", "sway speed", 0, 5, 0.05],
+        ["band", "band size", 8, 160, 1],
+        ["scroll", "scroll", -0.5, 0.5, 0.005],
+        ["c0", "dark"], ["c1", "middle"], ["c2", "light"],
+        ["Ripple"],
+        ["rSpeed", "speed", 20, 600, 5],
+        ["rSlow", "slowing", 0, 5, 0.05],
+        ["rWidth", "width", 1, 60, 0.5],
+        ["rPush", "push", -40, 40, 0.5],
+        ["rFlash", "flash", 0, 4, 0.1],
+        ["rLife", "life", 0.2, 6, 0.1]
+      ];
+      var panel = document.createElement("div");
+      panel.id = "debug";
+      panel.innerHTML = "<b>Background</b> <small>click the background to ripple</small>";
+      var inputs = {};
+      function save() { localStorage.setItem("tly-waves", JSON.stringify(WAVES)); }
+      SLIDERS.forEach(function (row) {
+        if (row.length === 1) {
+          var h = document.createElement("div");
+          h.className = "head";
+          h.textContent = row[0];
+          panel.appendChild(h);
+          return;
+        }
+        var key = row[0], label = document.createElement("label");
+        var input = document.createElement("input"), value = document.createElement("span");
+        if (row.length === 2) {
+          input.type = "color";
+        } else {
+          input.type = "range";
+          input.min = row[2]; input.max = row[3]; input.step = row[4];
+        }
+        label.appendChild(document.createTextNode(row[1]));
+        label.appendChild(input);
+        label.appendChild(value);
+        function show() { input.value = WAVES[key]; value.textContent = input.type === "range" ? WAVES[key] : ""; }
+        input.addEventListener("input", function () {
+          WAVES[key] = input.type === "range" ? parseFloat(input.value) : input.value;
+          value.textContent = input.type === "range" ? WAVES[key] : "";
+          save();
+        });
+        inputs[key] = show;
+        show();
+        panel.appendChild(label);
+      });
+      var buttons = document.createElement("div");
+      buttons.className = "buttons";
+      function button(text, onClick) {
+        var b = document.createElement("button");
+        b.type = "button";
+        b.textContent = text;
+        b.addEventListener("click", function () { onClick(b); });
+        buttons.appendChild(b);
+      }
+      button("Test ripple", function () {
+        var rect = frame.getBoundingClientRect();
+        ripple(rect.left + rect.width / 2, rect.top + rect.height / 2);
+      });
+      button("Copy values", function (b) {
+        var text = JSON.stringify(WAVES, null, 2);
+        console.log(text);
+        var done = function () { b.textContent = "Copied"; setTimeout(function () { b.textContent = "Copy values"; }, 1200); };
+        if (navigator.clipboard) navigator.clipboard.writeText(text).then(done, function () { b.textContent = "See console"; });
+        else b.textContent = "See console";
+      });
+      button("Reset", function () {
+        Object.assign(WAVES, WAVES_DEFAULTS);
+        localStorage.removeItem("tly-waves");
+        for (var key in inputs) inputs[key]();
+      });
+      panel.appendChild(buttons);
+      document.body.appendChild(panel);
+
+      // A click on the background (not the game, links or panel) ripples from there.
+      document.addEventListener("pointerdown", function (e) {
+        if (e.target === document.body || e.target === document.documentElement) ripple(e.clientX, e.clientY);
+      });
     }
 
     var picker = document.getElementById("picker");
