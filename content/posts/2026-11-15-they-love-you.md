@@ -15,7 +15,7 @@ They Love You is a small top-down arcade game. It was made by Paul Annesley, Zac
 
 <!--more-->
 
-If you're in front of a keyboard, **[GIVE IT A PLAY!](/they-love-you/)**
+If you're in front of a keyboard, **[Play the game here!](/they-love-you/)**
 
 ## Reviving the game
 
@@ -29,7 +29,7 @@ They Love You was originally written in an arcane language called UnityScript. S
 
 The original version gave the player a finite number of freeze-bombs per level. Dropping the freeze-bomb at the right moment was key, or you had to reset. Several levels were pure resource puzzles. 
 
-[Here you can play the game with the original rules](/they-love-you/?design=classic)
+[Play the game with the original rules here](/they-love-you/?design=classic)
 
 For the re-design I removed all the puzzle levels, made the bombs an infinite resource and added a bomb-charge that's activated by stopping.
 
