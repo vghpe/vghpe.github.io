@@ -164,9 +164,9 @@
   <div class="links">
     <a href="/posts/they-love-you/">About the game</a>
     <span class="sep">·</span>
-    <a id="rules" href="?design=classic">Play the original version</a>
+    <a id="rules" href="?design=classic">OG version</a>
     <span class="sep">·</span>
-    <button id="dynamic" type="button" class="link">Disable dynamic background</button>
+    <button id="dynamic" type="button" class="link">Disable BG</button>
   </div>
 
   <footer>
@@ -206,7 +206,7 @@
     rules.href = p.toString() ? "?" + p : "./";
   }
   if (classic) {
-    rules.textContent = "Play the new version";
+    rules.textContent = "New version";
     document.title = "They Love You (2012 rules)";
   }
   updateRulesLink();
@@ -711,7 +711,7 @@
     function setStill(on, remember) {
       still = on;
       document.documentElement.classList.toggle("still", on);
-      dynamicButton.textContent = on ? "Enable dynamic background" : "Disable dynamic background";
+      dynamicButton.textContent = on ? "Enable BG" : "Disable BG";
       if (remember) {
         try { localStorage.setItem("tly-bg-dynamic", on ? "off" : "on"); } catch (e) {}
       }
