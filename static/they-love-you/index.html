@@ -119,8 +119,10 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.9em;
-    padding: 8%;
+    gap: 0.8em;
+    /* Centred in the still's open floor below the middle wall, above the goal's walls (the
+       box is square, so percentages of its width work vertically too) */
+    padding: 47% 11% 28%;
     box-sizing: border-box;
     text-align: center;
     background: linear-gradient(rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.55)), url("still.jpg") center / cover;
@@ -128,22 +130,9 @@
     text-shadow: 0 2px 0 rgba(0, 0, 0, 0.8);
   }
   #phone[hidden] { display: none; }
-  #phone .big { font-size: clamp(15px, 5vmin, 24px); line-height: 1.4; }
-  #phone .small { font-size: clamp(11px, 3.4vmin, 15px); color: rgba(255, 255, 255, 0.8); }
-  #phone button {
-    margin-top: 0.6em;
-    font: inherit;
-    font-size: clamp(12px, 3.6vmin, 16px);
-    letter-spacing: inherit;
-    color: #000;
-    background: #ffd23f;
-    border: 0;
-    padding: 0.7em 1.2em;
-    box-shadow: 0 4px 0 #b8901a;
-    text-shadow: none;
-    cursor: pointer;
-  }
-  #phone button:active { transform: translateY(3px); box-shadow: 0 1px 0 #b8901a; }
+  /* Sized from the game's square, so the text keeps its place in the picture */
+  #phone .big { font-size: calc(var(--game) * 0.04); line-height: 1.5; }
+  #phone .small { font-size: calc(var(--game) * 0.029); color: rgba(255, 255, 255, 0.8); }
 
   .links { text-align: center; }
   .sep { color: rgba(255, 255, 255, 0.35); margin: 0 0.6em; }
@@ -198,7 +187,6 @@
     <div id="phone" hidden>
       <div class="big">They love you…<br>but they need a keyboard.</div>
       <div class="small">Come back on a computer to play.</div>
-      <button id="share" type="button">Send me the link</button>
     </div>
   </div>
 
@@ -245,18 +233,6 @@
   if (phone) {
     frame.style.display = "none";
     document.getElementById("phone").hidden = false;
-    var share = document.getElementById("share");
-    share.addEventListener("click", function () {
-      var url = location.origin + location.pathname + (classic ? "?design=classic" : "");
-      var copied = function () { share.textContent = "Link copied!"; };
-      if (navigator.share) {
-        navigator.share({ title: document.title, url: url }).catch(function () {});
-      } else if (navigator.clipboard) {
-        navigator.clipboard.writeText(url).then(copied, function () { share.textContent = url; });
-      } else {
-        share.textContent = url;
-      }
-    });
   } else {
     frame.src = "/games/they-love-you/" + (gameParams.toString() ? "?" + gameParams : "");
   }
