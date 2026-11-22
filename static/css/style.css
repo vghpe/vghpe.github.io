@@ -894,3 +894,40 @@ details[open] summary::after { content: " ▲"; }
 .version-nav .version-current {
   color: var(--color-text-secondary);
 }
+
+/* Wikipedia-style table of games on the about page */
+.ludography {
+  overflow-x: auto;
+}
+.ludography table {
+  width: auto;
+  margin: 0 0 1.5em;
+  font-size: 14px;
+  border: 1px solid #a2a9b1;
+}
+.ludography th,
+.ludography tr > td {
+  border: 1px solid #a2a9b1;
+  padding: 0.3em 0.7em;
+  white-space: nowrap;
+  height: auto;
+  color: #202122;
+}
+.ludography th {
+  background: #eaecf0;
+  font-size: 14px;
+  text-align: center;
+}
+.ludography tr > td,
+.ludography tr:nth-child(odd) > td {
+  background: #f8f9fa;
+}
+.ludography-note {
+  margin-top: -0.8em;
+  font-size: 13px;
+  color: var(--color-text-muted);
+}
+.ludography-title {
+  margin: 0.5em 0 0.4em;
+  font-weight: bold;
+}
