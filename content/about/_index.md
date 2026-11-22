@@ -21,7 +21,7 @@ Henrik is currently based in Gothenburg and works from [Automat](https://automat
 
 | Year | Title | Role | Genre |
 |---|---|---|---|
-| 2026 | [*Unhinged*](https://www.netflix.com/tudum/articles/unhinged-game-news)\* | Design Lead | Horror, Cloud |
+| 2026 | [*Unhinged*](https://www.netflix.com/tudum/articles/unhinged-game-news)\* | Design Lead | Narrative horror, Cloud |
 | 2023 | [*Oxenfree II: Lost Signals*](https://nightschoolstudio.com/oxenfree-ii/) | Sr. Game Designer | Narrative adventure |
 | 2020 | [*Spin Rhythm XD*](https://store.steampowered.com/app/1058830/Spin_Rhythm_XD/) | Level Designer | Rhythm |
 | 2019 | [*Afterparty*](https://nightschoolstudio.com/afterparty/) | Game Designer | Narrative adventure |
