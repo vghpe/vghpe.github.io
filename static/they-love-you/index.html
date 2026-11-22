@@ -87,6 +87,8 @@
     display: none;
   }
   html.shader #bg { display: block; }
+  /* "Disable dynamic background": plain black */
+  html.still #bg, html.still body::before { display: none; }
 
   h1 { margin: 0; line-height: 0; }
   h1 img { width: min(var(--game), 420px); height: auto; }
@@ -112,7 +114,7 @@
   a, button.link { color: #f19ba3; text-decoration: none; }
   a:hover, a:focus-visible, button.link:hover, button.link:focus-visible { text-decoration: underline; }
   button.link { font: inherit; letter-spacing: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
-  html.still body::before { animation-play-state: paused; }
+
 
   footer { color: rgba(255, 255, 255, 0.45); font-size: 10px; text-align: center; }
   footer a { color: rgba(255, 255, 255, 0.7); }
@@ -324,8 +326,8 @@
     var gl = canvas.getContext("webgl", { antialias: false, alpha: false, depth: false, preserveDrawingBuffer: false });
     var programs = {};  // compiled on first use, so only the chosen ones cost anything
     var current = null, raf = 0;
-    // Frozen waves ("Disable dynamic background", remembered in this browser; at first, frozen
-    // for people whose system asks for reduced motion): no motion, no bomb reaction.
+    // "Disable dynamic background" (remembered in this browser; at first, disabled for people
+    // whose system asks for reduced motion): the background is plain black, nothing draws.
     var dynamicChoice = null;
     try { dynamicChoice = localStorage.getItem("tly-bg-dynamic"); } catch (e) {}
     var still = dynamicChoice ? dynamicChoice === "off" : window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -715,14 +717,14 @@
       }
       if (!current || !current.glsl) return;
       cancelAnimationFrame(raf);
-      if (on) bombs = [];  // the shudder stops too
+      if (on) { bombs = []; return; }  // hidden (CSS): no drawing at all
       lastNow = performance.now();
-      draw(lastNow);  // frozen: draws this frame once; moving: starts the loop again
+      draw(lastNow);  // starts the loop again
     }
     dynamicButton.addEventListener("click", function () { setStill(!still, true); });
 
     window.addEventListener("resize", function () {
-      if (current && current.glsl) { resize(); if (still) draw(performance.now()); }
+      if (current && current.glsl) resize();
     });
 
     choose(params.get("bg") || "waves", false);
