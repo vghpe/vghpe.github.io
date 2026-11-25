@@ -327,7 +327,11 @@
       const blob = await new Promise((done) =>
         canvas.toBlob(done, 'image/jpeg', 0.9),
       );
-      const name = file.name.replace(/\.[^.]+$/, '') + '.jpg';
+      // Unique name per crop: the media path is built from the file name and
+      // the GitHub store silently skips paths that already exist, so a crop
+      // named like an earlier upload of the same photo would be dropped
+      const suffix = Math.random().toString(36).slice(2, 7);
+      const name = `${file.name.replace(/\.[^.]+$/, '')}-crop-${suffix}.jpg`;
       return new File([blob], name, { type: 'image/jpeg' });
     }
 
